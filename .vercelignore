@@ -1,0 +1,32 @@
+# Local authoring material and source-app dependencies are not needed by the static site.
+.agents/
+3d blender/
+AgriGCS_Blender_Project/
+agrigcs-app/
+agrigcs_3d_field_setup_sensor_placement_sop_guide/
+agrigcs_academy_learning_center/
+agrigcs_alert_center/
+agrigcs_brand_logo/
+agrigcs_home_landing/
+agrigcs_how_it_works_architecture/
+agrigcs_interactive_wiring_simulator/
+agrigcs_live_field_monitoring/
+agrigcs_live_field_monitoring_dynamic_motion_effects/
+agrigcs_live_field_monitoring_interactive_3d_three.js_orbit/
+agrigcs_live_field_monitoring_interactive_webgl_telemetry/
+agrigcs_precision_ground_control/
+agrigcs_presentation_walkthrough_10_stage_interactive_deck/
+agrigcs_sensor_ecosystem/
+agrigcs_simulation_lab_stress_tester_1/
+agrigcs_simulation_lab_stress_tester_2/
+agrigcs_telemetry_packet_inspector_system_health/
+config/
+docs/
+exports/
+files/
+references/
+renders/
+scripts/
+studio/
+walkthrough.md
+agrigcs_master_qa_audit_design_system_spec.md

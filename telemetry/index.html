@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>AgriGCS | Real-Time Telemetry Stream &amp; Raw Binary Packet Bus</title>
+  <meta name="description" content="Level 4 SCADA Telemetry Stream, 1Hz binary packet bus, CRC-16 verification, 32-byte frame dissection, and sub-GHz LoRa RF link inspector.">
+
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400..700,0..1,-50..200" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#0d141b",
+            "surface-dim": "#080f16",
+            "surface-container-lowest": "#060b10",
+            "surface-container-low": "#11181f",
+            "surface-container": "#151c23",
+            "surface-container-high": "#222a33",
+            "surface-container-highest": "#2e3742",
+            "outline": "#85948d",
+            "outline-variant": "#3b4a44",
+            "on-surface": "#dce3ed",
+            "on-surface-variant": "#bacac3",
+            "primary": "#00d2aa",
+            "primary-fixed": "#57fcd2",
+            "on-primary": "#00382b",
+            "secondary": "#7bd0ff",
+            "secondary-fixed": "#c4e7ff",
+            "tertiary": "#60eeb1",
+            "error": "#ff6e6e",
+            "on-error": "#690005"
+          },
+          fontFamily: {
+            "sans": ["Inter", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Chart.js for RF Spectrum & Constellation Plots -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* High-Tech Custom Scrollbars */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #080f16; }
+    ::-webkit-scrollbar-thumb { background: #242b32; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00d2aa; }
+
+    /* Tactical Glow Accents */
+    .glow-teal { box-shadow: 0 0 20px rgba(0, 210, 170, 0.25); }
+    .glow-gold { box-shadow: 0 0 25px rgba(245, 158, 11, 0.35); }
+
+    /* Terminal Packet Stream Strobe */
+    @keyframes term-scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(1000%); }
+    }
+
+    .byte-active-highlight {
+      outline: 2px solid #00d2aa;
+      background: rgba(0, 210, 170, 0.25) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 12px rgba(0, 210, 170, 0.5);
+    }
+
+    /* ⚡ GOD MODE (SUPER-ADMIN OVERRIDE) STYLING */
+    body.god-mode-active {
+      --god-gold: #f59e0b;
+      --god-amber: #fbbf24;
+      padding-top: 7.5rem !important;
+    }
+    body.god-mode-active .agrigcs-unified-header {
+      border-bottom-color: rgba(245, 158, 11, 0.4) !important;
+      box-shadow: 0 4px 30px rgba(245, 158, 11, 0.15) !important;
+    }
+    body.god-mode-active .card-telemetry-highlight {
+      border-color: rgba(245, 158, 11, 0.5) !important;
+    }
+  </style>
+</head>
+
+<body class="bg-surface font-sans text-on-surface antialiased min-h-screen flex flex-col items-center pt-20 pb-16 px-3 sm:px-5 lg:px-8 selection:bg-primary/25 selection:text-primary relative overflow-x-hidden">
+
+  <!-- Radial Neon Ambient Glows -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[500px] bg-primary/10 blur-[160px] pointer-events-none -z-10 rounded-full"></div>
+  <div class="absolute top-[500px] right-1/4 w-[700px] h-[450px] bg-secondary/10 blur-[150px] pointer-events-none -z-10 rounded-full"></div>
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP UNIFIED NAVIGATION HEADER -->
+  <!-- ========================================================================= -->
+  <header class="agrigcs-unified-header fixed top-0 left-0 right-0 z-50 bg-surface/85 backdrop-blur-xl border-b border-outline-variant/15 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+    <div class="h-16 w-full px-4 lg:px-8 max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Left: Brand Identity & Modules Dock Pill -->
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="/home/" class="flex items-center gap-2.5 hover:opacity-95 transition-all group no-underline">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/20 via-surface-container-high to-surface-container flex items-center justify-center border border-primary/40 shadow-[0_0_15px_rgba(0,210,170,0.25)] group-hover:scale-105 transition-transform">
+            <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12a10 10 0 0 1 10-10z"></path>
+              <path d="M12 6c0 4 4 6 4 10"></path>
+              <path d="M8 12c2 0 4-2 4-6"></path>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-lg text-white tracking-tight leading-none">Agri<span class="text-primary">GCS</span></span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">v2.4</span>
+            </div>
+            <span class="text-[9px] font-mono tracking-widest uppercase text-on-surface-variant/80 mt-0.5">Ground Control Station</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Center: Navigation Dropdowns -->
+      <nav aria-label="Main Navigation" class="hidden xl:flex items-center gap-1">
+        
+        <!-- Dropdown 1: Mission Control (Current Active Category) -->
+        <div class="relative group/nav">
+          <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full text-[13px] font-medium bg-primary/15 text-primary border border-primary/30 transition-all cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[16px] text-primary">dashboard</span>
+            <span>Mission Control</span>
+            <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+          </button>
+          <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+            <div class="w-68 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+              <a href="/telemetry/" class="flex items-center gap-3 p-2 rounded-xl bg-primary/10 border border-primary/20 group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">vital_signs</span>
+                <div class="flex flex-col">
+                  <div class="flex items-center justify-between w-full">
+                    <span class="text-[13px] font-semibold text-primary">Telemetry Stream</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-primary/20 text-primary font-bold">CURRENT</span>
+                  </div>
+                  <span class="text-[10px] text-on-surface-variant font-mono">1Hz live binary bus &amp; CRC</span>
+                </div>
+              </a>
+              <a href="/monitoring/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-container-high transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">satellite_alt</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Field Monitoring</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">Real 3D Satellite &amp; Telemetry</span>
+                </div>
+              </a>
+              <a href="/home/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-container-high transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">home</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Station Overview</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">Global GCS command hub</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dropdown 2: Operations & 3D -->
+        <div class="relative group/nav">
+          <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[16px] text-secondary">radar</span>
+            <span>Operations &amp; 3D</span>
+            <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+          </button>
+          <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+            <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+              <a href="/orbit/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-secondary">3d_rotation</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface">3D Orbit Visualizer</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">360° field canopy inspect</span>
+                </div>
+              </a>
+              <a href="/field-setup/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-secondary">layers</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface">3D Field Setup &amp; SOP</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">Probe depth &amp; GPS RTK</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dropdown 3: Hardware & Nodes -->
+        <div class="relative group/nav">
+          <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[16px] text-primary">sensors</span>
+            <span>Hardware &amp; Nodes</span>
+            <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+          </button>
+          <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+            <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+              <a href="/sensors/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary">sensors</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface">Sensor Ecosystem</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">Capacitive probes &amp; SX1262</span>
+                </div>
+              </a>
+              <a href="/wiring/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary">cable</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface">Interactive Wiring Lab</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">ESP32-S3 pinout &amp; I2C</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dropdown 4: Simulations & Labs -->
+        <div class="relative group/nav">
+          <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[16px] text-amber-400">science</span>
+            <span>Simulations</span>
+            <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+          </button>
+          <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+            <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+              <a href="/sim-lab/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-amber-400/10 transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-amber-400">biotech</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface">Simulation Lab</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">Stress test agronomic scenarios</span>
+                </div>
+              </a>
+              <a href="/alerts/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-amber-400/10 transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-amber-400">warning</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface">Alert Center</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">Triage automated solenoids</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Documentation Dropdown -->
+        <div class="relative group/nav">
+          <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[16px] text-outline">menu_book</span>
+            <span>Docs</span>
+            <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+          </button>
+          <div class="absolute top-full right-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+            <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+              <a href="/how-it-works/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary">account_tree</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface">Architecture Overview</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">LoRa RF to Tokio broker</span>
+                </div>
+              </a>
+              <a href="/deck/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-secondary">slideshow</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface">Executive Deck</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">10-stage interactive deck</span>
+                </div>
+              </a>
+              <a href="/academy/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-tertiary/10 transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-tertiary">school</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface">AgriGCS Academy</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">Field manuals &amp; SOPs</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </nav>
+
+      <!-- Right: Utility Cluster & Operator Actions -->
+      <div class="flex items-center gap-2.5 shrink-0">
+
+        <!-- ⚡ GOD MODE Trigger Button -->
+        <button onclick="toggleGodModeUI()" id="nav-god-mode-btn" class="agrigcs-god-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-yellow-400/25 to-amber-500/20 text-amber-300 hover:text-amber-200 border border-amber-400/40 hover:border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)] font-mono text-[11px] font-bold tracking-wider transition-all active:scale-95 cursor-pointer" type="button" title="God Mode: Super-Admin Telemetry & Hardware Actuator Override [Hotkey: Shift+G]">
+          <span class="material-symbols-outlined text-[16px] text-amber-400 animate-pulse">bolt</span>
+          <span id="nav-god-mode-text">GOD MODE</span>
+          <span id="nav-god-mode-dot" class="w-1.5 h-1.5 rounded-full bg-amber-400/40"></span>
+        </button>
+
+        <!-- Live / Sim Stream Pill -->
+        <button onclick="toggleStreamLive()" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest/90 hover:bg-surface-container-high text-on-surface text-xs font-medium transition-all active:scale-95 cursor-pointer border border-outline-variant/20" type="button" title="Toggle Live / Simulated Stream">
+          <span class="relative flex h-2 w-2">
+            <span id="nav-live-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span id="nav-live-dot" class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+          </span>
+          <span id="nav-live-label" class="font-mono text-[11px] uppercase tracking-wider text-on-surface font-semibold">LIVE</span>
+        </button>
+
+        <!-- Connect Hardware Button -->
+        <button onclick="openHardwareModal()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-semibold text-[12px] tracking-wide shadow-[0_0_15px_rgba(0,210,170,0.3)] hover:shadow-[0_0_20px_rgba(0,210,170,0.5)] transition-all active:scale-95 cursor-pointer" type="button">
+          <span class="material-symbols-outlined text-[16px]">memory</span>
+          <span>Connect Gateway</span>
+        </button>
+
+        <!-- Operator Badge -->
+        <div class="flex items-center gap-1.5 p-1 pr-2.5 rounded-full bg-surface-container-high/80 border border-outline-variant/20 font-mono text-[11px]">
+          <div class="w-6 h-6 rounded-full bg-primary/20 text-primary border border-primary/40 flex items-center justify-center text-[10px] font-bold">
+            W4
+          </div>
+          <span class="text-on-surface hidden sm:inline">OP-04</span>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- ⚡ GOD MODE PERSISTENT COMMAND HUD BAR (WHEN ACTIVE) -->
+  <!-- ========================================================================= -->
+  <div id="god-mode-hud-bar" class="hidden fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-[#181206]/95 via-[#231a08]/98 to-[#181206]/95 border-b border-amber-500/50 backdrop-blur-2xl shadow-[0_10px_35px_rgba(245,158,11,0.3)] transition-all">
+    <div class="max-w-[1440px] mx-auto px-4 lg:px-8 py-2 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+      <div class="flex items-center gap-2.5">
+        <span class="flex h-2.5 w-2.5 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400"></span>
+        </span>
+        <span class="font-black text-amber-300 tracking-wider">⚡ GOD MODE ACTIVE // SUPER-ADMIN OVERRIDE</span>
+        <span class="hidden md:inline px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 border border-amber-500/30 text-[10px]">SAFETY LOCKS: BYPASSED</span>
+        <span class="hidden lg:inline text-[11px] text-amber-400/80">LATENCY: 0.8ms • DIRECT SPI/I2C BUS</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="openGodModeModal()" class="px-2.5 py-1 rounded-lg bg-amber-400 text-amber-950 font-bold hover:bg-amber-300 transition-all flex items-center gap-1 cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.4)]">
+          <span class="material-symbols-outlined text-[15px]">tune</span>
+          <span>Open Command Deck</span>
+        </button>
+        <button onclick="godModeForceAllValves(true)" class="px-2.5 py-1 rounded-lg bg-surface-container-high text-amber-300 border border-amber-400/30 hover:border-amber-400 transition-all flex items-center gap-1 cursor-pointer">
+          <span class="material-symbols-outlined text-[15px]">valve</span>
+          <span>Force All Solenoids</span>
+        </button>
+        <button onclick="godModeEmergencyStop()" class="px-2.5 py-1 rounded-lg bg-error/20 text-error border border-error/40 hover:bg-error/30 transition-all flex items-center gap-1 cursor-pointer">
+          <span class="material-symbols-outlined text-[15px]">e911_emergency</span>
+          <span>E-STOP</span>
+        </button>
+        <button onclick="toggleGodModeUI(false)" class="p-1 text-amber-400/70 hover:text-white transition-all cursor-pointer" title="Exit God Mode">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN COCKPIT VIEWPORT -->
+  <!-- ========================================================================= -->
+  <main class="relative z-10 w-full max-w-[1440px] flex flex-col gap-6 mt-2">
+
+    <!-- 2. PAGE HEADER SECTION (LEVEL 4 DIAGNOSTICS SPEC) -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl bg-gradient-to-b from-[#14232c]/95 to-[#0c161d]/98 border border-outline-variant/25 backdrop-blur-xl shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2 text-xs font-mono text-primary">
+          <span class="material-symbols-outlined text-[16px]">terminal</span>
+          <span class="uppercase tracking-widest font-bold">ISA-101 Level 4 Diagnostics Surface</span>
+          <span class="text-outline">•</span>
+          <span class="text-on-surface-variant">Sub-GHz 915.2 MHz LoRa PHY</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+            <span>Telemetry Stream &amp; Raw Binary Packet Bus</span>
+            <span class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+            </span>
+          </h1>
+        </div>
+        <p class="text-xs sm:text-sm text-on-surface-variant max-w-3xl">
+          Real-time binary telemetry ingestion, byte-level frame dissection, CRC-16 polynomial verification, and sub-canopy RF constellation health monitoring.
+        </p>
+      </div>
+
+      <!-- Action Controls -->
+      <div class="flex flex-wrap items-center gap-2.5 self-start md:self-auto shrink-0 font-mono text-xs">
+        <button onclick="toggleStreamPause()" id="btn-stream-pause" class="px-3.5 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-white border border-outline-variant/30 flex items-center gap-1.5 transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-[17px] text-amber-400" id="icon-stream-pause">pause_circle</span>
+          <span id="text-stream-pause">Pause Stream</span>
+        </button>
+        <button onclick="clearTerminalBuffer()" class="px-3 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-white border border-outline-variant/30 flex items-center gap-1.5 transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-[17px]">delete_sweep</span>
+          <span>Clear Bus</span>
+        </button>
+        <button onclick="exportTelemetryCSV()" class="px-4 py-2 rounded-xl bg-primary text-on-primary font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,210,170,0.3)] hover:shadow-[0_0_20px_rgba(0,210,170,0.5)] transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-[17px]">download</span>
+          <span>Export PCAP / CSV</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 3. TOP TELEMETRY INSTRUMENTAL KPI STRIP (6 LIVE METRICS) -->
+    <!-- ========================================================================= -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+      
+      <!-- KPI 1: Ingestion Cadence -->
+      <div class="p-4 rounded-2xl bg-gradient-to-b from-[#14232c]/90 to-[#0c161d]/95 border border-outline-variant/25 shadow-md flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs text-on-surface-variant font-mono">
+          <span>Cadence</span>
+          <span class="material-symbols-outlined text-primary text-[18px]">speed</span>
+        </div>
+        <div class="mt-2">
+          <div class="text-xl sm:text-2xl font-bold font-mono text-white" id="kpi-stream-rate">1.0 Hz</div>
+          <div class="text-[10px] font-mono text-primary mt-0.5">1,000ms Frame Sync</div>
+        </div>
+        <div class="mt-2 text-[10px] text-outline font-mono border-t border-outline-variant/20 pt-1.5 flex justify-between">
+          <span>Jitter: &lt;1.8ms</span>
+          <span class="text-primary font-bold">LOCKED</span>
+        </div>
+      </div>
+
+      <!-- KPI 2: Packets Ingested -->
+      <div class="p-4 rounded-2xl bg-gradient-to-b from-[#14232c]/90 to-[#0c161d]/95 border border-outline-variant/25 shadow-md flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs text-on-surface-variant font-mono">
+          <span>Total Packets</span>
+          <span class="material-symbols-outlined text-secondary text-[18px]">input</span>
+        </div>
+        <div class="mt-2">
+          <div class="text-xl sm:text-2xl font-bold font-mono text-secondary" id="kpi-total-packets">148,932</div>
+          <div class="text-[10px] font-mono text-on-surface-variant mt-0.5">32 Bytes / Frame</div>
+        </div>
+        <div class="mt-2 text-[10px] text-outline font-mono border-t border-outline-variant/20 pt-1.5 flex justify-between">
+          <span>Throughput: 256 B/s</span>
+          <span class="text-secondary font-bold">RX ACTIVE</span>
+        </div>
+      </div>
+
+      <!-- KPI 3: CRC-16 Integrity -->
+      <div class="p-4 rounded-2xl bg-gradient-to-b from-[#14232c]/90 to-[#0c161d]/95 border border-outline-variant/25 shadow-md flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs text-on-surface-variant font-mono">
+          <span>CRC-16 Pass</span>
+          <span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+        </div>
+        <div class="mt-2">
+          <div class="text-xl sm:text-2xl font-bold font-mono text-primary" id="kpi-crc-rate">99.88%</div>
+          <div class="text-[10px] font-mono text-on-surface-variant mt-0.5">Poly 0x1021 CCITT</div>
+        </div>
+        <div class="mt-2 text-[10px] text-outline font-mono border-t border-outline-variant/20 pt-1.5 flex justify-between">
+          <span>Corrupt: 0 Pkt</span>
+          <span class="text-primary font-bold">0.00% BER</span>
+        </div>
+      </div>
+
+      <!-- KPI 4: RF Carrier PHY -->
+      <div class="p-4 rounded-2xl bg-gradient-to-b from-[#14232c]/90 to-[#0c161d]/95 border border-outline-variant/25 shadow-md flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs text-on-surface-variant font-mono">
+          <span>LoRa PHY</span>
+          <span class="material-symbols-outlined text-amber-400 text-[18px]">cell_tower</span>
+        </div>
+        <div class="mt-2">
+          <div class="text-lg sm:text-xl font-bold font-mono text-white">915.2 MHz</div>
+          <div class="text-[10px] font-mono text-amber-300 mt-0.5">SF7 / BW 125kHz</div>
+        </div>
+        <div class="mt-2 text-[10px] text-outline font-mono border-t border-outline-variant/20 pt-1.5 flex justify-between">
+          <span>SX1262 Master</span>
+          <span class="text-amber-400 font-bold">+14 dBm TX</span>
+        </div>
+      </div>
+
+      <!-- KPI 5: Avg Link Margin / RSSI -->
+      <div class="p-4 rounded-2xl bg-gradient-to-b from-[#14232c]/90 to-[#0c161d]/95 border border-outline-variant/25 shadow-md flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs text-on-surface-variant font-mono">
+          <span>Link RSSI / SNR</span>
+          <span class="material-symbols-outlined text-secondary text-[18px]">wifi</span>
+        </div>
+        <div class="mt-2">
+          <div class="text-xl sm:text-2xl font-bold font-mono text-white" id="kpi-avg-rssi">-68 dBm</div>
+          <div class="text-[10px] font-mono text-secondary mt-0.5" id="kpi-avg-snr">+9.4 dB SNR</div>
+        </div>
+        <div class="mt-2 text-[10px] text-outline font-mono border-t border-outline-variant/20 pt-1.5 flex justify-between">
+          <span>Link Margin: +24dB</span>
+          <span class="text-primary font-bold">OPTIMAL</span>
+        </div>
+      </div>
+
+      <!-- KPI 6: Active Mesh Nodes -->
+      <div class="p-4 rounded-2xl bg-gradient-to-b from-[#14232c]/90 to-[#0c161d]/95 border border-outline-variant/25 shadow-md flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs text-on-surface-variant font-mono">
+          <span>Mesh Topology</span>
+          <span class="material-symbols-outlined text-primary text-[18px]">hub</span>
+        </div>
+        <div class="mt-2">
+          <div class="text-xl sm:text-2xl font-bold font-mono text-primary" id="kpi-active-nodes">12 / 12</div>
+          <div class="text-[10px] font-mono text-on-surface-variant mt-0.5">Nodes Heartbeat OK</div>
+        </div>
+        <div class="mt-2 text-[10px] text-outline font-mono border-t border-outline-variant/20 pt-1.5 flex justify-between">
+          <span>Mesh Latency: 14ms</span>
+          <span class="text-primary font-bold">STAR MESH</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 4. INTERACTIVE 32-BYTE RAW BINARY PACKET FRAME DISSECTOR -->
+    <!-- ========================================================================= -->
+    <div class="p-5 sm:p-6 rounded-3xl bg-gradient-to-b from-[#14232c]/95 to-[#0c161d]/98 border border-outline-variant/25 shadow-xl space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-primary/20 text-primary border border-primary/30 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">memory</span>
+          </div>
+          <div>
+            <h2 class="font-bold text-base text-white tracking-tight flex items-center gap-2">
+              <span>Interactive 32-Byte Packet Hex Frame Dissector</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-primary/15 text-primary border border-primary/30">FRAME #04921</span>
+            </h2>
+            <div class="text-xs text-on-surface-variant font-mono">Hover or tap individual byte clusters to inspect bitmask structures, raw ADC voltages and physical conversion formulas.</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-mono">
+          <span class="text-outline">Checksum Validation:</span>
+          <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+            <span>CRC-16 OK (0x8F4A)</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Hex Byte Stream Layout (32 Bytes Grid) -->
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-wrap items-center gap-1.5 p-4 rounded-2xl bg-[#070e14] border border-outline-variant/25 font-mono text-xs sm:text-sm overflow-x-auto select-none" id="hex-dissector-grid">
+          <!-- Byte 00-03: Header/Preamble -->
+          <span onmouseenter="inspectByte('sync')" class="px-2 py-1.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/40 cursor-pointer hover:scale-105 transition-transform" title="Preamble & Sync: 0xAA 0x55">AA 55</span>
+          <span onmouseenter="inspectByte('sync')" class="px-2 py-1.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/40 cursor-pointer hover:scale-105 transition-transform" title="Network Signature: 'GC' (AgriGCS)">47 43</span>
+          
+          <!-- Byte 04-05: Node ID -->
+          <span onmouseenter="inspectByte('node')" class="px-2 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 cursor-pointer hover:scale-105 transition-transform" title="Source Node ID: #10555 (Zone B)">29 3B</span>
+          
+          <!-- Byte 06: Packet Type -->
+          <span onmouseenter="inspectByte('type')" class="px-2 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 cursor-pointer hover:scale-105 transition-transform" title="Packet Type: 0x01 Soil FDR Telemetry">01</span>
+          
+          <!-- Byte 07-08: VWC Moisture -->
+          <span onmouseenter="inspectByte('vwc')" class="px-2 py-1.5 rounded-lg bg-primary/25 text-primary border border-primary/50 cursor-pointer hover:scale-105 transition-transform" id="byte-vwc" title="Volumetric Water Content: 28.0% VWC">01 18</span>
+          
+          <!-- Byte 09-10: Soil Temp -->
+          <span onmouseenter="inspectByte('temp')" class="px-2 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 cursor-pointer hover:scale-105 transition-transform" id="byte-temp" title="Soil Temperature: 26.8°C">01 0C</span>
+          
+          <!-- Byte 11-12: Soil EC -->
+          <span onmouseenter="inspectByte('ec')" class="px-2 py-1.5 rounded-lg bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 cursor-pointer hover:scale-105 transition-transform" title="Electrical Conductivity: 0.88 dS/m">00 58</span>
+          
+          <!-- Byte 13: Battery Status -->
+          <span onmouseenter="inspectByte('batt')" class="px-2 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 cursor-pointer hover:scale-105 transition-transform" id="byte-batt" title="Battery: 85% / 12.8V">5A</span>
+          
+          <!-- Byte 14: RSSI -->
+          <span onmouseenter="inspectByte('rssi')" class="px-2 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 cursor-pointer hover:scale-105 transition-transform" id="byte-rssi" title="LoRa RSSI: -68 dBm">BC</span>
+          
+          <!-- Byte 15: SNR -->
+          <span onmouseenter="inspectByte('snr')" class="px-2 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 cursor-pointer hover:scale-105 transition-transform" title="LoRa SNR: +9.2 dB">25</span>
+          
+          <!-- Byte 16-29: Extensions -->
+          <span onmouseenter="inspectByte('payload')" class="px-2 py-1.5 rounded-lg bg-surface-container-high text-on-surface-variant border border-outline-variant/20 cursor-pointer hover:scale-105 transition-transform" title="Sub-canopy Reserved Extended Registers">00 00 00 00 00 00 00 00 00 00 00 00 00 00</span>
+          
+          <!-- Byte 30-31: CRC Checksum -->
+          <span onmouseenter="inspectByte('crc')" class="px-2 py-1.5 rounded-lg bg-emerald-500/30 text-emerald-300 border border-emerald-400 cursor-pointer hover:scale-105 transition-transform font-bold" title="CRC-16-CCITT: 0x8F4A (Pass)">8F 4A</span>
+        </div>
+
+        <!-- Dissection Breakdown Card -->
+        <div class="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/25 grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-mono">
+          <div class="space-y-1">
+            <span class="text-outline block text-[10px] uppercase">Selected Field:</span>
+            <span class="text-sm font-bold text-primary block" id="dissect-field-name">Byte 07-08: Soil Moisture VWC</span>
+            <span class="text-[11px] text-on-surface-variant" id="dissect-hex-val">Hex: 0x0118 (Raw Dec: 280)</span>
+          </div>
+          <div class="space-y-1">
+            <span class="text-outline block text-[10px] uppercase">Decoded Value:</span>
+            <span class="text-sm font-bold text-white block" id="dissect-decoded-val">28.0% VWC (Moisture Deficit)</span>
+            <span class="text-[11px] text-error" id="dissect-status">Deficit Alert (&lt;30.0% MAD)</span>
+          </div>
+          <div class="space-y-1">
+            <span class="text-outline block text-[10px] uppercase">Conversion Formula:</span>
+            <span class="text-[11px] text-white block" id="dissect-formula">VWC% = (RawADC * 0.1)</span>
+            <span class="text-[10px] text-outline">Resolution: 0.1% • 10-bit resolution</span>
+          </div>
+          <div class="space-y-1">
+            <span class="text-outline block text-[10px] uppercase">Hardware Interface:</span>
+            <span class="text-[11px] text-white block">I2C Address 0x36 • 3.3V Logic</span>
+            <span class="text-[10px] text-primary font-bold">CRC Verified • Zero Bit Jitter</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 5. REAL-TIME 1Hz PACKET INGESTION TERMINAL & RF CONSTELLATION -->
+    <!-- ========================================================================= -->
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+      
+      <!-- Left (7 Cols): Live Terminal Console -->
+      <div class="xl:col-span-7 p-5 rounded-3xl bg-gradient-to-b from-[#14232c]/95 to-[#0c161d]/98 border border-outline-variant/25 shadow-2xl flex flex-col gap-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">terminal</span>
+            <h2 class="text-base font-bold text-white font-mono tracking-tight">Live 1Hz Raw Packet Bus Feed</h2>
+            <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-primary/20 text-primary animate-pulse">STREAMING</span>
+          </div>
+          <div class="flex items-center gap-2 font-mono text-xs">
+            <select id="filter-node-select" onchange="filterTerminalNode(this.value)" class="bg-surface-container-low border border-outline-variant/30 rounded-xl px-2.5 py-1 text-xs text-white">
+              <option value="ALL">All 12 Nodes</option>
+              <option value="#10555">Probe #10555 (Zone B)</option>
+              <option value="#10551">Probe #10551 (Zone A)</option>
+              <option value="#10558">Probe #10558 (Zone C)</option>
+              <option value="#20412">DHT22 #20412 (Canopy)</option>
+              <option value="#30101">RTK Rover #30101</option>
+            </select>
+            <label class="flex items-center gap-1 text-[11px] text-on-surface-variant cursor-pointer">
+              <input type="checkbox" id="chk-autoscroll" checked class="accent-primary">
+              <span>Auto-Scroll</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Terminal Output Viewport -->
+        <div class="relative w-full h-[380px] rounded-2xl bg-[#060b10] border border-outline-variant/30 p-3 font-mono text-[11px] overflow-y-auto space-y-1.5 select-text" id="terminal-packet-log">
+          <!-- Live packet rows dynamically injected here -->
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] font-mono text-outline pt-1">
+          <span id="terminal-packet-counter">Buffer: 45 / 500 Frames Cached</span>
+          <span class="text-primary font-bold">1Hz Tokio Broker Synchronized</span>
+        </div>
+      </div>
+
+      <!-- Right (5 Cols): RF Constellation Scatter & Waterfall Plot -->
+      <div class="xl:col-span-5 flex flex-col gap-5">
+        
+        <!-- RF Plot 1: RSSI vs SNR Constellation -->
+        <div class="p-5 rounded-3xl bg-gradient-to-b from-[#14232c]/95 to-[#0c161d]/98 border border-outline-variant/25 shadow-2xl flex flex-col gap-3">
+          <div class="flex items-center justify-between border-b border-white/10 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary text-[18px]">scatter_plot</span>
+              <h3 class="font-bold text-sm text-white font-mono uppercase">RF Constellation (RSSI vs SNR)</h3>
+            </div>
+            <span class="text-[10px] font-mono text-primary">12 NODES PLOTTED</span>
+          </div>
+          <div class="w-full h-[180px] relative">
+            <canvas id="rfConstellationChart"></canvas>
+          </div>
+        </div>
+
+        <!-- RF Plot 2: 8-Channel Concentrator Load Waterfall -->
+        <div class="p-5 rounded-3xl bg-gradient-to-b from-[#14232c]/95 to-[#0c161d]/98 border border-outline-variant/25 shadow-2xl flex flex-col gap-3">
+          <div class="flex items-center justify-between border-b border-white/10 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-amber-400 text-[18px]">equalizer</span>
+              <h3 class="font-bold text-sm text-white font-mono uppercase">SX1302 8-Channel Load Spectrum</h3>
+            </div>
+            <span class="text-[10px] font-mono text-outline">915.0 - 915.8 MHz</span>
+          </div>
+          <div class="w-full h-[150px] relative">
+            <canvas id="rfChannelSpectrumChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 6. 12-NODE SUB-CANOPY MESH TOPOLOGY HEALTH MATRIX -->
+    <!-- ========================================================================= -->
+    <div class="p-5 sm:p-6 rounded-3xl bg-gradient-to-b from-[#14232c]/95 to-[#0c161d]/98 border border-outline-variant/25 shadow-2xl space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-primary text-[22px]">hub</span>
+          <div>
+            <h2 class="font-bold text-base text-white tracking-tight">12-Node Sub-Canopy Mesh Network Health Matrix</h2>
+            <div class="text-xs text-on-surface-variant font-mono">Real-time ESP32-S3 register status, transmission intervals, link budgets, and battery voltages.</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 font-mono text-xs">
+          <button onclick="runMeshPingBroadcast()" class="px-3 py-1.5 rounded-xl bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 font-bold transition-all cursor-pointer flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px]">sensors</span>
+            <span>Broadcast RF Ping</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid of 12 Node Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5" id="nodes-health-matrix">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 7. FIELD HARDWARE CALIBRATION & RECALIBRATION LAB -->
+    <!-- ========================================================================= -->
+    <div class="p-5 sm:p-6 rounded-3xl bg-gradient-to-b from-[#14232c]/95 to-[#0c161d]/98 border border-outline-variant/25 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-5">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2 text-primary font-mono text-xs font-bold">
+          <span class="material-symbols-outlined text-[18px]">build</span>
+          <span>FDR Probe Field Recalibration Suite</span>
+        </div>
+        <h3 class="text-lg font-bold text-white">Two-Point Capacitive Curve Calibration</h3>
+        <p class="text-xs text-on-surface-variant max-w-2xl">
+          Execute two-point in-situ sensor calibration (dry air 0.0% raw baseline vs deionized water 100.0% dielectric permittivity) to eliminate soil mineral drift.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 shrink-0 font-mono text-xs">
+        <button onclick="calibrateSensorAir()" class="px-4 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/30 text-white font-bold transition-all cursor-pointer flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px] text-amber-400">air</span>
+          <span>Sample Air (0%)</span>
+        </button>
+        <button onclick="calibrateSensorWater()" class="px-4 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/30 text-white font-bold transition-all cursor-pointer flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px] text-secondary">water</span>
+          <span>Sample Water (100%)</span>
+        </button>
+        <button onclick="commitCalibrationCurve()" class="px-4 py-2.5 rounded-xl bg-primary text-on-primary font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,210,170,0.3)]">
+          <span class="material-symbols-outlined text-[16px]">save</span>
+          <span>Flash Curve (EEPROM)</span>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- ⚡ GOD MODE COMMAND DECK MODAL -->
+  <!-- ========================================================================= -->
+  <div id="modal-god-mode" class="fixed inset-0 z-[100] bg-black/85 backdrop-blur-2xl hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="relative bg-gradient-to-b from-[#181308]/98 via-[#0e141b]/98 to-[#090e14]/99 border-2 border-amber-500/50 rounded-3xl max-w-4xl w-full p-5 sm:p-7 shadow-[0_0_60px_rgba(245,158,11,0.35)] space-y-6 text-white font-sans max-h-[92vh] overflow-y-auto">
+      
+      <!-- Top Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-500/30 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-400/50 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+            <span class="material-symbols-outlined text-[26px] animate-pulse">bolt</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="font-extrabold text-lg sm:text-xl text-amber-300 font-mono tracking-tight">⚡ GOD MODE // MASTER COMMAND DECK</h2>
+              <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-amber-400/20 text-amber-300 border border-amber-400/40 animate-pulse">SUPER-ADMIN UNLOCKED</span>
+            </div>
+            <p class="text-xs text-on-surface-variant font-mono mt-0.5">Direct SCADA Actuator Override &amp; Dynamic Agronomic Simulation Forcer</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 self-end sm:self-auto">
+          <button onclick="toggleGodModeUI(false); closeModal('modal-god-mode');" class="px-3 py-1.5 rounded-xl bg-error/15 text-error hover:bg-error/25 border border-error/30 text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px]">power_settings_new</span>
+            <span>Disengage</span>
+          </button>
+          <button onclick="closeModal('modal-god-mode')" class="p-1.5 rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-white cursor-pointer">
+            <span class="material-symbols-outlined text-[22px]">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sliders & Actuators Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        
+        <!-- BAY 1: Sliders -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-[#141b24]/90 border border-amber-500/30 shadow-lg space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-white/10">
+            <span class="font-bold text-sm text-white font-mono uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-amber-400 text-[18px]">tune</span>
+              <span>Telemetry Forcers (Live Sliders)</span>
+            </span>
+            <span class="text-[10px] font-mono text-amber-400">DIRECT INJECT</span>
+          </div>
+
+          <!-- Slider VWC -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="text-on-surface-variant">Zone B Soil Moisture (VWC):</span>
+              <span id="god-slider-val-vwc" class="text-amber-300 font-bold text-sm">28.0%</span>
+            </div>
+            <input type="range" id="god-slider-vwc" min="0" max="100" step="0.5" value="28.0" oninput="handleGodVwcSlider(this.value)" class="w-full accent-amber-400 cursor-pointer bg-surface-container-high h-2 rounded-lg">
+          </div>
+
+          <!-- Slider Temp -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="text-on-surface-variant">Canopy Temperature:</span>
+              <span id="god-slider-val-temp" class="text-amber-300 font-bold text-sm">28.5°C</span>
+            </div>
+            <input type="range" id="god-slider-temp" min="-10" max="55" step="0.5" value="28.5" oninput="handleGodTempSlider(this.value)" class="w-full accent-amber-400 cursor-pointer bg-surface-container-high h-2 rounded-lg">
+          </div>
+
+          <!-- Slider RSSI -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="text-on-surface-variant">LoRa Mesh RSSI:</span>
+              <span id="god-slider-val-rssi" class="text-amber-300 font-bold text-sm">-68 dBm</span>
+            </div>
+            <input type="range" id="god-slider-rssi" min="-135" max="-30" step="1" value="-68" oninput="handleGodRssiSlider(this.value)" class="w-full accent-amber-400 cursor-pointer bg-surface-container-high h-2 rounded-lg">
+          </div>
+        </div>
+
+        <!-- BAY 2: Actuators -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-[#141b24]/90 border border-amber-500/30 shadow-lg space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-white/10">
+              <span class="font-bold text-sm text-white font-mono uppercase tracking-wider flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-amber-400 text-[18px]">precision_manufacturing</span>
+                <span>Master Actuators</span>
+              </span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">BYPASS ON</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+              <button onclick="godModeForceAllValves(true)" class="p-3 rounded-xl bg-primary/20 border border-primary/40 hover:border-primary text-left transition-all cursor-pointer font-mono font-bold text-xs text-primary">
+                FORCE ALL VALVES (OPEN)
+              </button>
+              <button onclick="godModeForceAllValves(false)" class="p-3 rounded-xl bg-surface-container-high border border-outline-variant/30 hover:border-outline-variant text-left transition-all cursor-pointer font-mono font-bold text-xs text-on-surface">
+                CLOSE ALL VALVES
+              </button>
+            </div>
+
+            <!-- E-STOP -->
+            <button onclick="godModeEmergencyStop()" class="w-full py-3 rounded-xl bg-error/25 border border-error hover:border-error text-error font-mono font-extrabold text-xs tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+              <span class="material-symbols-outlined text-[18px] animate-pulse">e911_emergency</span>
+              <span>🚨 MASTER EMERGENCY E-STOP</span>
+            </button>
+          </div>
+
+          <div class="text-[10px] text-on-surface-variant font-mono border-t border-white/5 pt-2 flex justify-between">
+            <span>Actuator Status: <strong class="text-primary" id="god-actuator-status">ALL CLEAR</strong></span>
+            <span>Safety Locks: <strong class="text-amber-400">BYPASS</strong></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="flex items-center justify-between border-t border-amber-500/20 pt-4 text-xs font-mono">
+        <span class="text-amber-400/70">Press <kbd class="px-1.5 py-0.5 rounded bg-black border border-white/20 text-white text-[10px]">Shift + G</kbd> anytime to toggle God Mode</span>
+        <button onclick="closeModal('modal-god-mode')" class="px-5 py-2 rounded-full bg-amber-400 text-amber-950 font-bold hover:bg-amber-300 transition-all cursor-pointer">
+          Close Deck
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Hardware Modal -->
+  <div id="modal-hardware" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-[#0f1821] border border-outline-variant/30 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 font-sans">
+      <div class="flex items-center justify-between border-b border-outline-variant/20 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">memory</span>
+          <h3 class="font-bold text-base text-white">Hardware Bridge (WebSerial)</h3>
+        </div>
+        <button onclick="closeModal('modal-hardware')" class="p-1 rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-white cursor-pointer">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+      <div class="text-xs font-mono space-y-3">
+        <div>
+          <label class="text-on-surface-variant block mb-1">Serial Interface:</label>
+          <select class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3 py-2 text-white">
+            <option>COM3 - ESP32-S3 LoRa Bridge (115,200 Baud)</option>
+            <option>Virtual LoRa Telemetry Channel (868.1 / 915.2 MHz)</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-hardware'); showToast('Gateway Connected', 'Serial telemetry link synchronized');" class="px-5 py-2 rounded-full bg-primary text-on-primary font-bold text-xs cursor-pointer">Connect</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-notify" class="fixed bottom-6 right-6 z-50 max-w-sm bg-[#0b1219]/95 backdrop-blur-xl border border-primary p-3.5 rounded-2xl shadow-[0_0_30px_rgba(0,210,170,0.3)] flex items-center gap-3 transition-all duration-300 translate-y-24 opacity-0 pointer-events-none">
+    <div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0">
+      <span class="material-symbols-outlined text-[18px]">check_circle</span>
+    </div>
+    <div class="text-xs font-sans">
+      <div id="toast-title" class="font-bold text-white">Action Complete</div>
+      <div id="toast-desc" class="text-on-surface-variant text-[11px]">System state updated</div>
+    </div>
+  </div>
+
+  <!-- State & Nav Scripts -->
+  <script src="/agrigcs-state.js"></script>
+  <script src="/agrigcs-nav.js"></script>
+
+  <!-- ========================================================================= -->
+  <!-- TELEMETRY STREAM & PACKET DISSECTOR ENGINE -->
+  <!-- ========================================================================= -->
+  <script>
+    let isLiveStream = true;
+    let isStreamPaused = false;
+    let isGodModeActive = false;
+    let packetSeqNum = 148932;
+    let selectedNodeFilter = 'ALL';
+    let packetBuffer = [];
+    const maxBufferSize = 250;
+
+    // 12 Sub-canopy Sensor Nodes Inventory
+    const meshNodes = [
+      { id: '#10555', name: 'Soil FDR (Primary)', zone: 'Zone B', vwc: 28.0, temp: 26.8, ec: 0.88, rssi: -68, snr: 9.4, batt: 85, freq: '915.2 MHz', status: 'Warning', lastAck: 1 },
+      { id: '#10554', name: 'Soil FDR (Backup)', zone: 'Zone B', vwc: 29.2, temp: 26.5, ec: 0.90, rssi: -71, snr: 8.8, batt: 88, freq: '915.2 MHz', status: 'Online', lastAck: 2 },
+      { id: '#10551', name: 'Soil FDR (Primary)', zone: 'Zone A', vwc: 42.1, temp: 23.1, ec: 1.42, rssi: -64, snr: 10.2, batt: 92, freq: '915.0 MHz', status: 'Online', lastAck: 1 },
+      { id: '#10552', name: 'Soil FDR (Sub-depth)', zone: 'Zone A', vwc: 43.5, temp: 22.4, ec: 1.45, rssi: -66, snr: 9.9, batt: 91, freq: '915.0 MHz', status: 'Online', lastAck: 3 },
+      { id: '#10558', name: 'Soil FDR (Primary)', zone: 'Zone C', vwc: 18.0, temp: 31.0, ec: 0.65, rssi: -76, snr: 7.2, batt: 76, freq: '915.4 MHz', status: 'Warning', lastAck: 1 },
+      { id: '#10559', name: 'Soil FDR (Backup)', zone: 'Zone C', vwc: 18.4, temp: 30.8, ec: 0.68, rssi: -79, snr: 6.8, batt: 80, freq: '915.4 MHz', status: 'Warning', lastAck: 2 },
+      { id: '#20412', name: 'DHT22 Canopy Climate', zone: 'Zone B', vwc: 0.0, temp: 26.8, ec: 0.0, rssi: -62, snr: 11.5, batt: 90, freq: '915.2 MHz', status: 'Online', lastAck: 1 },
+      { id: '#40012', name: 'Solar Tower Mast Hub', zone: 'Zone D', vwc: 0.0, temp: 24.0, ec: 0.0, rssi: -58, snr: 12.0, batt: 96, freq: '915.6 MHz', status: 'Online', lastAck: 1 },
+      { id: '#50004', name: 'Solenoid Actuator #04', zone: 'Zone B', vwc: 0.0, temp: 25.0, ec: 0.0, rssi: -69, snr: 9.1, batt: 89, freq: '915.2 MHz', status: 'Online', lastAck: 2 },
+      { id: '#30101', name: 'Autonomous RTK Rover', zone: 'Zone B', vwc: 0.0, temp: 28.0, ec: 0.0, rssi: -59, snr: 11.8, batt: 94, freq: '915.8 MHz', status: 'Online', lastAck: 1 },
+      { id: '#90001', name: 'Davis Vantage Station', zone: 'Zone D', vwc: 0.0, temp: 24.5, ec: 0.0, rssi: -55, snr: 13.1, batt: 98, freq: '915.6 MHz', status: 'Online', lastAck: 1 },
+      { id: '#00001', name: 'SX1302 Master Concentrator', zone: 'Hub', vwc: 0.0, temp: 26.0, ec: 0.0, rssi: -45, snr: 15.0, batt: 100, freq: '915.2 MHz', status: 'Online', lastAck: 0 }
+    ];
+
+    // Chart.js instances
+    let constellationChart = null;
+    let spectrumChart = null;
+
+    // Web Audio Synthesizer
+    function playAudio(type) {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        if (type === 'beep') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(880, ctx.currentTime);
+          gain.gain.setValueAtTime(0.04, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.1);
+        } else if (type === 'estop') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(880, ctx.currentTime);
+          osc.frequency.setValueAtTime(440, ctx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.18, ctx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.4);
+        }
+      } catch (e) {}
+    }
+
+    // 1Hz Ingestion Loop Ticker
+    function startTelemetryIngestion() {
+      setInterval(() => {
+        if (isStreamPaused) return;
+
+        packetSeqNum++;
+        document.getElementById('kpi-total-packets').textContent = packetSeqNum.toLocaleString();
+
+        // Pick an active sensor node to emit a packet
+        const node = meshNodes[Math.floor(Math.random() * meshNodes.length)];
+        node.lastAck = 0;
+
+        // Apply slight jitter
+        if (node.vwc > 0) {
+          node.vwc = parseFloat(Math.max(10.0, Math.min(85.0, node.vwc + (Math.random() - 0.5) * 0.15)).toFixed(1));
+        }
+
+        // Generate Synthetic 32-Byte Binary Frame Hex
+        const vwcRaw = Math.round(node.vwc * 10);
+        const vwcHex = vwcRaw.toString(16).padStart(4, '0').toUpperCase();
+        const tempRaw = Math.round(node.temp * 10);
+        const tempHex = tempRaw.toString(16).padStart(4, '0').toUpperCase();
+        const ecRaw = Math.round(node.ec * 100);
+        const ecHex = ecRaw.toString(16).padStart(4, '0').toUpperCase();
+        const battHex = node.batt.toString(16).padStart(2, '0').toUpperCase();
+        const rssiHex = (Math.abs(node.rssi)).toString(16).padStart(2, '0').toUpperCase();
+        const snrHex = Math.round(node.snr * 2).toString(16).padStart(2, '0').toUpperCase();
+
+        const hexStr = `AA 55 47 43 ${node.id.replace('#', '').slice(0, 2)} ${node.id.slice(-2)} 01 ${vwcHex.slice(0, 2)} ${vwcHex.slice(2, 4)} ${tempHex.slice(0, 2)} ${tempHex.slice(2, 4)} ${ecHex.slice(0, 2)} ${ecHex.slice(2, 4)} ${battHex} ${rssiHex} ${snrHex} 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8F 4A`;
+
+        // Render Packet Row into Terminal
+        renderPacketToTerminal({
+          seq: packetSeqNum,
+          timestamp: new Date().toISOString().slice(11, 19) + '.' + Math.floor(Math.random() * 900 + 100),
+          nodeId: node.id,
+          name: node.name,
+          zone: node.zone,
+          hex: hexStr,
+          vwc: node.vwc,
+          temp: node.temp,
+          rssi: node.rssi,
+          snr: node.snr,
+          batt: node.batt,
+          crc: 'CRC_PASS'
+        });
+
+        // Age other node ACKs
+        meshNodes.forEach(n => { if (n !== node) n.lastAck += 1; });
+        renderNodesHealthMatrix();
+
+      }, 1000);
+    }
+
+    // Render Packet to Terminal
+    function renderPacketToTerminal(pkt) {
+      const container = document.getElementById('terminal-packet-log');
+      if (!container) return;
+
+      if (selectedNodeFilter !== 'ALL' && pkt.nodeId !== selectedNodeFilter) return;
+
+      const row = document.createElement('div');
+      row.className = 'py-1 px-2 rounded hover:bg-surface-container-high transition-colors flex flex-wrap items-center justify-between gap-2 border-l-2 border-primary/50 text-[11px] font-mono';
+      
+      const vwcDisplay = pkt.vwc > 0 ? `<span class="text-primary font-bold">${pkt.vwc}% VWC</span>` : `<span class="text-secondary font-bold">${pkt.temp}°C</span>`;
+
+      row.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="text-outline text-[10px]">${pkt.timestamp}</span>
+          <span class="text-secondary font-bold">#${pkt.seq}</span>
+          <span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-white font-bold">${pkt.nodeId}</span>
+          <span class="text-on-surface-variant">${pkt.zone}</span>
+          <span class="text-on-surface-variant/70 hidden sm:inline text-[10px] tracking-wider font-mono">${pkt.hex.slice(0, 35)}...</span>
+        </div>
+        <div class="flex items-center gap-2">
+          ${vwcDisplay}
+          <span class="text-on-surface-variant text-[10px]">${pkt.rssi}dBm</span>
+          <span class="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[9px] border border-emerald-500/30">PASS</span>
+        </div>
+      `;
+
+      container.appendChild(row);
+      packetBuffer.push(pkt);
+      if (packetBuffer.length > maxBufferSize) {
+        packetBuffer.shift();
+        if (container.firstElementChild) container.firstElementChild.remove();
+      }
+
+      document.getElementById('terminal-packet-counter').textContent = `Buffer: ${packetBuffer.length} / ${maxBufferSize} Cached`;
+
+      const autoscroll = document.getElementById('chk-autoscroll');
+      if (autoscroll && autoscroll.checked) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    // Interactive Byte Dissector Hover Handler
+    function inspectByte(field) {
+      const nameEl = document.getElementById('dissect-field-name');
+      const hexEl = document.getElementById('dissect-hex-val');
+      const valEl = document.getElementById('dissect-decoded-val');
+      const statEl = document.getElementById('dissect-status');
+      const formEl = document.getElementById('dissect-formula');
+
+      if (field === 'sync') {
+        nameEl.textContent = 'Bytes 00-03: Preamble & Network Sync Word';
+        hexEl.textContent = 'Hex: 0xAA 0x55 0x47 0x43 (ASCII: "UGC")';
+        valEl.textContent = 'AgriGCS LoRa Frame Preamble';
+        statEl.textContent = 'Frame Lock Valid';
+        formEl.textContent = 'SyncWord == 0xAA554743';
+      } else if (field === 'node') {
+        nameEl.textContent = 'Bytes 04-05: Node Hardware Device Address';
+        hexEl.textContent = 'Hex: 0x293B (Decimal: 10555)';
+        valEl.textContent = 'Probe #10555 (Zone B Organic Kale)';
+        statEl.textContent = 'Active Sub-Canopy FDR Probe';
+        formEl.textContent = 'NodeID = (Byte[4] << 8) | Byte[5]';
+      } else if (field === 'type') {
+        nameEl.textContent = 'Byte 06: Telemetry Frame Descriptor';
+        hexEl.textContent = 'Hex: 0x01 (FRAME_TYPE_SOIL_FDR)';
+        valEl.textContent = 'Capacitive Multi-Depth Permittivity';
+        statEl.textContent = 'Standard Ingestion Metric';
+        formEl.textContent = 'FrameTypeEnum[0x01]';
+      } else if (field === 'vwc') {
+        nameEl.textContent = 'Bytes 07-08: Volumetric Water Content (VWC)';
+        hexEl.textContent = 'Hex: 0x0118 (Raw ADC: 280)';
+        valEl.textContent = '28.0% VWC (Root Depth 30cm)';
+        statEl.textContent = 'Moisture Deficit (<30.0% MAD)';
+        formEl.textContent = 'VWC% = (RawADC * 0.1)';
+      } else if (field === 'temp') {
+        nameEl.textContent = 'Bytes 09-10: Soil Temperature';
+        hexEl.textContent = 'Hex: 0x010C (Raw Dec: 268)';
+        valEl.textContent = '26.8°C Root Temperature';
+        statEl.textContent = 'Nominal Thermal Band';
+        formEl.textContent = 'TempC = (RawADC * 0.1)';
+      } else if (field === 'ec') {
+        nameEl.textContent = 'Bytes 11-12: Bulk Electrical Conductivity';
+        hexEl.textContent = 'Hex: 0x0058 (Raw Dec: 88)';
+        valEl.textContent = '0.88 dS/m Salinity';
+        statEl.textContent = 'Nutrient Fertigation Balanced';
+        formEl.textContent = 'EC = (RawADC * 0.01 dS/m)';
+      } else if (field === 'batt') {
+        nameEl.textContent = 'Byte 13: Node Battery Capacity & Bus Volts';
+        hexEl.textContent = 'Hex: 0x5A (Decimal: 90)';
+        valEl.textContent = '90% Capacity (12.8V LiFePO4)';
+        statEl.textContent = 'Solar MPPT Charging Active (+3.2A)';
+        formEl.textContent = 'Batt% = Byte[13]; Volts = 9 + (Batt * 0.04)';
+      } else if (field === 'rssi') {
+        nameEl.textContent = 'Byte 14: LoRa RF Received Signal Strength';
+        hexEl.textContent = 'Hex: 0xBC (Signed Dec: -68 dBm)';
+        valEl.textContent = '-68 dBm (Strong Sub-Canopy Signal)';
+        statEl.textContent = 'Link Margin: +24 dB';
+        formEl.textContent = 'RSSI_dBm = -1 * Byte[14]';
+      } else if (field === 'snr') {
+        nameEl.textContent = 'Byte 15: LoRa Signal-to-Noise Ratio (SNR)';
+        hexEl.textContent = 'Hex: 0x25 (Dec: 37 -> +9.2 dB)';
+        valEl.textContent = '+9.2 dB SNR (Low RF Interference)';
+        statEl.textContent = 'SF7 Demodulation Optimal';
+        formEl.textContent = 'SNR_dB = (Byte[15] * 0.25)';
+      } else if (field === 'crc') {
+        nameEl.textContent = 'Bytes 30-31: CRC-16-CCITT Polynomial Integrity';
+        hexEl.textContent = 'Hex: 0x8F4A (Computed Match: 0x8F4A)';
+        valEl.textContent = 'Valid Mathematical Checksum';
+        statEl.textContent = '0 Bit Flips • Transmission Uncorrupted';
+        formEl.textContent = 'Poly: x^16 + x^12 + x^5 + 1 (0x1021)';
+      }
+    }
+
+    // Render 12 Node Health Cards
+    function renderNodesHealthMatrix() {
+      const container = document.getElementById('nodes-health-matrix');
+      if (!container) return;
+      container.innerHTML = '';
+
+      meshNodes.forEach(node => {
+        const card = document.createElement('div');
+        const isWarning = node.status === 'Warning';
+        card.className = `p-3.5 rounded-2xl bg-surface-container-low/95 border ${isWarning ? 'border-error/40' : 'border-outline-variant/20'} hover:border-primary/40 transition-all flex flex-col justify-between gap-2.5 font-mono text-xs`;
+        
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full ${isWarning ? 'bg-error animate-pulse' : 'bg-primary'}"></span>
+              <span class="font-bold text-white">${node.id}</span>
+              <span class="text-outline text-[10px]">${node.zone}</span>
+            </div>
+            <span class="text-[9px] px-1.5 py-0.2 rounded ${isWarning ? 'bg-error/20 text-error' : 'bg-primary/20 text-primary'} font-bold">${node.status}</span>
+          </div>
+
+          <div class="text-[11px] text-on-surface-variant">${node.name}</div>
+
+          <div class="grid grid-cols-2 gap-2 text-[10px] bg-[#070e14] p-2 rounded-xl border border-outline-variant/15">
+            <div>
+              <span class="text-outline block">Reading:</span>
+              <span class="font-bold text-white">${node.vwc > 0 ? node.vwc + '% VWC' : node.temp + '°C'}</span>
+            </div>
+            <div>
+              <span class="text-outline block">RF RSSI / SNR:</span>
+              <span class="font-bold text-secondary">${node.rssi} dBm / +${node.snr}dB</span>
+            </div>
+            <div>
+              <span class="text-outline block">Battery:</span>
+              <span class="font-bold text-primary">${node.batt}%</span>
+            </div>
+            <div>
+              <span class="text-outline block">Last ACK:</span>
+              <span class="text-outline">${node.lastAck === 0 ? 'just now' : node.lastAck + 's ago'}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Chart.js: RF Constellation & Spectrum
+    function initRFCharts() {
+      // 1. Constellation Plot (RSSI vs SNR)
+      const ctx1 = document.getElementById('rfConstellationChart');
+      if (ctx1) {
+        const scatterData = meshNodes.map(n => ({ x: n.rssi, y: n.snr, label: n.id }));
+        constellationChart = new Chart(ctx1, {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Active Node RF Links',
+              data: scatterData,
+              backgroundColor: '#00d2aa',
+              borderColor: '#ffffff',
+              borderWidth: 1.5,
+              pointRadius: 6,
+              pointHoverRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => `${meshNodes[ctx.dataIndex].id}: ${ctx.parsed.x} dBm, +${ctx.parsed.y} dB SNR`
+                }
+              }
+            },
+            scales: {
+              x: {
+                title: { display: true, text: 'RSSI (dBm)', color: '#85948d', font: { family: 'JetBrains Mono', size: 10 } },
+                grid: { color: 'rgba(255,255,255,0.06)' },
+                ticks: { color: '#85948d' },
+                min: -130,
+                max: -40
+              },
+              y: {
+                title: { display: true, text: 'SNR (dB)', color: '#85948d', font: { family: 'JetBrains Mono', size: 10 } },
+                grid: { color: 'rgba(255,255,255,0.06)' },
+                ticks: { color: '#85948d' },
+                min: -5,
+                max: 18
+              }
+            }
+          }
+        });
+      }
+
+      // 2. Channel Spectrum Load Bar Chart
+      const ctx2 = document.getElementById('rfChannelSpectrumChart');
+      if (ctx2) {
+        spectrumChart = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: ['CH0 915.0', 'CH1 915.2', 'CH2 915.4', 'CH3 915.6', 'CH4 915.8', 'CH5 916.0', 'CH6 916.2', 'CH7 916.4'],
+            datasets: [{
+              label: 'Packets / Min',
+              data: [18, 45, 24, 14, 29, 6, 8, 4],
+              backgroundColor: ['#7bd0ff', '#00d2aa', '#7bd0ff', '#fbbf24', '#7bd0ff', '#242b32', '#242b32', '#242b32'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: '#85948d', font: { family: 'JetBrains Mono', size: 9 } } },
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#85948d', font: { size: 9 } } }
+            }
+          }
+        });
+      }
+    }
+
+    // Terminal Controls
+    function toggleStreamPause() {
+      isStreamPaused = !isStreamPaused;
+      const text = document.getElementById('text-stream-pause');
+      const icon = document.getElementById('icon-stream-pause');
+      if (isStreamPaused) {
+        text.textContent = 'Resume Stream';
+        icon.textContent = 'play_circle';
+        showToast('Stream Ingestion Paused', 'Terminal packet buffer locked');
+      } else {
+        text.textContent = 'Pause Stream';
+        icon.textContent = 'pause_circle';
+        showToast('Stream Ingestion Resumed', 'Live 1Hz packet bus active');
+      }
+    }
+
+    function clearTerminalBuffer() {
+      const container = document.getElementById('terminal-packet-log');
+      if (container) container.innerHTML = '';
+      packetBuffer = [];
+      document.getElementById('terminal-packet-counter').textContent = 'Buffer Cleared (0 Pkt)';
+      showToast('Buffer Cleared', 'Terminal packet memory reset');
+    }
+
+    function filterTerminalNode(nodeId) {
+      selectedNodeFilter = nodeId;
+      showToast('Node Filter Applied', `Showing packets for: ${nodeId}`);
+    }
+
+    function exportTelemetryCSV() {
+      let csv = 'SeqNum,Timestamp,NodeID,Zone,VWC,TempC,RSSI,SNR,Battery,Status,CRC\n';
+      packetBuffer.forEach(p => {
+        csv += `${p.seq},"${p.timestamp}","${p.nodeId}","${p.zone}",${p.vwc},${p.temp},${p.rssi},${p.snr},${p.batt},"${p.crc}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `agrigcs_binary_telemetry_${Date.now()}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('CSV Exported', `${packetBuffer.length} packet telemetry logs downloaded`);
+    }
+
+    // Diagnostics & Calibrations
+    function runMeshPingBroadcast() {
+      playAudio('beep');
+      showToast('Ping Broadcast Sent', '12/12 Nodes Responded • Round-trip Latency: 14.2ms');
+    }
+
+    function calibrateSensorAir() {
+      playAudio('beep');
+      showToast('Air Baseline Sampled', 'ADC Dry Reference: 1024 counts stored (0.0% VWC)');
+    }
+
+    function calibrateSensorWater() {
+      playAudio('beep');
+      showToast('Water Baseline Sampled', 'ADC Saturation Reference: 284 counts stored (100.0% VWC)');
+    }
+
+    function commitCalibrationCurve() {
+      playAudio('beep');
+      showToast('EEPROM Flashed', 'New 2-point dielectric polynomial written to Probe #10555');
+    }
+
+    // =========================================================================
+    // ⚡ GOD MODE ENGINE
+    // =================================
+    function toggleGodModeUI(forceState, openModal = true) {
+      if (typeof forceState === 'boolean') {
+        isGodModeActive = forceState;
+      } else {
+        isGodModeActive = !isGodModeActive;
+      }
+      const btn = document.getElementById('nav-god-mode-btn');
+      const text = document.getElementById('nav-god-mode-text');
+      const dot = document.getElementById('nav-god-mode-dot');
+      const hudBar = document.getElementById('god-mode-hud-bar');
+
+      if (isGodModeActive) {
+        document.body.classList.add('god-mode-active');
+        if (hudBar) hudBar.classList.remove('hidden');
+        if (btn) {
+          btn.classList.remove('text-amber-300', 'bg-gradient-to-r', 'from-amber-500/20', 'via-yellow-400/25', 'to-amber-500/20');
+          btn.classList.add('bg-amber-400', 'text-amber-950', 'border-amber-300', 'shadow-[0_0_30px_rgba(245,158,11,0.8)]');
+        }
+        if (text) text.textContent = '⚡ GOD MODE [ACTIVE]';
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-950 animate-ping';
+        playAudio('beep');
+        if (openModal) {
+          showToast('⚡ GOD MODE ACTIVE', 'Master Telemetry & Hardware Actuator Override Unlocked [Shift+G]');
+          openGodModeModal();
+        }
+      } else {
+        document.body.classList.remove('god-mode-active');
+        if (hudBar) hudBar.classList.add('hidden');
+        if (btn) {
+          btn.classList.remove('bg-amber-400', 'text-amber-950', 'border-amber-300', 'shadow-[0_0_30px_rgba(245,158,11,0.8)]');
+          btn.classList.add('text-amber-300', 'bg-gradient-to-r', 'from-amber-500/20', 'via-yellow-400/25', 'to-amber-500/20');
+        }
+        if (text) text.textContent = 'GOD MODE';
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-400/40';
+        closeModal('modal-god-mode');
+        showToast('God Mode Disengaged', 'Standard safety interlocks restored');
+      }
+
+      if (window.AgriGCS_State && window.AgriGCS_State.toggleGodMode) {
+        window.AgriGCS_State.toggleGodMode(isGodModeActive);
+      }
+    }
+
+    function openGodModeModal() {
+      const modal = document.getElementById('modal-god-mode');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function handleGodVwcSlider(val) {
+      val = parseFloat(val);
+      const readout = document.getElementById('god-slider-val-vwc');
+      if (readout) readout.textContent = val.toFixed(1) + '%';
+      const slider = document.getElementById('god-slider-vwc');
+      if (slider) slider.value = val;
+
+      const nodeB = meshNodes.find(n => n.id === '#10555');
+      if (nodeB) {
+        nodeB.vwc = val;
+        nodeB.status = val < 30 || val > 65 ? 'Warning' : 'Online';
+      }
+      renderNodesHealthMatrix();
+
+      if (window.AgriGCS_State && window.AgriGCS_State.forceTelemetry) {
+        window.AgriGCS_State.forceTelemetry({ vwc: val });
+      }
+    }
+
+    function handleGodTempSlider(val) {
+      val = parseFloat(val);
+      const readout = document.getElementById('god-slider-val-temp');
+      if (readout) readout.textContent = val.toFixed(1) + '°C';
+      const nodeDHT = meshNodes.find(n => n.id === '#20412');
+      if (nodeDHT) nodeDHT.temp = val;
+      renderNodesHealthMatrix();
+    }
+
+    function handleGodRssiSlider(val) {
+      val = parseInt(val, 10);
+      const readout = document.getElementById('god-slider-val-rssi');
+      if (readout) readout.textContent = val + ' dBm';
+      meshNodes.forEach(n => { n.rssi = val; });
+      document.getElementById('kpi-avg-rssi').textContent = val + ' dBm';
+      renderNodesHealthMatrix();
+
+      if (window.AgriGCS_State && window.AgriGCS_State.forceTelemetry) {
+        window.AgriGCS_State.forceTelemetry({ rssi: val });
+      }
+    }
+
+    function godModeForceAllValves(openState) {
+      playAudio('beep');
+      const status = document.getElementById('god-actuator-status');
+      if (openState) {
+        if (status) status.textContent = 'ALL VALVES OPEN (+380 L/MIN)';
+        showToast('⚡ ALL 4 SOLENOIDS FORCED OPEN', 'Direct SCADA hydraulic bypass active');
+      } else {
+        if (status) status.textContent = 'ALL VALVES CLOSED';
+        showToast('All Valves Closed', 'Lockout active across all 4 zones');
+      }
+      if (window.AgriGCS_State && window.AgriGCS_State.setGodModeActuator) {
+        window.AgriGCS_State.setGodModeActuator('allValvesOpen', openState);
+      }
+    }
+
+    function godModeEmergencyStop() {
+      playAudio('estop');
+      godModeForceAllValves(false);
+      isStreamPaused = true;
+      const status = document.getElementById('god-actuator-status');
+      if (status) status.textContent = '🚨 SYSTEM E-STOPPED';
+      showToast('🚨 SYSTEM EMERGENCY E-STOP', 'Telemetry bus halted, pumps killed, valves sealed');
+    }
+
+    // Modal Helpers
+    function openHardwareModal() {
+      const m = document.getElementById('modal-hardware');
+      if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+    }
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+    }
+
+    function showToast(title, desc) {
+      const toast = document.getElementById('toast-notify');
+      if (!toast) return;
+      document.getElementById('toast-title').textContent = title;
+      document.getElementById('toast-desc').textContent = desc;
+      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'G' && e.shiftKey) || (e.key === 'g' && !e.target.matches('input, select, textarea'))) {
+        toggleGodModeUI();
+      }
+    });
+
+    // Page Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      renderNodesHealthMatrix();
+      initRFCharts();
+      startTelemetryIngestion();
+      inspectByte('vwc');
+
+      // Check if God Mode was active in shared state
+      if (window.AgriGCS_State) {
+        const s = window.AgriGCS_State.get();
+        if (s && s.godMode) toggleGodModeUI(true, false);
+      }
+    });
+  </script>
+
+</body>
+</html>

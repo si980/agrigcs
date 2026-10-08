@@ -1,0 +1,999 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "tertiary-container": "#3dd197", "on-primary": "#00382b", "error-container": "#93000a", "on-background": "#dce3ed", "on-primary-fixed-variant": "#005140", "outline-variant": "#3b4a44", "primary-container": "#00d2aa", "secondary-container": "#00a6e0", "on-secondary-container": "#00374d", "surface-container": "#192028", "on-tertiary-fixed": "#002113", "tertiary-fixed-dim": "#4edea3", "on-secondary-fixed": "#001e2c", "tertiary-fixed": "#6ffbbe", "tertiary": "#60eeb1", "secondary": "#7bd0ff", "surface-container-low": "#151c23", "secondary-fixed-dim": "#7bd0ff", "outline": "#85948d", "surface-container-highest": "#2e353d", "inverse-on-surface": "#2a3139", "background": "#0d141b", "on-surface-variant": "#bacac3", "inverse-primary": "#006b56", "surface-dim": "#0d141b", "on-secondary-fixed-variant": "#004c69", "secondary-fixed": "#c4e7ff", "inverse-surface": "#dce3ed", "on-error-container": "#ffdad6", "primary-fixed-dim": "#2bdfb6", "surface-tint": "#2bdfb6", "on-tertiary-container": "#005539", "on-surface": "#dce3ed", "primary-fixed": "#57fcd2", "surface-bright": "#333a42", "on-secondary": "#00354a", "surface": "#0d141b", "on-tertiary-fixed-variant": "#005236", "primary": "#45efc5", "on-primary-container": "#005543", "on-tertiary": "#003824", "on-primary-fixed": "#002018", "surface-container-high": "#242b32", "error": "#ffb4ab", "surface-container-lowest": "#080f16", "on-error": "#690005", "surface-variant": "#2e353d" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "unit-xl": "2rem", "container-max": "1440px", "unit-sm": "0.75rem", "unit-2xs": "0.25rem", "unit-xs": "0.5rem", "gutter-desktop": "1.25rem", "unit-2xl": "2.5rem", "unit-3xl": "3.5rem", "gutter-mobile": "0.75rem", "unit-md": "1rem", "unit-lg": "1.5rem" }, "fontFamily": { "headline-sm": ["Inter"], "body-md": ["Inter"], "label-caps": ["JetBrains Mono"], "display": ["Inter"], "headline-md": ["Inter"], "body-sm": ["Inter"], "body-lg": ["Inter"], "telemetry-sm": ["JetBrains Mono"], "headline-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "telemetry-metric": ["JetBrains Mono"] }, "fontSize": { "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.005em", "fontWeight": "400" }], "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600" }], "display": ["44px", { "lineHeight": "52px", "letterSpacing": "-0.025em", "fontWeight": "700" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "telemetry-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "telemetry-metric": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="agrigcs-unified-header fixed top-0 left-0 right-0 z-50 bg-surface/85 backdrop-blur-xl border-b border-outline-variant/15 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+  <div class="h-16 w-full px-4 lg:px-8 max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+    
+    <!-- Left: Single Clean Brand Identity (Zero Duplication) -->
+    <div class="flex items-center gap-3 shrink-0">
+      <a href="/home/" class="flex items-center gap-2.5 hover:opacity-95 transition-all group no-underline">
+        <!-- High-res Vector Emblem -->
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/20 via-surface-container-high to-surface-container flex items-center justify-center border border-primary/40 shadow-[0_0_15px_rgba(0,210,170,0.25)] group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12a10 10 0 0 1 10-10z"></path>
+            <path d="M12 6c0 4 4 6 4 10"></path>
+            <path d="M8 12c2 0 4-2 4-6"></path>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="font-display font-extrabold text-lg text-white tracking-tight leading-none">Agri<span class="text-primary">GCS</span></span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">v2.4</span>
+          </div>
+          <span class="text-[9px] font-mono tracking-widest uppercase text-on-surface-variant/80 mt-0.5">Ground Control Station</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Center: Clean Grouped Navigation Dropdowns (Zero Text-Wrapping) -->
+    <nav class="hidden xl:flex items-center gap-1">
+      
+      <!-- Primary 1: Mission Control -->
+      <a href="/home/" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-body-sm text-[13px] font-medium transition-all whitespace-nowrap text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high">
+        <span class="material-symbols-outlined text-[16px]">dashboard</span>
+        <span>Mission Control</span>
+      </a>
+
+      <!-- Primary 2: Operations & 3D Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-secondary">radar</span>
+          <span>Operations &amp; 3D</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/monitoring/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">monitoring</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Live Field Monitoring</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Sector 04 sensor array &amp; nodes</span>
+              </div>
+            </a>
+            <a href="/orbit/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">3d_rotation</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">3D Orbit Visualizer</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Interactive 360&deg; canopy inspect</span>
+              </div>
+            </a>
+            <a href="/webgl/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary-fixed/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary-fixed group-hover/item:scale-110 transition-transform">view_in_ar</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary-fixed">WebGL Telemetry</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Volumetric soil heatmaps</span>
+              </div>
+            </a>
+            <a href="/motion/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-tertiary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-tertiary group-hover/item:scale-110 transition-transform">motion_photos_on</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-tertiary">Dynamic Motion</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Real-time pulse wave physics</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary 3: Hardware & Field Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium bg-primary text-on-primary font-semibold shadow-[0_0_12px_rgba(0,210,170,0.3)] transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-on-primary">sensors</span>
+          <span>Hardware &amp; Nodes</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/sensors/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">device_hub</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Sensor Ecosystem</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Capacitive probes, SX1262 LoRa</span>
+              </div>
+            </a>
+            <a href="/wiring/" class="flex items-center gap-3 p-2 rounded-xl bg-primary/20 border-l-2 border-primary hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">cable</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">Interactive Wiring Lab</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">ESP32-S3 pinouts &amp; schematics</span>
+              </div>
+            </a>
+            <a href="/field-setup/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-tertiary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-tertiary group-hover/item:scale-110 transition-transform">layers</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-tertiary">Field Placement SOP</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">3D GPS-RTK node alignment</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary 4: Diagnostics & Triage Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-tertiary">warning</span>
+          <span>Diagnostics</span>
+          <span class="agrigcs-alert-badge px-1.5 py-0.2 rounded-full text-[10px] bg-error text-on-error font-bold font-mono">3</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/alerts/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-error/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-error group-hover/item:scale-110 transition-transform">notification_important</span>
+              <div class="flex flex-col">
+                <div class="flex items-center justify-between w-full">
+                  <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-error">Alert Center</span>
+                  <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-error/20 text-error font-bold">3 ACTIVE</span>
+                </div>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Threshold breaches &amp; triage</span>
+              </div>
+            </a>
+            <a href="/inspector/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">terminal</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Packet Inspector</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">CRC-16, raw hex streams</span>
+              </div>
+            </a>
+            <a href="/sim-lab/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">science</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">Simulation Lab</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Drought &amp; packet drop tests</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary 5: Architecture & Docs Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-outline">menu_book</span>
+          <span>Documentation</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full right-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/how-it-works/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">account_tree</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Architecture Overview</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">LoRa RF to Tokio broker</span>
+              </div>
+            </a>
+            <a href="/deck/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">slideshow</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">10-Stage Executive Deck</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Interactive slide pitch deck</span>
+              </div>
+            </a>
+            <a href="/academy/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-tertiary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-tertiary group-hover/item:scale-110 transition-transform">school</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-tertiary">AgriGCS Academy</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Agronomy &amp; hardware manuals</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Right: Utility Cluster & Operator Actions -->
+    <div class="flex items-center gap-2.5 shrink-0">
+      
+      <!-- Command Palette Quick Launcher (⌘K) -->
+      <button onclick="if(window.AgriGCS_UI && window.AgriGCS_UI.toggleCommandPalette) window.AgriGCS_UI.toggleCommandPalette();" type="button" class="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high/80 hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface text-xs font-mono border border-outline-variant/20 transition-all cursor-pointer" title="Quick Jump (Ctrl+K / ⌘K)">
+        <span class="material-symbols-outlined text-[14px]">terminal</span>
+        <span class="text-[11px]">⌘K</span>
+      </button>
+
+      <!-- Live Stream Pill -->
+      <button class="agrigcs-live-btn flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest/90 hover:bg-surface-container-high text-on-surface text-xs font-medium transition-all active:scale-95 cursor-pointer border border-outline-variant/20" type="button" title="Toggle Live / Simulated Stream">
+        <span class="relative flex h-2 w-2">
+          <span class="agrigcs-live-ping animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+          <span class="agrigcs-live-dot relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+        </span>
+        <span class="agrigcs-live-label font-mono text-[11px] uppercase tracking-wider text-on-surface font-semibold">LIVE</span>
+      </button>
+
+      <!-- Connect Hardware Button (Calls openHardwareModal) -->
+      <button class="agrigcs-connect-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-semibold text-[12px] tracking-wide shadow-[0_0_15px_rgba(0,210,170,0.3)] hover:shadow-[0_0_20px_rgba(0,210,170,0.5)] transition-all active:scale-95 cursor-pointer" type="button">
+        <span class="material-symbols-outlined text-[16px]">memory</span>
+        <span>Connect Gateway</span>
+      </button>
+
+      <!-- Operator Profile Badge -->
+      <button class="agrigcs-profile-btn flex items-center gap-1.5 p-1 pr-2.5 rounded-full bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/20 transition-all active:scale-95 cursor-pointer" type="button" title="Sector 04 Operator Profile">
+        <div class="w-6 h-6 rounded-full bg-primary/20 text-primary border border-primary/40 flex items-center justify-center font-mono text-[10px] font-bold">
+          W4
+        </div>
+        <span class="text-[11px] font-mono text-on-surface hidden sm:inline">OP-04</span>
+      </button>
+
+      <!-- Mobile Hamburger Menu Button -->
+      <button class="xl:hidden flex items-center justify-center w-8 h-8 rounded-full bg-surface-container-highest hover:bg-surface-container-high text-on-surface transition-all cursor-pointer" id="agrigcs-mobile-menu-btn" type="button" aria-label="Toggle navigation">
+        <span class="material-symbols-outlined text-[20px]">menu</span>
+      </button>
+
+    </div>
+
+  </div>
+</header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<!-- Subtle Ambient Glowing Vector Grid Canvas Backdrop -->
+<div class="relative w-full overflow-hidden px-gutter-mobile md:px-gutter-desktop py-unit-lg max-w-[1440px] mx-auto">
+<div class="absolute -top-32 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<div class="absolute top-1/2 -left-20 w-80 h-80 bg-secondary/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<!-- Top Engineering Sub-Nav & Header Strip -->
+<header class="w-full flex flex-col xl:flex-row xl:items-center justify-between gap-unit-md pb-unit-lg border-b border-outline-variant/30">
+<div class="flex flex-col gap-unit-2xs">
+<div class="flex items-center gap-unit-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Sensors</span>
+<span class="text-outline-variant font-label-caps text-label-caps">/</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Hardware Nodes</span>
+<span class="text-outline-variant font-label-caps text-label-caps">/</span>
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-wider font-semibold">Wiring Simulator</span>
+</div>
+<div class="flex flex-wrap items-center gap-unit-sm">
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">ESP32-WROOM-32 Sensor Bus &amp; Harness Simulator</h1>
+<div class="flex items-center gap-unit-xs px-unit-sm py-unit-2xs rounded-full bg-surface-container-high/90 shadow-sm">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+</span>
+<span class="font-label-caps text-label-caps text-primary font-semibold tracking-wide uppercase">Circuit Validated (3.3V Logic Safe)</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Controls -->
+<div class="flex flex-wrap items-center gap-unit-xs">
+<button class="group flex items-center gap-unit-xs px-unit-sm py-unit-xs rounded-full bg-surface-container-high hover:bg-surface-container-highest text-primary font-label-caps text-label-caps uppercase tracking-wider transition-all shadow-sm" id="btnAutoWire" type="button">
+<span class="material-symbols-outlined text-[16px] group-hover:rotate-12 transition-transform">auto_fix_high</span>
+<span>Auto-Wire Preset</span>
+</button>
+<button class="flex items-center gap-unit-xs px-unit-sm py-unit-xs rounded-full bg-primary-container/20 hover:bg-primary-container/30 text-primary-fixed font-label-caps text-label-caps uppercase tracking-wider transition-all shadow-sm" id="btnTestPulse" type="button">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Test Pulse</span>
+</button>
+<button class="flex items-center gap-unit-xs px-unit-sm py-unit-xs rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-error font-label-caps text-label-caps uppercase tracking-wider transition-all shadow-sm" id="btnResetCircuit" type="button">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span>Reset</span>
+</button>
+<button class="flex items-center gap-unit-xs px-unit-md py-unit-xs rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-headline-sm font-semibold text-[13px] tracking-wide shadow-[0_0_18px_rgba(0,210,170,0.3)] transition-all" id="btnExportHeader" type="button">
+<span class="material-symbols-outlined text-[16px]">terminal</span>
+<span>Export C++ Header</span>
+</button>
+</div>
+</header>
+<!-- Main Command 3-Column Cockpit -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-unit-md pt-unit-md">
+<!-- LEFT COLUMN: Pin Mapping & Voltage Inspector (4 Cols) -->
+<section class="xl:col-span-3 flex flex-col gap-unit-md">
+<!-- Peripheral Module Switcher Card -->
+<div class="bg-surface-container/80 backdrop-blur-xl rounded-xl p-unit-md shadow-md flex flex-col gap-unit-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant font-semibold">Active Sensor Module</span>
+<span class="font-telemetry-sm text-telemetry-sm text-tertiary">NODE: 0x48</span>
+</div>
+<div class="grid grid-cols-1 gap-unit-xs">
+<button class="w-full flex items-center justify-between p-unit-xs px-unit-sm rounded-lg bg-surface-container-highest text-primary text-left transition-all">
+<div class="flex items-center gap-unit-xs min-w-0">
+<span class="material-symbols-outlined text-primary text-[18px]">water_ph</span>
+<div class="truncate">
+<p class="font-headline-sm text-[13px] font-semibold truncate">Capacitive Moisture V1.2</p>
+<p class="font-telemetry-sm text-[11px] text-on-surface-variant truncate">Analog Output • 3.3V DC</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[16px]">radio_button_checked</span>
+</button>
+<button class="w-full flex items-center justify-between p-unit-xs px-unit-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface text-left transition-all">
+<div class="flex items-center gap-unit-xs min-w-0">
+<span class="material-symbols-outlined text-secondary text-[18px]">thermostat</span>
+<div class="truncate">
+<p class="font-headline-sm text-[13px] font-semibold truncate">DHT22 Temp &amp; Humidity</p>
+<p class="font-telemetry-sm text-[11px] text-on-surface-variant truncate">1-Wire Digital GPIO4</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[16px]">radio_button_unchecked</span>
+</button>
+<button class="w-full flex items-center justify-between p-unit-xs px-unit-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface text-left transition-all">
+<div class="flex items-center gap-unit-xs min-w-0">
+<span class="material-symbols-outlined text-outline text-[18px]">satellite_alt</span>
+<div class="truncate">
+<p class="font-headline-sm text-[13px] font-semibold truncate">NEO-M8N GNSS UART</p>
+<p class="font-telemetry-sm text-[11px] text-on-surface-variant truncate">Serial TX2/RX2 (GPIO 16/17)</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[16px]">radio_button_unchecked</span>
+</button>
+</div>
+</div>
+<!-- Dynamic Pin Inspector & Strapping Watcher -->
+<div class="bg-surface-container/80 backdrop-blur-xl rounded-xl p-unit-md shadow-md flex flex-col gap-unit-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant font-semibold">Terminal Pin Assignments</span>
+<span class="material-symbols-outlined text-outline text-[18px]">info</span>
+</div>
+<!-- Pin Rows List -->
+<div class="flex flex-col gap-unit-xs">
+<!-- Row 1: VCC -->
+<div class="p-unit-xs rounded-lg bg-surface-container-low flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-unit-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
+<div class="flex flex-col">
+<span class="font-label-caps text-[11px] font-bold text-on-surface">VCC / PWR</span>
+<span class="font-telemetry-sm text-[10px] text-on-surface-variant">Sensor Rail</span>
+</div>
+</div>
+<div class="flex items-center gap-unit-xs">
+<span class="font-telemetry-sm text-[11px] text-primary px-unit-xs py-0.5 rounded bg-surface-container-highest">PIN 1 (3V3)</span>
+<span class="material-symbols-outlined text-tertiary text-[14px]">check_circle</span>
+</div>
+</div>
+<!-- Row 2: GND -->
+<div class="p-unit-xs rounded-lg bg-surface-container-low flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-unit-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-slate-400 shadow-[0_0_8px_rgba(148,163,184,0.4)]"></span>
+<div class="flex flex-col">
+<span class="font-label-caps text-[11px] font-bold text-on-surface">GND</span>
+<span class="font-telemetry-sm text-[10px] text-on-surface-variant">Common Return</span>
+</div>
+</div>
+<div class="flex items-center gap-unit-xs">
+<span class="font-telemetry-sm text-[11px] text-on-surface px-unit-xs py-0.5 rounded bg-surface-container-highest">PIN 14 (GND)</span>
+<span class="material-symbols-outlined text-tertiary text-[14px]">check_circle</span>
+</div>
+</div>
+<!-- Row 3: AOUT -->
+<div class="p-unit-xs rounded-lg bg-surface-container-low flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-unit-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]"></span>
+<div class="flex flex-col">
+<span class="font-label-caps text-[11px] font-bold text-on-surface">AOUT (Analog)</span>
+<span class="font-telemetry-sm text-[10px] text-on-surface-variant">0 - 3.0V DC</span>
+</div>
+</div>
+<div class="flex items-center gap-unit-xs">
+<span class="font-telemetry-sm text-[11px] text-primary px-unit-xs py-0.5 rounded bg-surface-container-highest">GPIO 34 (ADC1_6)</span>
+<span class="material-symbols-outlined text-tertiary text-[14px]">check_circle</span>
+</div>
+</div>
+<!-- Row 4: DHT DATA -->
+<div class="p-unit-xs rounded-lg bg-surface-container-low flex items-center justify-between hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-unit-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(123,208,255,0.6)]"></span>
+<div class="flex flex-col">
+<span class="font-label-caps text-[11px] font-bold text-on-surface">DHT22 DATA</span>
+<span class="font-telemetry-sm text-[10px] text-on-surface-variant">Bidirectional 1-Wire</span>
+</div>
+</div>
+<div class="flex items-center gap-unit-xs">
+<span class="font-telemetry-sm text-[11px] text-secondary px-unit-xs py-0.5 rounded bg-surface-container-highest">GPIO 4 (Pull-Up)</span>
+<span class="material-symbols-outlined text-tertiary text-[14px]">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Logic Level & ADC Safety Diagnostic -->
+<div class="mt-unit-xs p-unit-sm rounded-lg bg-surface-container-lowest flex flex-col gap-unit-2xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Bus Logic Level</span>
+<span class="font-telemetry-sm text-telemetry-sm text-tertiary font-bold">3.3V (SAFE)</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full w-[82%]"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant font-telemetry-sm pt-0.5">
+<span>Max ADC In: 3.3V</span>
+<span>12-bit (0-4095)</span>
+</div>
+</div>
+<!-- Non-Volatile Strapping Note -->
+<div class="p-unit-xs rounded-lg bg-primary-container/10 flex items-start gap-unit-xs">
+<span class="material-symbols-outlined text-primary text-[16px] mt-0.5">verified_user</span>
+<p class="font-body-sm text-[11px] text-on-surface-variant leading-tight">
+              GPIO 34 is an input-only ADC channel (no internal pullup/pulldown conflicts). Safe for high-impedance capacitive probes.
+            </p>
+</div>
+</div>
+<!-- Interactive Quick Pinout Config Tool -->
+<div class="bg-surface-container/80 backdrop-blur-xl rounded-xl p-unit-md shadow-md flex flex-col gap-unit-sm">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant font-semibold">Quick Assign Target Pin</span>
+<div class="flex flex-col gap-unit-xs">
+<label class="font-body-sm text-body-sm text-on-surface" for="selectMoisturePin">Moisture Sensor AOUT Pin</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-low text-on-surface font-telemetry-sm text-telemetry-sm rounded-lg px-unit-sm py-unit-xs pr-8 focus:outline-none focus:bg-surface-container-high transition-all" id="selectMoisturePin">
+<option selected="" value="GPIO34">GPIO 34 (ADC1_CH6) - Recommended</option>
+<option value="GPIO35">GPIO 35 (ADC1_CH7) - Free</option>
+<option value="GPIO32">GPIO 32 (ADC1_CH4) - Free</option>
+<option value="GPIO33">GPIO 33 (ADC1_CH5) - Free</option>
+<option value="GPIO0">GPIO 00 (Strapping Pin - Warning)</option>
+</select>
+<span class="material-symbols-outlined text-outline pointer-events-none absolute right-2.5 top-2 text-[18px]">expand_more</span>
+</div>
+</div>
+</div>
+</section>
+<!-- CENTER STAGE: Visual Realistic Circuit Simulator (6 Cols) -->
+<section class="xl:col-span-6 flex flex-col gap-unit-md">
+<!-- Circuit Canvas Visualizer Enclosure -->
+<div class="relative bg-surface-container-lowest/90 backdrop-blur-2xl rounded-2xl p-unit-md shadow-2xl flex flex-col min-h-[580px] overflow-hidden">
+<!-- Top Canvas Status & Overlays Strip -->
+<div class="w-full flex items-center justify-between z-20 pb-unit-xs border-b border-outline-variant/20">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">memory</span>
+<span class="font-headline-sm text-[13px] font-semibold text-on-surface">Visual Harness Schematic</span>
+<span class="font-telemetry-sm text-[11px] text-tertiary px-unit-xs py-0.5 rounded bg-tertiary/10 ml-unit-2xs">Real-Time CAD View</span>
+</div>
+<div class="flex items-center gap-unit-xs">
+<button class="px-unit-xs py-0.5 rounded bg-surface-container text-on-surface-variant hover:text-primary font-label-caps text-[10px] tracking-wide transition-colors" id="toggleVoltRail" type="button">
+                RAILS: 3.3V / GND ON
+              </button>
+<div class="flex items-center gap-1 text-[11px] font-telemetry-sm text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span>MESH OK</span>
+</div>
+</div>
+</div>
+<!-- Schematic Ambient Grid lines -->
+<div class="absolute inset-0 bg-[radial-gradient(#2e353d_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
+<!-- Interactive Hardware Breadboard / Enclosure Representation -->
+<div class="relative flex-1 w-full flex flex-col lg:flex-row items-center justify-between gap-unit-lg py-unit-lg z-10 px-unit-xs">
+<!-- LEFT HARDWARE: Capacitive Soil Moisture Sensor Probe -->
+<div class="flex flex-col items-center group relative cursor-pointer">
+<!-- Probe Header Pinout Callout -->
+<div class="absolute -top-6 bg-surface-container-high/95 px-unit-xs py-0.5 rounded text-[10px] font-label-caps text-on-surface shadow-md">
+                Capacitive V1.2 Probe
+              </div>
+<!-- Graphic Vector of Capacitive Soil Sensor Probe -->
+<div class="relative w-28 h-64 bg-surface-container-low rounded-t-xl rounded-b-3xl p-2 shadow-xl flex flex-col items-center justify-between group-hover:shadow-[0_0_24px_rgba(0,210,170,0.2)] transition-shadow">
+<!-- Top Circuit Portion with IC and 3-pin Header -->
+<div class="w-full flex flex-col items-center">
+<!-- Header Terminal Pins with Labeled Connectors -->
+<div class="w-full flex justify-around items-center bg-surface-container-highest rounded py-1 px-1 mb-2">
+<div class="flex flex-col items-center" id="pinProbeVCC" title="Sensor VCC (3.3V)">
+<div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.8)] ring-2 ring-surface-container-lowest"></div>
+<span class="font-label-caps text-[8px] text-red-300 font-bold mt-0.5">VCC</span>
+</div>
+<div class="flex flex-col items-center" id="pinProbeGND" title="Sensor GND">
+<div class="w-2.5 h-2.5 rounded-full bg-slate-300 shadow-[0_0_6px_rgba(203,213,225,0.8)] ring-2 ring-surface-container-lowest"></div>
+<span class="font-label-caps text-[8px] text-slate-300 font-bold mt-0.5">GND</span>
+</div>
+<div class="flex flex-col items-center" id="pinProbeAOUT" title="Sensor AOUT (Analog Signal)">
+<div class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.8)] ring-2 ring-surface-container-lowest"></div>
+<span class="font-label-caps text-[8px] text-amber-300 font-bold mt-0.5">AOUT</span>
+</div>
+</div>
+<!-- 555 Timer Chip Simulation -->
+<div class="w-10 h-6 bg-surface-container-lowest rounded flex items-center justify-center">
+<span class="font-label-caps text-[7px] text-outline tracking-tight">TLC555</span>
+</div>
+<!-- Mini Surface Resistors & Diodes -->
+<div class="flex gap-1 mt-1">
+<div class="w-2 h-1 bg-amber-600/80 rounded-2xs"></div>
+<div class="w-2 h-1 bg-primary/60 rounded-2xs"></div>
+<div class="w-2 h-1 bg-amber-600/80 rounded-2xs"></div>
+</div>
+</div>
+<!-- Two Prongs of Capacitive Probe -->
+<div class="w-full flex-1 flex justify-between px-2 pt-3 pb-1">
+<!-- Left Prong -->
+<div class="w-3.5 h-full bg-gradient-to-b from-surface-container-highest via-amber-900/40 to-amber-700/60 rounded-b-full flex flex-col items-center justify-end pb-2">
+<div class="w-1.5 h-1.5 rounded-full bg-amber-200/40"></div>
+</div>
+<!-- Center Calibration Slot -->
+<div class="w-2 h-full flex flex-col items-center justify-center">
+<div class="h-3/4 w-[1px] bg-outline-variant/40"></div>
+</div>
+<!-- Right Prong -->
+<div class="w-3.5 h-full bg-gradient-to-b from-surface-container-highest via-amber-900/40 to-amber-700/60 rounded-b-full flex flex-col items-center justify-end pb-2">
+<div class="w-1.5 h-1.5 rounded-full bg-amber-200/40"></div>
+</div>
+</div>
+<!-- Depth Water Line Indicator -->
+<div class="w-full text-center py-0.5 bg-surface-container-highest/60 rounded">
+<span class="font-telemetry-sm text-[8px] text-primary">MAX DEPTH</span>
+</div>
+</div>
+</div>
+<!-- SVG DYNAMIC WIRE HARNESS OVERLAY LAYER -->
+<div class="w-full h-44 lg:h-64 lg:w-48 relative flex-1 flex items-center justify-center">
+<svg class="w-full h-full overflow-visible" fill="none" id="harnessSvg" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+<!-- Trace 1: VCC Rail (Red Wire) -->
+<path class="animate-[dash_1.5s_linear_infinite]" d="M 20 50 C 80 50, 110 35, 260 40" id="wireVcc" opacity="0.95" stroke="#ef4444" stroke-dasharray="4 2" stroke-linecap="round" stroke-width="3.5"></path>
+<circle cx="20" cy="50" fill="#ef4444" r="4.5" stroke="#ffffff" stroke-width="1.5"></circle>
+<circle cx="260" cy="40" fill="#ef4444" r="4.5" stroke="#ffffff" stroke-width="1.5"></circle>
+<!-- Trace 2: GND Rail (Black/Dark Slate Wire) -->
+<path d="M 32 60 C 90 70, 120 90, 260 115" id="wireGnd" stroke="#64748b" stroke-linecap="round" stroke-width="3.5"></path>
+<circle cx="32" cy="60" fill="#64748b" r="4.5" stroke="#ffffff" stroke-width="1.5"></circle>
+<circle cx="260" cy="115" fill="#64748b" r="4.5" stroke="#ffffff" stroke-width="1.5"></circle>
+<!-- Trace 3: AOUT Signal (Amber Yellow Wire to GPIO 34) -->
+<path class="animate-[dash_1s_linear_infinite]" d="M 44 70 C 110 95, 140 145, 260 155" id="wireAout" opacity="0.95" stroke="#fbbf24" stroke-dasharray="6 3" stroke-linecap="round" stroke-width="3.5"></path>
+<circle cx="44" cy="70" fill="#fbbf24" r="4.5" stroke="#ffffff" stroke-width="1.5"></circle>
+<circle cx="260" cy="155" fill="#fbbf24" r="4.5" stroke="#ffffff" stroke-width="1.5"></circle>
+<!-- Wire Tooltip / Tag Anchors -->
+<g transform="translate(110, 20)">
+<rect fill="#151c23" height="18" rx="4" stroke="#ef4444" stroke-width="1" width="64"></rect>
+<text fill="#ef4444" font-family="JetBrains Mono" font-size="8" font-weight="bold" text-anchor="middle" x="32" y="12">3.3V DC</text>
+</g>
+<g transform="translate(130, 80)">
+<rect fill="#151c23" height="18" rx="4" stroke="#64748b" stroke-width="1" width="64"></rect>
+<text fill="#dce3ed" font-family="JetBrains Mono" font-size="8" font-weight="bold" text-anchor="middle" x="32" y="12">COMMON GND</text>
+</g>
+<g transform="translate(100, 148)">
+<rect fill="#151c23" height="18" rx="4" stroke="#fbbf24" stroke-width="1" width="84"></rect>
+<text fill="#fbbf24" font-family="JetBrains Mono" font-size="8" font-weight="bold" text-anchor="middle" x="42" y="12">AOUT → GPIO34</text>
+</g>
+</svg>
+</div>
+<!-- RIGHT HARDWARE: ESP32 Enclosure & Screw Terminal Block -->
+<div class="flex flex-col items-center relative group">
+<!-- Enclosure Top Title Callout -->
+<div class="absolute -top-6 bg-surface-container-high/95 px-unit-xs py-0.5 rounded text-[10px] font-label-caps text-on-surface shadow-md">
+                Industrial Node Controller
+              </div>
+<!-- Rugged ESP32 Weatherproof Enclosure Simulation -->
+<div class="relative w-64 bg-surface-container-high rounded-2xl p-unit-sm shadow-2xl flex flex-col gap-unit-xs group-hover:shadow-[0_0_30px_rgba(0,210,170,0.25)] transition-shadow">
+<!-- Inner PCB Plate with Mounting Screws -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-unit-xs flex flex-col gap-unit-xs relative">
+<!-- Top Status Diagnostic LEDs -->
+<div class="flex items-center justify-between px-unit-xs py-1 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(69,239,197,0.9)]" id="ledPwr"></span>
+<span class="font-label-caps text-[9px] text-on-surface font-semibold">PWR</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(123,208,255,0.9)] animate-pulse" id="ledData"></span>
+<span class="font-label-caps text-[9px] text-secondary font-semibold">DATA</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-surface-container-highest" id="ledErr"></span>
+<span class="font-label-caps text-[9px] text-on-surface-variant font-semibold">ERR</span>
+</div>
+</div>
+<!-- ESP32-WROOM-32 Module Metal Can Lid -->
+<div class="w-full bg-gradient-to-br from-surface-variant to-surface-container-highest rounded-lg p-unit-sm flex flex-col items-center justify-center text-center shadow-inner relative">
+<div class="w-full flex items-center justify-between text-[8px] font-label-caps text-outline">
+<span>ESP32-WROOM-32E</span>
+<span>FCC: 2AC7Z</span>
+</div>
+<!-- Wi-Fi / BT Antenna PCB Traces Pattern -->
+<div class="my-1.5 w-16 h-3 border-t-2 border-r-2 border-primary/40 rounded-tr-md flex justify-end">
+<span class="text-[7px] font-telemetry-sm text-primary/70 mr-1">2.4GHz MESH</span>
+</div>
+<span class="font-label-caps text-[9px] text-on-surface font-bold tracking-wider uppercase">Espressif Systems</span>
+<span class="font-telemetry-sm text-[8px] text-on-surface-variant">Xtensa Dual-Core 240MHz</span>
+</div>
+<!-- Terminal Block (Green Industrial Screw Terminals) -->
+<div class="w-full bg-emerald-950/80 rounded-lg p-unit-2xs flex flex-col gap-1 shadow-inner">
+<div class="flex justify-between items-center px-1">
+<span class="font-label-caps text-[8px] text-primary uppercase font-bold">Terminal Bus A</span>
+<span class="font-telemetry-sm text-[8px] text-on-surface-variant">Clamp Screw M2.5</span>
+</div>
+<!-- Terminal Screw Terminals Grid -->
+<div class="grid grid-cols-4 gap-1">
+<!-- Pin 1: 3V3 -->
+<div class="bg-emerald-900/60 p-1 rounded flex flex-col items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-surface-container-lowest flex items-center justify-center">
+<div class="w-1.5 h-0.5 bg-red-400"></div>
+</div>
+<span class="font-label-caps text-[8px] text-red-400 font-bold mt-1">3V3</span>
+</div>
+<!-- Pin 2: GND -->
+<div class="bg-emerald-900/60 p-1 rounded flex flex-col items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-surface-container-lowest flex items-center justify-center">
+<div class="w-1.5 h-0.5 bg-slate-300"></div>
+</div>
+<span class="font-label-caps text-[8px] text-slate-300 font-bold mt-1">GND</span>
+</div>
+<!-- Pin 3: GPIO 34 -->
+<div class="bg-emerald-900/60 p-1 rounded flex flex-col items-center justify-center ring-1 ring-primary/50">
+<div class="w-3 h-3 rounded-full bg-surface-container-lowest flex items-center justify-center">
+<div class="w-1.5 h-0.5 bg-amber-400"></div>
+</div>
+<span class="font-label-caps text-[8px] text-primary font-bold mt-1">IO34</span>
+</div>
+<!-- Pin 4: GPIO 4 -->
+<div class="bg-emerald-900/60 p-1 rounded flex flex-col items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-surface-container-lowest flex items-center justify-center">
+<div class="w-1.5 h-0.5 bg-secondary"></div>
+</div>
+<span class="font-label-caps text-[8px] text-secondary font-bold mt-1">IO04</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Enclosure Bottom Cable Gland Sim -->
+<div class="flex justify-around items-center pt-1 px-4">
+<div class="w-5 h-2 bg-surface-container-lowest rounded-b"></div>
+<div class="w-5 h-2 bg-surface-container-lowest rounded-b"></div>
+<div class="w-5 h-2 bg-surface-container-lowest rounded-b"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Visual Wiring Action Toolbar -->
+<div class="w-full flex flex-wrap items-center justify-between gap-unit-xs pt-unit-xs border-t border-outline-variant/20 z-20">
+<div class="flex items-center gap-unit-xs">
+<button class="flex items-center gap-1.5 px-unit-sm py-1 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-caps text-[11px] uppercase transition-colors" id="btnContinuity" type="button">
+<span class="material-symbols-outlined text-primary text-[15px]">hearing</span>
+<span>Continuity Beeper: Active</span>
+</button>
+<div class="hidden sm:flex items-center gap-1 text-[11px] font-telemetry-sm text-on-surface-variant">
+<span>Pull-up Resistor:</span>
+<span class="text-tertiary font-bold">4.7 kΩ Valid</span>
+</div>
+</div>
+<div class="flex items-center gap-unit-xs">
+<button class="px-unit-xs py-1 rounded bg-surface-container text-on-surface-variant hover:text-on-surface font-label-caps text-[10px] uppercase transition-colors" id="btnInvertSignals" type="button">
+                Invert Polarity
+              </button>
+<span class="font-telemetry-sm text-[11px] text-primary">Latency: 0.12 ms</span>
+</div>
+</div>
+</div>
+<!-- Real-Time Oscilloscope / Signal Trace Preview -->
+<div class="bg-surface-container/80 backdrop-blur-xl rounded-xl p-unit-md shadow-md flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">show_chart</span>
+<span class="font-headline-sm text-[13px] font-semibold text-on-surface">GPIO 34 ADC Live Signal Trace</span>
+</div>
+<span class="font-telemetry-sm text-[11px] text-tertiary">Sampling Rate: 200 Hz</span>
+</div>
+<!-- Inline SVG Mini Waveform Simulator -->
+<div class="w-full h-16 bg-surface-container-lowest rounded-lg p-1 relative flex items-center overflow-hidden">
+<div class="absolute inset-0 bg-[linear-gradient(to_right,#192028_1px,transparent_1px),linear-gradient(to_bottom,#192028_1px,transparent_1px)] bg-[size:16px_16px] opacity-40"></div>
+<svg class="w-full h-full" fill="none" preserveAspectRatio="none" viewBox="0 0 500 60">
+<!-- Grid line middle -->
+<line stroke="#242b32" stroke-dasharray="2 2" stroke-width="1" x1="0" x2="500" y1="30" y2="30"></line>
+<!-- Smooth Moisture Analog Waveform -->
+<path d="M 0 35 Q 30 22, 60 32 T 120 30 T 180 38 T 240 28 T 300 34 T 360 29 T 420 36 T 500 31" fill="none" id="adcWaveform" stroke="#45efc5" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+<div class="absolute right-3 top-2 px-1.5 py-0.5 rounded bg-surface-container-high/90 font-telemetry-sm text-[10px] text-primary font-bold">
+              1.42 V (ADC: 1762)
+            </div>
+</div>
+</div>
+</section>
+<!-- RIGHT COLUMN: Diagnostics & Export Code Generator (3 Cols) -->
+<section class="xl:col-span-3 flex flex-col gap-unit-md">
+<!-- Real-Time Bus Diagnostics Card -->
+<div class="bg-surface-container/80 backdrop-blur-xl rounded-xl p-unit-md shadow-md flex flex-col gap-unit-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant font-semibold">Live Bus Diagnostics</span>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+</div>
+<div class="grid grid-cols-2 gap-unit-xs">
+<div class="bg-surface-container-low p-unit-xs rounded-lg flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Rail Voltage</span>
+<span class="font-telemetry-metric text-[20px] font-bold text-on-surface leading-tight mt-0.5">3.28 <span class="text-[12px] text-on-surface-variant font-normal">V</span></span>
+<span class="font-telemetry-sm text-[10px] text-tertiary mt-0.5">Nominal (±0.5%)</span>
+</div>
+<div class="bg-surface-container-low p-unit-xs rounded-lg flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Moisture Read</span>
+<span class="font-telemetry-metric text-[20px] font-bold text-primary leading-tight mt-0.5">38.4 <span class="text-[12px] text-primary font-normal">%</span></span>
+<span class="font-telemetry-sm text-[10px] text-primary-fixed-dim mt-0.5">VWC Volumetric</span>
+</div>
+<div class="bg-surface-container-low p-unit-xs rounded-lg flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">DHT22 Temp</span>
+<span class="font-telemetry-metric text-[20px] font-bold text-secondary leading-tight mt-0.5">24.5 <span class="text-[12px] text-secondary font-normal">°C</span></span>
+<span class="font-telemetry-sm text-[10px] text-on-surface-variant mt-0.5">Humidity: 58%</span>
+</div>
+<div class="bg-surface-container-low p-unit-xs rounded-lg flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">CRC Integrity</span>
+<span class="font-telemetry-metric text-[20px] font-bold text-tertiary leading-tight mt-0.5">100 <span class="text-[12px] text-tertiary font-normal">%</span></span>
+<span class="font-telemetry-sm text-[10px] text-tertiary mt-0.5">0 Dropped Pkts</span>
+</div>
+</div>
+<!-- Sensor Calibration Bounds -->
+<div class="flex flex-col gap-1 pt-unit-2xs">
+<div class="flex justify-between text-[11px] font-telemetry-sm">
+<span class="text-on-surface-variant">Air Dry (Raw 3200)</span>
+<span class="text-on-surface-variant">Water Sat (Raw 1400)</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden relative">
+<div class="bg-gradient-to-r from-amber-500 via-primary to-secondary h-2 rounded-full w-[62%]"></div>
+</div>
+</div>
+</div>
+<!-- Generated ESP32 C++ / Arduino Firmware Snippet -->
+<div class="bg-surface-container/80 backdrop-blur-xl rounded-xl p-unit-md shadow-md flex flex-col gap-unit-sm flex-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">code</span>
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface font-semibold">Generated Firmware</span>
+</div>
+<button class="flex items-center gap-1 text-[11px] font-label-caps text-primary hover:text-primary-fixed uppercase transition-colors" id="btnCopyCode" type="button">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+<span id="copyFeedback">Copy</span>
+</button>
+</div>
+<!-- Code Snippet Display Block -->
+<div class="bg-surface-container-lowest rounded-lg p-unit-sm overflow-x-auto text-[11px] font-telemetry-sm text-on-surface leading-relaxed max-h-72">
+<p class="text-outline-variant font-semibold">// AgriGCS Hardware Configuration Header</p>
+<p class="text-outline-variant font-semibold mb-2">// Target: ESP32-WROOM-32 (IDF 5.1 / Arduino 2.x)</p>
+<p><span class="text-secondary font-bold">#pragma</span> once</p>
+<p><span class="text-secondary font-bold">#include</span> <span class="text-amber-300">&lt;Arduino.h&gt;</span></p>
+<br>
+<p><span class="text-secondary font-bold">#define</span> <span class="text-primary font-bold">PIN_SOIL_ANALOG</span> <span class="text-amber-300">34</span></p>
+<p><span class="text-secondary font-bold">#define</span> <span class="text-primary font-bold">PIN_DHT22_DATA</span> <span class="text-amber-300">4</span></p>
+<p><span class="text-secondary font-bold">#define</span> <span class="text-primary font-bold">ADC_RESOLUTION</span> <span class="text-amber-300">12</span></p>
+<br>
+<p class="text-secondary font-bold">void <span class="text-tertiary">setupHarnessBus</span>() {</p>
+<p class="pl-3">analogReadResolution(<span class="text-amber-300">12</span>);</p>
+<p class="pl-3">analogSetAttenuation(<span class="text-secondary">ADC_11db</span>);</p>
+<p class="pl-3">pinMode(<span class="text-primary">PIN_SOIL_ANALOG</span>, <span class="text-secondary">INPUT</span>);</p>
+<p class="pl-3">pinMode(<span class="text-primary">PIN_DHT22_DATA</span>, <span class="text-secondary">INPUT_PULLUP</span>);</p>
+<p class="pl-3">Serial.begin(<span class="text-amber-300">115200</span>);</p>
+<p>}</p>
+</div>
+<!-- PlatformIO Button Strip -->
+<div class="pt-unit-2xs flex items-center justify-between gap-unit-xs">
+<button class="w-full flex items-center justify-center gap-unit-xs px-unit-sm py-unit-xs rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-caps text-[11px] uppercase tracking-wider transition-colors" id="btnDownloadPio" type="button">
+<span class="material-symbols-outlined text-[15px]">download</span>
+<span>platformio.ini</span>
+</button>
+<button class="px-unit-sm py-unit-xs rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-primary font-label-caps text-[11px] uppercase tracking-wider transition-colors" id="btnDocPins" title="View Full Pinout Guide" type="button">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Bottom Secondary Info Strip: Electrical Design Guidelines -->
+<div class="mt-unit-lg p-unit-md rounded-xl bg-surface-container-low/70 backdrop-blur-md grid grid-cols-1 md:grid-cols-3 gap-unit-md text-on-surface-variant">
+<div class="flex items-start gap-unit-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">electrical_services</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[14px] font-semibold text-on-surface">3.3V Logic Level Safety</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant leading-relaxed mt-0.5">
+            ESP32 GPIO pins are not 5V tolerant. Directly wiring 5V sensor outputs without a bidirectional level shifter will permanently damage ADC channels.
+          </p>
+</div>
+</div>
+<div class="flex items-start gap-unit-sm">
+<span class="material-symbols-outlined text-secondary text-[24px]">sensors</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[14px] font-semibold text-on-surface">Capacitive vs Resistive Probes</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant leading-relaxed mt-0.5">
+            Corrosion-resistant capacitive probes operate via frequency shift through FR-4 solder mask, eliminating soil electrolysis and DC lead oxidation.
+          </p>
+</div>
+</div>
+<div class="flex items-start gap-unit-sm">
+<span class="material-symbols-outlined text-tertiary text-[24px]">shield</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[14px] font-semibold text-on-surface">Ground Loop &amp; Noise Isolation</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant leading-relaxed mt-0.5">
+            Keep wire harnesses under 1.5 meters or add a 100nF ceramic decoupling capacitor across the ADC input to dampen inductive spikes in agricultural mesh networks.
+          </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive JavaScript Engine for Circuit Simulator Micro-interactions -->
+<script>
+    (function() {
+      // Elements
+      const btnPulse = document.getElementById('btnTestPulse');
+      const btnAutoWire = document.getElementById('btnAutoWire');
+      const btnReset = document.getElementById('btnResetCircuit');
+      const selectMoisture = document.getElementById('selectMoisturePin');
+      const wireAout = document.getElementById('wireAout');
+      const ledData = document.getElementById('ledData');
+      const btnCopyCode = document.getElementById('btnCopyCode');
+      const copyFeedback = document.getElementById('copyFeedback');
+      const toggleVoltRail = document.getElementById('toggleVoltRail');
+      const btnContinuity = document.getElementById('btnContinuity');
+
+      let railsActive = true;
+      let isSimulating = false;
+
+      // Pulse Trigger Interaction
+      if (btnPulse) {
+        btnPulse.addEventListener('click', () => {
+          if (isSimulating) return;
+          isSimulating = true;
+          const originalText = btnPulse.innerHTML;
+          btnPulse.classList.add('bg-primary', 'text-on-primary');
+          btnPulse.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">autorenew</span><span>Pulsing ADC...</span>';
+
+          // Pulse wires
+          if (wireAout) {
+            wireAout.setAttribute('stroke', '#45efc5');
+            wireAout.setAttribute('stroke-width', '5');
+          }
+
+          if (ledData) {
+            ledData.classList.remove('bg-secondary');
+            ledData.classList.add('bg-primary', 'scale-125');
+          }
+
+          setTimeout(() => {
+            if (wireAout) {
+              wireAout.setAttribute('stroke', '#fbbf24');
+              wireAout.setAttribute('stroke-width', '3.5');
+            }
+            if (ledData) {
+              ledData.classList.remove('bg-primary', 'scale-125');
+              ledData.classList.add('bg-secondary');
+            }
+            btnPulse.classList.remove('bg-primary', 'text-on-primary');
+            btnPulse.innerHTML = originalText;
+            isSimulating = false;
+          }, 900);
+        });
+      }
+
+      // Auto Wire Preset Animation
+      if (btnAutoWire) {
+        btnAutoWire.addEventListener('click', () => {
+          selectMoisture.value = "GPIO34";
+          const wires = [document.getElementById('wireVcc'), document.getElementById('wireGnd'), wireAout];
+          wires.forEach(w => {
+            if (w) {
+              w.style.opacity = '0.2';
+              setTimeout(() => {
+                w.style.transition = 'opacity 0.4s ease';
+                w.style.opacity = '1';
+              }, 150);
+            }
+          });
+        });
+      }
+
+      // Reset Circuit
+      if (btnReset) {
+        btnReset.addEventListener('click', () => {
+          selectMoisture.value = "GPIO34";
+          const errLed = document.getElementById('ledErr');
+          if (errLed) {
+            errLed.classList.add('bg-error', 'shadow-[0_0_8px_rgba(255,180,171,0.8)]');
+            setTimeout(() => {
+              errLed.classList.remove('bg-error', 'shadow-[0_0_8px_rgba(255,180,171,0.8)]');
+            }, 600);
+          }
+        });
+      }
+
+      // Pin dropdown change warning handler
+      if (selectMoisture) {
+        selectMoisture.addEventListener('change', (e) => {
+          const val = e.target.value;
+          const errLed = document.getElementById('ledErr');
+          if (val === 'GPIO0') {
+            alert('WARNING: GPIO 0 is an ESP32 Boot/Strapping Pin. Pulling it LOW during boot puts the chip into flashing mode.');
+            if (errLed) errLed.classList.add('bg-error');
+          } else {
+            if (errLed) errLed.classList.remove('bg-error');
+          }
+        });
+      }
+
+      // Toggle Power Rails
+      if (toggleVoltRail) {
+        toggleVoltRail.addEventListener('click', () => {
+          railsActive = !railsActive;
+          const vccWire = document.getElementById('wireVcc');
+          const pwrLed = document.getElementById('ledPwr');
+          if (railsActive) {
+            toggleVoltRail.textContent = 'RAILS: 3.3V / GND ON';
+            toggleVoltRail.classList.remove('text-error');
+            if (vccWire) vccWire.style.display = 'block';
+            if (pwrLed) pwrLed.classList.add('bg-primary');
+          } else {
+            toggleVoltRail.textContent = 'RAILS: ISOLATED (OFF)';
+            toggleVoltRail.classList.add('text-error');
+            if (vccWire) vccWire.style.display = 'none';
+            if (pwrLed) pwrLed.classList.remove('bg-primary');
+          }
+        });
+      }
+
+      // Continuity test buzzer simulator
+      if (btnContinuity) {
+        btnContinuity.addEventListener('click', () => {
+          btnContinuity.classList.add('text-primary', 'bg-primary-container/30');
+          setTimeout(() => {
+            btnContinuity.classList.remove('text-primary', 'bg-primary-container/30');
+          }, 500);
+        });
+      }
+
+      // Copy snippet button handler
+      if (btnCopyCode) {
+        btnCopyCode.addEventListener('click', () => {
+          copyFeedback.textContent = 'Copied!';
+          setTimeout(() => {
+            copyFeedback.textContent = 'Copy';
+          }, 1800);
+        });
+      }
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-lowest border-t border-white/5 pt-unit-xl pb-unit-lg text-on-surface-variant font-body-sm text-body-sm">
+  <div class="max-w-[1440px] mx-auto px-gutter-desktop flex flex-col gap-unit-lg">
+    <!-- 4-Column Directory Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-unit-lg pb-unit-md border-b border-white/5">
+      <!-- Col 1: Core Platform -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Core Platform</span>
+        <a href="/home/" class="hover:text-primary transition-colors text-[13px] no-underline">Home Landing Hub</a>
+        <a href="/monitoring/" class="hover:text-primary transition-colors text-[13px] no-underline">Live Field Monitoring</a>
+        <a href="/how-it-works/" class="hover:text-primary transition-colors text-[13px] no-underline">Architecture & Protocol</a>
+      </div>
+      <!-- Col 2: Hardware & Field -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Hardware & Nodes</span>
+        <a href="/sensors/" class="hover:text-primary transition-colors text-[13px] no-underline">Sensor Ecosystem</a>
+        <a href="/field-setup/" class="hover:text-primary transition-colors text-[13px] no-underline">3D Field Placement SOP</a>
+        <a href="/wiring/" class="hover:text-primary transition-colors text-[13px] no-underline">Wiring Simulator</a>
+      </div>
+      <!-- Col 3: Diagnostics & Triage -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Diagnostics & Triage</span>
+        <a href="/inspector/" class="hover:text-primary transition-colors text-[13px] no-underline">Packet Inspector</a>
+        <a href="/alerts/" class="hover:text-primary transition-colors text-[13px] no-underline">Alert Center & Actuation</a>
+        <a href="/sim-lab/" class="hover:text-primary transition-colors text-[13px] no-underline">Simulation Lab</a>
+      </div>
+      <!-- Col 4: Knowledge & 3D -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Presentations & 3D</span>
+        <a href="/academy/" class="hover:text-primary transition-colors text-[13px] no-underline">AgriGCS Academy</a>
+        <a href="/deck/" class="hover:text-primary transition-colors text-[13px] no-underline">10-Stage Executive Deck</a>
+        <a href="/orbit/" class="hover:text-primary transition-colors text-[13px] no-underline">3D Orbit Visualizer</a>
+        <a href="/webgl/" class="hover:text-primary transition-colors text-[13px] no-underline">WebGL Heatmap Telemetry</a>
+        <a href="/motion/" class="hover:text-primary transition-colors text-[13px] no-underline">Dynamic Motion Wave Effects</a>
+      </div>
+    </div>
+    <!-- Bottom Telemetry Specs Strip -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-unit-sm text-xs font-telemetry-sm">
+      <div class="flex flex-wrap items-center gap-unit-sm">
+        <span class="font-label-caps text-label-caps text-on-surface font-bold uppercase tracking-wider">AgriGCS Ground Control v2.4</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-tertiary">Baud: 115200</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-secondary">RF: 915.2 MHz (SF7)</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-primary">Mesh: 12/12 Synced</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-primary-container">RTK FIXED (±1.2cm)</span>
+      </div>
+      <div class="flex items-center gap-unit-sm text-outline">
+        <span>© 2024 AgriGCS Systems Inc. All rights reserved.</span>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="/agrigcs-state.js"></script>
+<script src="/agrigcs-nav.js"></script>
+<script>
+  (function() {
+    let beeperActive = true;
+    let inverted = false;
+
+    const beepBtn = document.getElementById('btnContinuity');
+    beepBtn?.addEventListener('click', () => {
+      beeperActive = !beeperActive;
+      beepBtn.innerHTML = `
+        <span class="material-symbols-outlined ${beeperActive ? 'text-primary' : 'text-outline'} text-[15px]">${beeperActive ? 'hearing' : 'volume_off'}</span>
+        <span>Continuity Beeper: ${beeperActive ? 'Active' : 'Muted'}</span>
+      `;
+      window.AgriGCS_UI?.showToast(beeperActive ? 'Continuity Audio Beeper Enabled (Tone: 2.4 kHz)' : 'Continuity Beeper Muted', 'info');
+    });
+
+    const invertBtn = document.getElementById('btnInvertSignals');
+    invertBtn?.addEventListener('click', () => {
+      inverted = !inverted;
+      invertBtn.textContent = inverted ? 'Polarity: Inverted' : 'Invert Polarity';
+      invertBtn.classList.toggle('text-amber-400', inverted);
+      window.AgriGCS_UI?.showToast(inverted ? 'I2C/Analog Polarity Inverted for Differential Sensor' : 'Polarity Restored to Standard Non-Inverting', 'warn');
+    });
+  })();
+</script>
+</body></html>

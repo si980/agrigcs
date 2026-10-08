@@ -1,0 +1,213 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<!-- STITCH_SHADER_START:ANIMATION_41 class="fixed inset-0 w-full h-full" -->
+<div class="fixed inset-0 w-full h-full" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_41" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_41');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+varying vec2 v_texCoord;
+
+// Simplex/Perlin-style hash for procedural soil & moisture turbulence
+float hash(vec2 p) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+}
+
+float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    float a = hash(i);
+    float b = hash(i + vec2(1.0, 0.0));
+    float c = hash(i + vec2(0.0, 1.0));
+    float d = hash(i + vec2(1.0, 1.0));
+    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+
+float fbm(vec2 p) {
+    float v = 0.0;
+    float a = 0.5;
+    for (int i = 0; i < 4; i++) {
+        v += a * noise(p);
+        p *= 2.0;
+        a *= 0.5;
+    }
+    return v;
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 aspect = vec2(u_resolution.x / u_resolution.y, 1.0);
+    vec2 p = (uv - 0.5) * aspect;
+
+    // Mouse interactive displacement
+    vec2 mouseNorm = (u_mouse / u_resolution) - 0.5;
+    mouseNorm *= aspect;
+    float mouseDist = length(p - mouseNorm);
+    float mouseInfluence = smoothstep(0.4, 0.0, mouseDist);
+
+    // Dynamic isometric scanning plane angle
+    vec2 isoCoord = vec2(p.x * 0.866 - p.y * 0.5, p.x * 0.5 + p.y * 0.866);
+
+    // Base agricultural soil moisture heat map gradient
+    float moistureTurbulence = fbm(isoCoord * 3.5 + vec2(u_time * 0.06, -u_time * 0.04));
+    float n2 = fbm(isoCoord * 7.0 - vec2(u_time * 0.03, u_time * 0.05));
+    float moistureValue = mix(moistureTurbulence, n2, 0.35) + mouseInfluence * 0.25;
+
+    // AgriGCS Color Scheme: Deep midnight slate, bioluminescent cyan (#00d2aa), telemetry blue (#38bdf8), and stress amber (#f59e0b)
+    vec3 colDeep = vec3(0.04, 0.07, 0.11);     // Background deep slate
+    vec3 colSoil = vec3(0.06, 0.13, 0.16);     // Dark damp soil
+    vec3 colMoist = vec3(0.0, 0.824, 0.667);   // Optimal VWC Teal (#00d2aa)
+    vec3 colAero = vec3(0.22, 0.74, 0.97);    // LoRa / RF Cyan (#38bdf8)
+    vec3 colStress = vec3(0.96, 0.62, 0.15);  // Dry threshold amber
+
+    // Zone B Stress anomaly zone (sub-coordinate center around x: 0.1, y: 0.0)
+    vec2 zoneBPos = vec2(0.12, -0.05);
+    float distZoneB = length(p - zoneBPos);
+    float zoneBStressPulse = 0.5 + 0.5 * sin(u_time * 2.5);
+    float zoneBMask = smoothstep(0.35, 0.05, distZoneB) * zoneBStressPulse;
+
+    // Layered color synthesis
+    vec3 baseColor = mix(colSoil, colMoist, smoothstep(0.3, 0.75, moistureValue));
+    baseColor = mix(baseColor, colStress, zoneBMask * 0.45);
+
+    // LoRa Mesh Beacon concentric pulsing rings (Gateway #1 at (-0.25, -0.08) and Node B1 at (0.12, 0.02))
+    vec2 beacon1 = vec2(-0.25, -0.08);
+    vec2 beacon2 = vec2(0.12, 0.02);
+    
+    // Pulse waves traveling outward
+    float d1 = length(p - beacon1);
+    float ring1 = sin(d1 * 32.0 - u_time * 4.0);
+    ring1 = smoothstep(0.85, 0.99, ring1) * smoothstep(0.45, 0.0, d1);
+
+    float d2 = length(p - beacon2);
+    float ring2 = sin(d2 * 28.0 - u_time * 3.5);
+    ring2 = smoothstep(0.88, 0.99, ring2) * smoothstep(0.4, 0.0, d2);
+
+    // Wireless RF Mesh Data link beam between Beacon 1 & Beacon 2
+    vec2 bDir = beacon2 - beacon1;
+    float bLen = length(bDir);
+    vec2 bNorm = bDir / bLen;
+    vec2 toP = p - beacon1;
+    float proj = clamp(dot(toP, bNorm), 0.0, bLen);
+    float perpDist = length(toP - bNorm * proj);
+    
+    float packetTravel = fract(u_time * 0.8);
+    float packetDist = abs(proj / bLen - packetTravel);
+    float packetPulse = smoothstep(0.08, 0.0, packetDist) * smoothstep(0.015, 0.0, perpDist);
+    float beamLine = smoothstep(0.005, 0.0, perpDist) * 0.25;
+
+    // Technical coordinate grid / radar sweep line
+    float sweepAngle = mod(u_time * 1.2, 6.28318);
+    float currentAngle = atan(p.y, p.x);
+    float angleDiff = mod(sweepAngle - currentAngle, 6.28318);
+    float radarSweep = smoothstep(1.5, 0.0, angleDiff) * 0.18 * smoothstep(0.6, 0.1, length(p));
+
+    // Synthetic Ortho Grid lines (isometric matrix)
+    vec2 gridUV = fract(uv * vec2(30.0, 20.0) + vec2(0.0, u_time * 0.02));
+    float gridLines = (smoothstep(0.96, 1.0, gridUV.x) + smoothstep(0.96, 1.0, gridUV.y)) * 0.08;
+
+    // Combine all luminous overlays with subtle vignetting
+    vec3 finalColor = baseColor * 0.75 + colAero * (ring1 * 0.8 + ring2 * 0.7 + beamLine + packetPulse * 1.6 + radarSweep);
+    finalColor += vec3(gridLines * colMoist);
+
+    // Corner vignette to blend seamlessly into dark card surface
+    float vignette = smoothstep(0.75, 0.25, length(uv - 0.5));
+    finalColor *= vignette;
+
+    gl_FragColor = vec4(finalColor, 0.92 * vignette);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_41 -->
+
+
+<script src="../agrigcs-nav.js"></script></body></html>

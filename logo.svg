@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" fill="none">
+  <g transform="translate(4, 4)">
+    <path d="M16 2C16 2 8 8 8 18C8 24 12 28 16 30C20 28 24 24 24 18C24 8 16 2 16 2Z" fill="url(#agri-grad)" />
+    <path d="M16 8C16 8 26 12 28 20C28 24 25 28 22 29" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
+    <circle cx="16" cy="18" r="3.5" fill="#0c131a" stroke="#00d2aa" stroke-width="2" />
+    <circle cx="28" cy="20" r="2" fill="#38bdf8" />
+  </g>
+  <defs>
+    <linearGradient id="agri-grad" x1="8" y1="2" x2="24" y2="30" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00d2aa"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <text x="44" y="26" font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="20" letter-spacing="-0.5px" fill="#ffffff">Agri<tspan fill="#00d2aa">GCS</tspan></text>
+</svg>

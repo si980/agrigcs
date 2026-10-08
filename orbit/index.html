@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>AgriGCS | 3D Spatial Digital Twin & Field Orbit Studio</title>
+  
+  <!-- Typography & Icons -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            surface: "#090e14",
+            "surface-dim": "#060a0e",
+            "surface-container-lowest": "#05080c",
+            "surface-container-low": "#0b1219",
+            "surface-container": "#101822",
+            "surface-container-high": "#16202c",
+            "surface-container-highest": "#1c2937",
+            "on-surface": "#e2e8f0",
+            "on-surface-variant": "#8ca3ba",
+            outline: "#48627d",
+            "outline-variant": "#233547",
+            primary: "#00d2aa",
+            "primary-container": "#005543",
+            "on-primary": "#002018",
+            secondary: "#38bdf8",
+            "secondary-container": "#004c69",
+            tertiary: "#a78bfa",
+            error: "#f87171",
+            "error-container": "#450a0a",
+            "on-error": "#450a0a"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #060a0e; }
+    ::-webkit-scrollbar-thumb { background: #1c2937; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00d2aa; }
+
+    /* 3D Canvas Container */
+    #orbit-viewport {
+      cursor: grab;
+      touch-action: none;
+    }
+    #orbit-viewport:active {
+      cursor: grabbing;
+    }
+
+    /* 3D Projected Floating Marker Anchor */
+    .spatial-marker-anchor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: auto;
+      will-change: transform;
+      transition: opacity 0.2s ease, filter 0.2s ease;
+      z-index: 20;
+    }
+    .spatial-marker-anchor.behind-camera {
+      display: none !important;
+    }
+
+    /* Ambient Pulsing Glow */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+    .animate-pulse-glow {
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+
+    /* God Mode Global Outline */
+    body.god-mode-active {
+      box-shadow: inset 0 0 40px rgba(245, 158, 11, 0.35);
+    }
+    body.god-mode-active .god-mode-border {
+      border-color: rgba(245, 158, 11, 0.6) !important;
+    }
+  </style>
+</head>
+
+<body class="bg-surface font-sans text-on-surface antialiased min-h-screen flex flex-col items-center pt-20 pb-8 px-3 sm:px-6 lg:px-8 selection:bg-primary/25 selection:text-primary relative overflow-x-hidden">
+
+  <!-- Radial Neon Ambient Glows -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[500px] bg-primary/10 blur-[170px] pointer-events-none -z-10 rounded-full"></div>
+  <div class="absolute top-[550px] right-1/4 w-[750px] h-[450px] bg-secondary/10 blur-[160px] pointer-events-none -z-10 rounded-full"></div>
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP UNIFIED NAVIGATION HEADER -->
+  <!-- ========================================================================= -->
+  <header class="agrigcs-unified-header fixed top-0 left-0 right-0 z-50 bg-surface/85 backdrop-blur-xl border-b border-outline-variant/20 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
+    <div class="h-16 w-full px-4 lg:px-8 max-w-[1536px] mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Left: Brand Identity -->
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="/home/" class="flex items-center gap-2.5 hover:opacity-95 transition-all group no-underline">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/20 via-surface-container-high to-surface-container flex items-center justify-center border border-primary/40 shadow-[0_0_15px_rgba(0,210,170,0.25)] group-hover:scale-105 transition-transform">
+            <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12a10 10 0 0 1 10-10z"></path>
+              <path d="M12 6c0 4 4 6 4 10"></path>
+              <path d="M8 12c2 0 4-2 4-6"></path>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span class="font-extrabold text-lg text-white tracking-tight leading-none">Agri<span class="text-primary">GCS</span></span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">v2.4</span>
+            </div>
+            <span class="text-[9px] font-mono tracking-widest uppercase text-on-surface-variant/80 mt-0.5">3D Spatial Digital Twin</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Center: Navigation Dropdowns -->
+      <nav aria-label="Main Navigation" class="hidden xl:flex items-center gap-1">
+        <!-- Mission Control -->
+        <a href="/home/" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-all no-underline">
+          Mission Control
+        </a>
+
+        <!-- Operations & 3D (Active) -->
+        <div class="relative group/nav">
+          <button type="button" class="flex items-center gap-1 px-3.5 py-1.5 rounded-full text-[13px] font-medium bg-primary/15 text-primary border border-primary/30 transition-all cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[16px] text-primary">view_in_ar</span>
+            <span>Operations &amp; 3D</span>
+            <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+          </button>
+          <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+            <div class="w-68 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+              <a href="/orbit/" class="flex items-center gap-3 p-2 rounded-xl bg-primary/15 border border-primary/30 group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">3d_rotation</span>
+                <div class="flex flex-col">
+                  <div class="flex items-center justify-between w-full">
+                    <span class="text-[13px] font-semibold text-primary">3D Orbit Visualizer</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-primary/20 text-primary font-bold">CURRENT</span>
+                  </div>
+                  <span class="text-[10px] text-on-surface-variant font-mono">360° field spatial twin</span>
+                </div>
+              </a>
+              <a href="/monitoring/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-container-high transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">satellite_alt</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Field Monitoring Station</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">2D Satellite, alerts &amp; valves</span>
+                </div>
+              </a>
+              <a href="/webgl/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-container-high transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">heat_pump</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">WebGL Heatmap</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">Volumetric soil shader</span>
+                </div>
+              </a>
+              <a href="/telemetry/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-container-high transition-colors group/item no-underline">
+                <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">vital_signs</span>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Telemetry Stream</span>
+                  <span class="text-[10px] text-on-surface-variant font-mono">Level 4 SCADA packet bus</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hardware & Field -->
+        <a href="/sensors/" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-all no-underline">
+          Hardware &amp; Nodes
+        </a>
+
+        <!-- Diagnostics -->
+        <a href="/alerts/" class="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-all no-underline flex items-center gap-1.5">
+          <span>Diagnostics</span>
+          <span class="agrigcs-alert-badge px-1.5 py-0.2 rounded-full text-[10px] bg-error text-on-error font-bold font-mono">1</span>
+        </a>
+      </nav>
+
+      <!-- Right: Utility Cluster & Operator Actions -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <!-- ⚡ GOD MODE Button -->
+        <button onclick="toggleGodModeUI()" id="nav-god-mode-btn" class="agrigcs-god-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-yellow-400/25 to-amber-500/20 text-amber-300 hover:text-amber-200 border border-amber-400/40 hover:border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)] font-mono text-[11px] font-bold tracking-wider transition-all active:scale-95 cursor-pointer" type="button" title="God Mode: Super-Admin Telemetry & Hardware Override [Hotkey: Shift+G]">
+          <span class="material-symbols-outlined text-[16px] text-amber-400 animate-pulse">bolt</span>
+          <span id="nav-god-mode-text">GOD MODE</span>
+          <span id="nav-god-mode-dot" class="w-2 h-2 rounded-full bg-amber-400/40"></span>
+        </button>
+
+        <!-- Switch to 2D Monitoring Button -->
+        <a href="/monitoring/" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 text-xs font-mono font-medium transition-all no-underline" title="Switch to 2D Satellite Field Monitoring Station">
+          <span class="material-symbols-outlined text-[16px] text-primary">satellite_alt</span>
+          <span>2D Station</span>
+        </a>
+
+        <!-- Live Stream Pill -->
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest/90 text-on-surface text-xs font-medium border border-outline-variant/20">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+          </span>
+          <span class="font-mono text-[11px] uppercase tracking-wider text-on-surface font-semibold">3D LIVE</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- ⚡ GOD MODE PERSISTENT COMMAND HUD BAR -->
+  <!-- ========================================================================= -->
+  <div id="god-mode-hud-bar" class="hidden fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-[#181206]/95 via-[#231a08]/98 to-[#181206]/95 border-b border-amber-500/50 backdrop-blur-2xl shadow-[0_10px_35px_rgba(245,158,11,0.3)] transition-all">
+    <div class="max-w-[1536px] mx-auto px-4 lg:px-8 py-2 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+      <div class="flex items-center gap-2.5">
+        <span class="flex h-2.5 w-2.5 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400"></span>
+        </span>
+        <span class="font-black text-amber-300 tracking-wider">⚡ GOD MODE ACTIVE // 3D TERRAIN FORCER</span>
+        <span class="hidden md:inline px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 border border-amber-500/30 text-[10px]">SAFETY LOCKS: BYPASSED</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="openGodModeModal()" class="px-2.5 py-1 rounded-lg bg-amber-400 text-amber-950 font-bold hover:bg-amber-300 transition-all flex items-center gap-1 cursor-pointer">
+          <span class="material-symbols-outlined text-[15px]">tune</span>
+          <span>Command Deck</span>
+        </button>
+        <button onclick="godModeForceAllValves(true)" class="px-2.5 py-1 rounded-lg bg-surface-container-high text-amber-300 border border-amber-400/30 hover:border-amber-400 transition-all flex items-center gap-1 cursor-pointer">
+          <span class="material-symbols-outlined text-[15px]">valve</span>
+          <span>Force All Valves</span>
+        </button>
+        <button onclick="toggleGodModeUI(false)" class="p-1 text-amber-400/70 hover:text-white transition-all cursor-pointer" title="Exit God Mode">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN 3D DIGITAL TWIN STUDIO VIEWPORT -->
+  <!-- ========================================================================= -->
+  <main class="relative z-10 w-full max-w-[1536px] flex flex-col gap-4 mt-1 flex-1">
+
+    <!-- STUDIO TOP BAR: Clean, Minimal, Non-Redundant -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#14232c]/90 to-[#0c161d]/95 border border-outline-variant/25 backdrop-blur-xl shadow-lg">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 border border-primary/30 text-primary flex items-center justify-center shadow-[0_0_20px_rgba(0,210,170,0.2)] shrink-0">
+          <span class="material-symbols-outlined text-[24px]">3d_rotation</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Sector 04 • 3D Spatial Digital Twin Studio</h1>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-primary/15 text-primary border border-primary/30">Three.js WebGL</span>
+          </div>
+          <p class="text-xs text-on-surface-variant font-mono mt-0.5">
+            Full 360° sub-canopy spatial orbit • 3D coordinate-projected telemetry anchors • Volumetric soil shaders
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Status Badges -->
+      <div class="flex items-center gap-2 self-end sm:self-auto font-mono text-[11px]">
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container border border-outline-variant/25 text-on-surface-variant">
+          <span class="material-symbols-outlined text-[15px] text-secondary">cell_tower</span>
+          <span>Mesh: <strong class="text-white">12 Nodes</strong></span>
+        </div>
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container border border-outline-variant/25 text-on-surface-variant">
+          <span class="material-symbols-outlined text-[15px] text-primary">my_location</span>
+          <span>RTK: <strong class="text-primary">FIXED ±1.2cm</strong></span>
+        </div>
+        <a href="/monitoring/" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-primary/15 hover:bg-primary/25 border border-primary/30 text-primary font-semibold transition-all no-underline" title="Go to detailed 2D Field Monitoring Station">
+          <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+          <span>2D Operations</span>
+        </a>
+        <a href="/orbit/agrigcs_platform.blend" download="agrigcs_platform.blend" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 font-semibold transition-all no-underline" title="Download native Blender .blend scene">
+          <span class="material-symbols-outlined text-[15px] text-amber-400">deployed_code</span>
+          <span>Blender (.blend)</span>
+        </a>
+        <a href="/orbit/agrigcs_platform.glb" download="agrigcs_platform.glb" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-secondary/15 hover:bg-secondary/25 border border-secondary/30 text-secondary font-semibold transition-all no-underline" title="Download standard 3D GLB model">
+          <span class="material-symbols-outlined text-[15px]">view_in_ar</span>
+          <span>3D GLB</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 3D WORKSPACE CANVAS & DYNAMIC FLOATING INTERFACE -->
+    <!-- ========================================================================= -->
+    <div class="relative w-full h-[650px] sm:h-[720px] lg:h-[760px] rounded-3xl overflow-hidden border border-outline-variant/30 bg-[#060b10] shadow-[0_20px_60px_rgba(0,0,0,0.8)] select-none">
+      
+      <!-- Background Aerial Orthomosaic (Subtle underlying ground layer) -->
+      <div class="absolute inset-0 bg-cover bg-center opacity-30 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCrRh_K8oSqBSrcL-ihOqnBArdCWE368vEfdAHtGXJq-Ayi-tbRrOje9uG9tnym6BThtCzvIukKxJwRWAOzVSScOFbYKcZXiEPGBbT8hDkt4uvD-Fw7qSjBoZMCgKN8ZmxQQDim7fU22qPUa0i87Gofmq_gcn3rPEKvvZncArRfAun6INQKl5QbbnGSfOlLePOr3vOtyDS6Wk7viY3Uj8dT__2ZAFHK-z52jJPOdiiobNLk007K5IFf');"></div>
+      
+      <!-- Ambient Studio Vignette -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#060b10]/80 via-transparent to-[#060b10]/90 pointer-events-none z-10"></div>
+
+      <!-- Tactical Corner Reticles -->
+      <div class="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-primary/50 pointer-events-none z-20"></div>
+      <div class="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-primary/50 pointer-events-none z-20"></div>
+      <div class="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-primary/50 pointer-events-none z-20"></div>
+      <div class="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-primary/50 pointer-events-none z-20"></div>
+
+      <!-- THREE.JS WEBGL RENDERER CONTAINER -->
+      <div id="orbit-viewport" class="absolute inset-0 w-full h-full z-15"></div>
+
+      <!-- ========================================================================= -->
+      <!-- DYNAMIC 3D-PROJECTED FLOATING SPATIAL HUD ANCHORS -->
+      <!-- Positioned in real-time by projecting Three.js Vector3 onto Screen XY! -->
+      <!-- ========================================================================= -->
+      <div id="spatial-labels-layer" class="absolute inset-0 pointer-events-none z-25 overflow-hidden">
+        
+        <!-- ANCHOR 1: Central Solar Mesh Gateway -->
+        <div id="marker-gateway" class="spatial-marker-anchor -translate-x-1/2 -translate-y-full cursor-pointer" onclick="select3DNode('gateway')">
+          <div class="flex flex-col items-center group">
+            <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0b141d]/90 backdrop-blur-md border border-primary/50 text-white shadow-[0_0_20px_rgba(0,210,170,0.4)] group-hover:scale-105 transition-transform">
+              <span class="material-symbols-outlined text-[15px] text-primary animate-pulse">cell_tower</span>
+              <span class="font-mono text-[11px] font-bold">Mesh Gateway #1</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+            </div>
+            <div class="w-0.5 h-6 bg-gradient-to-b from-primary to-transparent"></div>
+          </div>
+        </div>
+
+        <!-- ANCHOR 2: Zone B Probe #10555 (Critical Low Moisture Deficit) -->
+        <div id="marker-zone-b" class="spatial-marker-anchor -translate-x-1/2 -translate-y-full cursor-pointer" onclick="select3DNode('zone-b')">
+          <div class="flex flex-col items-center group">
+            <div class="flex items-center gap-2 p-1.5 pr-3 rounded-2xl bg-[#1b0d0d]/95 backdrop-blur-md border-2 border-error/70 text-white shadow-[0_0_30px_rgba(248,113,113,0.6)] group-hover:scale-105 transition-transform animate-pulse-glow">
+              <div class="w-7 h-7 rounded-xl bg-error text-white flex items-center justify-center font-bold">
+                <span class="material-symbols-outlined text-[17px]">warning</span>
+              </div>
+              <div class="flex flex-col text-left">
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono text-[11px] font-extrabold text-error">Zone B [Probe #10555]</span>
+                  <span class="px-1.5 py-0.2 rounded text-[8px] font-mono font-bold bg-error/30 text-error">DEFICIT</span>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-[10px] text-on-surface-variant">
+                  <span>Moisture: <strong id="spatial-vwc-val" class="text-error font-bold">28.0%</strong></span>
+                  <span>•</span>
+                  <span>Depth: 30cm</span>
+                </div>
+              </div>
+            </div>
+            <div class="w-0.5 h-8 bg-gradient-to-b from-error to-transparent"></div>
+          </div>
+        </div>
+
+        <!-- ANCHOR 3: Zone A Probe #10551 (Lush Corn Plot) -->
+        <div id="marker-zone-a" class="spatial-marker-anchor -translate-x-1/2 -translate-y-full cursor-pointer" onclick="select3DNode('zone-a')">
+          <div class="flex flex-col items-center group">
+            <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-[#091512]/90 backdrop-blur-md border border-primary/40 text-white shadow-[0_0_15px_rgba(0,210,170,0.25)] group-hover:scale-105 transition-transform">
+              <span class="w-2 h-2 rounded-full bg-primary"></span>
+              <span class="font-mono text-[11px] text-primary font-bold">Zone A: 42.1% VWC</span>
+              <span class="text-[10px] text-on-surface-variant font-mono">Sweet Corn</span>
+            </div>
+            <div class="w-0.5 h-5 bg-gradient-to-b from-primary to-transparent"></div>
+          </div>
+        </div>
+
+        <!-- ANCHOR 4: Zone C Probe #10558 (Soybean Plot) -->
+        <div id="marker-zone-c" class="spatial-marker-anchor -translate-x-1/2 -translate-y-full cursor-pointer" onclick="select3DNode('zone-c')">
+          <div class="flex flex-col items-center group">
+            <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-[#0c1822]/90 backdrop-blur-md border border-secondary/40 text-white shadow-md group-hover:scale-105 transition-transform">
+              <span class="w-2 h-2 rounded-full bg-secondary"></span>
+              <span class="font-mono text-[11px] text-secondary font-semibold">Zone C: 37.8% VWC</span>
+            </div>
+            <div class="w-0.5 h-4 bg-gradient-to-b from-secondary to-transparent"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- FLOATING STUDIO CONTROLS & HUD PANELS -->
+      <!-- ========================================================================= -->
+      
+      <!-- TOP LEFT: 3D Volumetric Layer Controls -->
+      <div class="absolute top-4 left-4 z-30 flex flex-col gap-2 max-w-[280px]">
+        <div class="p-2 sm:p-2.5 rounded-2xl bg-[#0a121a]/92 backdrop-blur-xl border border-outline-variant/30 shadow-2xl flex flex-col gap-1.5 font-mono text-xs">
+          <div class="flex items-center justify-between px-1 pb-1 border-b border-outline-variant/20">
+            <span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">3D Shading Layers</span>
+            <span class="text-[10px] text-primary">REAL-TIME</span>
+          </div>
+
+          <!-- Toggle: Soil Moisture VWC Heatmap -->
+          <button id="btn-toggle-heatmap" onclick="toggle3DHeatmap()" type="button" class="flex items-center justify-between p-1.5 px-2.5 rounded-xl bg-primary/15 text-primary border border-primary/30 hover:bg-primary/25 transition-all cursor-pointer">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">water_drop</span>
+              <span class="font-medium">Soil VWC Contours</span>
+            </div>
+            <span id="badge-heatmap" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-primary/20 text-primary">ON</span>
+          </button>
+
+          <!-- Toggle: NDVI Vegetation Index -->
+          <button id="btn-toggle-ndvi" onclick="toggle3DNDVI()" type="button" class="flex items-center justify-between p-1.5 px-2.5 rounded-xl bg-surface-container-high/80 text-on-surface hover:text-secondary border border-outline-variant/20 hover:border-secondary/30 transition-all cursor-pointer">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">grass</span>
+              <span class="font-medium">NDVI Canopy Vigor</span>
+            </div>
+            <span id="badge-ndvi" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant">OFF</span>
+          </button>
+
+          <!-- Toggle: LoRa RF Mesh Vectors -->
+          <button id="btn-toggle-mesh" onclick="toggle3DMeshBeams()" type="button" class="flex items-center justify-between p-1.5 px-2.5 rounded-xl bg-secondary/15 text-secondary border border-secondary/30 hover:bg-secondary/25 transition-all cursor-pointer">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">hub</span>
+              <span class="font-medium">LoRa RF Beams</span>
+            </div>
+            <span id="badge-mesh" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-secondary/20 text-secondary">ACTIVE</span>
+          </button>
+
+          <!-- Toggle: 3D Spatial Labels -->
+          <button id="btn-toggle-tags" onclick="toggle3DTags()" type="button" class="flex items-center justify-between p-1.5 px-2.5 rounded-xl bg-surface-container-high/80 text-on-surface hover:text-white border border-outline-variant/20 transition-all cursor-pointer">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">label</span>
+              <span class="font-medium">3D Sensor Badges</span>
+            </div>
+            <span id="badge-tags" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-primary/20 text-primary">SHOWN</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TOP RIGHT: Preset Camera Angles -->
+      <div class="absolute top-4 right-4 z-30 flex flex-col items-end gap-2">
+        <div class="p-1.5 sm:p-2 rounded-2xl bg-[#0a121a]/92 backdrop-blur-xl border border-outline-variant/30 shadow-2xl flex items-center gap-1 font-mono text-xs">
+          <button onclick="setCameraAngle('iso')" id="cam-btn-iso" class="px-2.5 py-1 rounded-xl bg-primary text-on-primary font-bold shadow-[0_0_10px_rgba(0,210,170,0.4)] transition-all cursor-pointer" title="Isometric 45° Perspective">
+            Isometric
+          </button>
+          <button onclick="setCameraAngle('top')" id="cam-btn-top" class="px-2.5 py-1 rounded-xl text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-all cursor-pointer" title="Top-Down 90° Bird's Eye Nadir">
+            Top-Down
+          </button>
+          <button onclick="setCameraAngle('canopy')" id="cam-btn-canopy" class="px-2.5 py-1 rounded-xl text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-all cursor-pointer" title="Ground-Level Canopy Walk">
+            Canopy
+          </button>
+          <button onclick="focusOnAlertZone()" class="px-2.5 py-1 rounded-xl text-error bg-error/15 hover:bg-error/25 border border-error/30 font-bold transition-all cursor-pointer" title="Snap focus camera directly on Zone B Alert">
+            ⚡ Zone B
+          </button>
+          <button onclick="resetCameraView()" class="p-1 rounded-xl hover:bg-surface-container-high text-on-surface-variant hover:text-white transition-all cursor-pointer" title="Reset Camera Orbit & Zoom">
+            <span class="material-symbols-outlined text-[18px]">restart_alt</span>
+          </button>
+        </div>
+
+        <!-- Orbit Interaction Hint -->
+        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0a121a]/80 backdrop-blur-md border border-outline-variant/20 text-[10px] font-mono text-on-surface-variant shadow-md">
+          <span class="material-symbols-outlined text-[14px] text-primary">mouse</span>
+          <span>Click &amp; Drag to Orbit • Scroll to Zoom</span>
+        </div>
+      </div>
+
+      <!-- BOTTOM LEFT: Interactive 3D Node Inspector Card (Reveals on node click) -->
+      <div id="spatial-node-inspector" class="absolute bottom-4 left-4 z-30 max-w-sm w-full transition-all duration-300">
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-[#0c1622]/95 backdrop-blur-2xl border border-primary/40 shadow-[0_15px_40px_rgba(0,0,0,0.85)] flex flex-col gap-2.5 text-white font-mono">
+          <div class="flex items-center justify-between pb-2 border-b border-outline-variant/25">
+            <div class="flex items-center gap-2">
+              <span id="inspect-icon" class="material-symbols-outlined text-[20px] text-error">warning</span>
+              <div>
+                <h3 id="inspect-title" class="font-bold text-sm text-white">Zone B [Probe #10555]</h3>
+                <span id="inspect-subtitle" class="text-[10px] text-on-surface-variant">Capacitive FDR Moisture Array</span>
+              </div>
+            </div>
+            <button onclick="closeInspectorCard()" class="p-1 text-on-surface-variant hover:text-white cursor-pointer">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2 rounded-xl bg-surface-container border border-outline-variant/20">
+              <span class="text-[10px] text-on-surface-variant block">Volumetric Moisture:</span>
+              <span id="inspect-val-vwc" class="text-base font-extrabold text-error">28.0% VWC</span>
+            </div>
+            <div class="p-2 rounded-xl bg-surface-container border border-outline-variant/20">
+              <span class="text-[10px] text-on-surface-variant block">Soil Horizon Temp:</span>
+              <span id="inspect-val-temp" class="text-base font-bold text-on-surface">19.5°C</span>
+            </div>
+            <div class="p-2 rounded-xl bg-surface-container border border-outline-variant/20">
+              <span class="text-[10px] text-on-surface-variant block">LoRa RF Link:</span>
+              <span id="inspect-val-rssi" class="text-xs font-semibold text-primary">-68 dBm / +9.4dB</span>
+            </div>
+            <div class="p-2 rounded-xl bg-surface-container border border-outline-variant/20">
+              <span class="text-[10px] text-on-surface-variant block">Battery Reserve:</span>
+              <span id="inspect-val-batt" class="text-xs font-semibold text-primary">85% (3.6V LiSOCl2)</span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1 text-[10px] text-on-surface-variant border-t border-outline-variant/20">
+            <span>Root Depth: <strong>30 cm</strong></span>
+            <span>RTK: <strong>36.558°N, 121.503°W</strong></span>
+          </div>
+
+          <!-- Quick Action within 3D Inspector -->
+          <div class="pt-1 flex items-center gap-2">
+            <button onclick="triggerDripDirect()" id="inspect-actuator-btn" class="flex-1 py-1.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-bold text-xs shadow-[0_0_12px_rgba(0,210,170,0.3)] transition-all cursor-pointer flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[15px]">water_drop</span>
+              <span id="inspect-actuator-text">Trigger Drip Valve</span>
+            </button>
+            <a href="/monitoring/" class="p-1.5 px-3 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-white border border-outline-variant/25 text-xs transition-all no-underline" title="View in 2D Monitoring Station">
+              View Station
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM RIGHT: Zoom & Camera Sliders -->
+      <div class="absolute bottom-4 right-4 z-30 flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a121a]/92 backdrop-blur-xl border border-outline-variant/30 shadow-2xl">
+        <button onclick="zoomCamera(1)" class="w-8 h-8 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-all cursor-pointer" title="Zoom In" aria-label="Zoom In">
+          <span class="material-symbols-outlined text-[18px]">zoom_in</span>
+        </button>
+        <button onclick="zoomCamera(-1)" class="w-8 h-8 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-all cursor-pointer" title="Zoom Out" aria-label="Zoom Out">
+          <span class="material-symbols-outlined text-[18px]">zoom_out</span>
+        </button>
+        <div class="w-px h-5 bg-outline-variant/30 mx-0.5"></div>
+        <button onclick="toggleAutoRotate()" id="btn-auto-rotate" class="px-2.5 py-1 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary font-mono text-[11px] transition-all cursor-pointer flex items-center gap-1">
+          <span class="material-symbols-outlined text-[15px]">sync</span>
+          <span id="rotate-label">Orbit: ON</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- ⚡ GOD MODE MASTER OVERRIDE MODAL -->
+  <!-- ========================================================================= -->
+  <div id="modal-god-mode" class="fixed inset-0 z-[100] bg-black/85 backdrop-blur-2xl hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="relative bg-gradient-to-b from-[#181308]/98 via-[#0e141b]/98 to-[#090e14]/99 border-2 border-amber-500/50 rounded-3xl max-w-4xl w-full p-5 sm:p-7 shadow-[0_0_60px_rgba(245,158,11,0.35)] space-y-6 text-white font-sans max-h-[92vh] overflow-y-auto">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-500/30 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-400/50 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+            <span class="material-symbols-outlined text-[26px] animate-pulse">bolt</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="font-extrabold text-lg sm:text-xl text-amber-300 font-mono tracking-tight">⚡ GOD MODE // 3D TERRAIN FORCER</h2>
+              <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-amber-400/20 text-amber-300 border border-amber-400/40 animate-pulse">SUPER-ADMIN UNLOCKED</span>
+            </div>
+            <p class="text-xs text-on-surface-variant font-mono mt-0.5">Force live agronomic moisture levels across 3D terrain and multi-tab state</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 self-end sm:self-auto">
+          <button onclick="toggleGodModeUI(false); closeModal('modal-god-mode');" class="px-3 py-1.5 rounded-xl bg-error/15 text-error hover:bg-error/25 border border-error/30 text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px]">power_settings_new</span>
+            <span>Disengage</span>
+          </button>
+          <button onclick="closeModal('modal-god-mode')" class="p-1.5 rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-white cursor-pointer">
+            <span class="material-symbols-outlined text-[22px]">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sliders Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="p-4 rounded-2xl bg-black/40 border border-amber-500/25 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-amber-300">Zone B Soil Moisture (VWC)</span>
+            <span id="god-readout-vwc" class="font-mono text-sm font-extrabold text-amber-400">28.0%</span>
+          </div>
+          <input type="range" min="10" max="80" step="0.5" value="28" id="god-slider-vwc" oninput="handleGodVwcSlider(this.value)" class="w-full accent-amber-400 h-2 bg-surface-container-highest rounded-lg cursor-pointer">
+          <div class="flex justify-between text-[10px] font-mono text-on-surface-variant">
+            <span>10% (Extreme Drought)</span>
+            <span>35% (Optimal)</span>
+            <span>80% (Saturation)</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-black/40 border border-amber-500/25 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-amber-300">Master Actuators</span>
+            <span id="god-actuator-status" class="font-mono text-[11px] text-primary">NORMAL</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="godModeForceAllValves(true)" class="flex-1 py-2 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary font-mono text-xs font-bold transition-all cursor-pointer">
+              Open All Valves
+            </button>
+            <button onclick="godModeForceAllValves(false)" class="flex-1 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/30 text-on-surface font-mono text-xs transition-all cursor-pointer">
+              Close Valves
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-notify" class="fixed bottom-6 right-6 z-[120] translate-y-24 opacity-0 pointer-events-none transition-all duration-300">
+    <div class="flex items-center gap-3 px-4 py-3 rounded-2xl bg-[#0e1620]/95 backdrop-blur-xl border border-primary/40 shadow-[0_10px_35px_rgba(0,0,0,0.8)] text-white font-mono text-xs">
+      <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+      <div>
+        <div id="toast-title" class="font-bold text-white">Action Executed</div>
+        <div id="toast-desc" class="text-[10px] text-on-surface-variant">System updated</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THREE.JS & CORE SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/agrigcs-state.js"></script>
+  <script src="/agrigcs-nav.js"></script>
+
+  <script>
+    // =========================================================================
+    // THREE.JS 3D SPATIAL DIGITAL TWIN ENGINE
+    // =========================================================================
+    let scene, camera, renderer, clock;
+    let fieldGroup, terrainMesh, zoneAPlot, zoneBPlot, zoneCPlot;
+    let beaconGateway, beaconProbeB, beaconProbeA, beaconProbeC;
+    let pulseRing, rfLinesGroup;
+    let autoRotate = true;
+    let isDragging = false;
+    let prevMousePos = { x: 0, y: 0 };
+    let spherical = { radius: 46, theta: 0.65, phi: 0.95 };
+    let targetRotation = { theta: 0.65, phi: 0.95, radius: 46 };
+    let damping = 0.08;
+
+    // Layer States
+    let layerHeatmap = true;
+    let layerNDVI = false;
+    let layerMeshBeams = true;
+    let layerTags = true;
+
+    // 3D Nodes World Vector Map for Screen Projection
+    const nodes3D = {
+      'gateway': { obj: null, elId: 'marker-gateway', pos: new THREE.Vector3(0, 5.0, 0) },
+      'zone-b':  { obj: null, elId: 'marker-zone-b', pos: new THREE.Vector3(6.2, 2.5, -4.15) },
+      'zone-a':  { obj: null, elId: 'marker-zone-a', pos: new THREE.Vector3(-6.2, 2.8, 2.0) },
+      'zone-c':  { obj: null, elId: 'marker-zone-c', pos: new THREE.Vector3(6.2, 2.4, 4.15) }
+    };
+
+    function init3DStudio() {
+      const container = document.getElementById('orbit-viewport');
+      if (!container) return;
+
+      const w = container.clientWidth || 800;
+      const h = container.clientHeight || 600;
+
+      // 1. Scene
+      scene = new THREE.Scene();
+      clock = new THREE.Clock();
+
+      // 2. Camera
+      camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      updateCameraPosImmediate();
+
+      // 3. Renderer
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.appendChild(renderer.domElement);
+
+      // 4. Lighting
+      const ambient = new THREE.AmbientLight(0x162432, 2.8);
+      scene.add(ambient);
+
+      const keyLight = new THREE.DirectionalLight(0x7dd3fc, 2.8);
+      keyLight.position.set(30, 55, 30);
+      keyLight.castShadow = true;
+      keyLight.shadow.mapSize.width = 1024;
+      keyLight.shadow.mapSize.height = 1024;
+      scene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight(0x00d2aa, 1.8);
+      fillLight.position.set(-30, 35, -25);
+      scene.add(fillLight);
+
+      const warmSun = new THREE.DirectionalLight(0xfde047, 1.4);
+      warmSun.position.set(10, 40, -10);
+      scene.add(warmSun);
+
+      const warnLight = new THREE.PointLight(0xf87171, 3.5, 30);
+      warnLight.position.set(6.2, 4.0, -4.15);
+      scene.add(warnLight);
+
+      // 5. Root Group
+      fieldGroup = new THREE.Group();
+      scene.add(fieldGroup);
+
+      // 6. Texture Loaders
+      const texLoader = new THREE.TextureLoader();
+      const texStrata = texLoader.load('/orbit/tex_soil_strata.jpg');
+      texStrata.wrapS = THREE.RepeatWrapping;
+      texStrata.wrapT = THREE.RepeatWrapping;
+
+      const texCorn = texLoader.load('/orbit/tex_corn_canopy.jpg');
+      const texKale = texLoader.load('/orbit/tex_kale_dry_soil.jpg');
+      const texSoy = texLoader.load('/orbit/tex_soy_rows.jpg');
+      const texSolar = texLoader.load('/orbit/tex_solar_mast.jpg');
+
+      // 7. Base Aerospace Pedestal with Continuous Neon Cyan Rim
+      const baseGeo = new THREE.BoxGeometry(32, 1.2, 24);
+      const baseMat = new THREE.MeshStandardMaterial({
+        color: 0x070c12,
+        metalness: 0.85,
+        roughness: 0.25
+      });
+      const basePedestal = new THREE.Mesh(baseGeo, baseMat);
+      basePedestal.position.y = -2.0;
+      basePedestal.receiveShadow = true;
+      fieldGroup.add(basePedestal);
+
+      // Glowing Cyan Perimeter Trim
+      const rimGeo = new THREE.BoxGeometry(32.6, 0.28, 24.6);
+      const rimMat = new THREE.MeshBasicMaterial({ color: 0x00d2aa });
+      const rim = new THREE.Mesh(rimGeo, rimMat);
+      rim.position.y = -1.4;
+      fieldGroup.add(rim);
+
+      // Upper Chassis Bevel Tray
+      const trayGeo = new THREE.BoxGeometry(29.6, 0.5, 21.6);
+      const trayMat = new THREE.MeshStandardMaterial({
+        color: 0x0f1822,
+        metalness: 0.9,
+        roughness: 0.2
+      });
+      const tray = new THREE.Mesh(trayGeo, trayMat);
+      tray.position.y = -1.0;
+      tray.receiveShadow = true;
+      fieldGroup.add(tray);
+
+      // 8. Volumetric Subterranean Soil Bed Horizon with Strata Cutaway
+      const strataMat = new THREE.MeshStandardMaterial({
+        map: texStrata,
+        roughness: 0.85,
+        metalness: 0.1
+      });
+      const darkSoilMat = new THREE.MeshStandardMaterial({
+        color: 0x18100a,
+        roughness: 0.95
+      });
+      const bedMaterials = [
+        strataMat, // +X (Right cutaway)
+        strataMat, // -X (Left cutaway)
+        darkSoilMat, // +Y (Top soil)
+        darkSoilMat, // -Y (Bottom)
+        strataMat, // +Z (Front cutaway)
+        strataMat  // -Z (Back cutaway)
+      ];
+      const bedGeo = new THREE.BoxGeometry(28, 2.2, 20);
+      terrainMesh = new THREE.Mesh(bedGeo, bedMaterials);
+      terrainMesh.position.y = 0.2;
+      terrainMesh.receiveShadow = true;
+      fieldGroup.add(terrainMesh);
+
+      // 9. Zone A: Sweet Corn (Lush Agricultural Plots with 3D Stalks & Tassels)
+      const cornBedMat = new THREE.MeshStandardMaterial({
+        map: texCorn,
+        roughness: 0.75,
+        metalness: 0.05
+      });
+      const zoneAGeo = new THREE.BoxGeometry(12.5, 0.45, 17.5);
+      zoneAPlot = new THREE.Mesh(zoneAGeo, cornBedMat);
+      zoneAPlot.position.set(-6.5, 1.4, 0);
+      zoneAPlot.receiveShadow = true;
+      fieldGroup.add(zoneAPlot);
+
+      // 3D Stalks, Leaves, Tassels & Micro-drip Piping
+      const cornGroup = new THREE.Group();
+      cornGroup.position.set(-6.5, 1.6, 0);
+      const stalkMat = new THREE.MeshStandardMaterial({ color: 0x22c55e, roughness: 0.5 });
+      const leafMat = new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.4, side: THREE.DoubleSide });
+      const tasselMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.3 });
+
+      for (let r = -7.0; r <= 7.0; r += 1.8) {
+        for (let c = -4.8; c <= 4.8; c += 1.4) {
+          const stalkHeight = 1.8 + Math.random() * 0.4;
+          const stalk = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.07, stalkHeight, 6), stalkMat);
+          stalk.position.set(c + (Math.random() - 0.5) * 0.15, stalkHeight / 2, r + (Math.random() - 0.5) * 0.15);
+          stalk.castShadow = true;
+
+          // Leaves
+          const leaf1 = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.2), leafMat);
+          leaf1.rotation.x = Math.PI / 4;
+          leaf1.rotation.y = Math.random() * Math.PI;
+          leaf1.position.y = stalkHeight * 0.45;
+          stalk.add(leaf1);
+
+          const leaf2 = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.18), leafMat);
+          leaf2.rotation.x = -Math.PI / 4;
+          leaf2.rotation.y = leaf1.rotation.y + Math.PI / 2;
+          leaf2.position.y = stalkHeight * 0.7;
+          stalk.add(leaf2);
+
+          // Tassel
+          const tassel = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.4, 6), tasselMat);
+          tassel.position.y = stalkHeight / 2;
+          stalk.add(tassel);
+
+          cornGroup.add(stalk);
+        }
+        // Micro-drip black pipe along row
+        const pipeGeo = new THREE.CylinderGeometry(0.025, 0.025, 11, 8);
+        const pipeMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.3 });
+        const pipe = new THREE.Mesh(pipeGeo, pipeMat);
+        pipe.rotation.z = Math.PI / 2;
+        pipe.position.set(0, 0.05, r);
+        cornGroup.add(pipe);
+      }
+      fieldGroup.add(cornGroup);
+
+      // 10. Zone B: Organic Kale (Deficit Alert Zone, Cracked Dry Soil, Rover)
+      const kaleBedMat = new THREE.MeshStandardMaterial({
+        map: texKale,
+        roughness: 0.95,
+        metalness: 0.02
+      });
+      const zoneBGeo = new THREE.BoxGeometry(12.5, 0.45, 8.2);
+      zoneBPlot = new THREE.Mesh(zoneBGeo, kaleBedMat);
+      zoneBPlot.position.set(6.5, 1.4, -4.65);
+      zoneBPlot.receiveShadow = true;
+      fieldGroup.add(zoneBPlot);
+
+      // Kale Plant Clusters
+      const kaleGroup = new THREE.Group();
+      kaleGroup.position.set(6.5, 1.6, -4.65);
+      const kaleMat = new THREE.MeshStandardMaterial({ color: 0x2e8b57, roughness: 0.8 });
+
+      for (let r = -3.0; r <= 3.0; r += 1.4) {
+        for (let c = -4.8; c <= 4.8; c += 1.4) {
+          const plant = new THREE.Group();
+          plant.position.set(c + (Math.random() - 0.5) * 0.2, 0.15, r + (Math.random() - 0.5) * 0.2);
+          for (let i = 0; i < 3; i++) {
+            const ball = new THREE.Mesh(new THREE.DodecahedronGeometry(0.28, 1), kaleMat);
+            ball.position.set((Math.random() - 0.5) * 0.18, i * 0.12, (Math.random() - 0.5) * 0.18);
+            ball.scale.set(1.2, 0.6, 1.2);
+            ball.castShadow = true;
+            plant.add(ball);
+          }
+          kaleGroup.add(plant);
+        }
+      }
+      fieldGroup.add(kaleGroup);
+
+      // Autonomous Scout Rover in Zone B
+      const roverGroup = new THREE.Group();
+      roverGroup.position.set(8.5, 1.8, -4.0);
+      const rBody = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.45, 0.8), new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.2, metalness: 0.8 }));
+      roverGroup.add(rBody);
+      const rRoof = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.05, 0.75), new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.9 }));
+      rRoof.position.y = 0.25;
+      roverGroup.add(rRoof);
+      const wGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.14, 12);
+      const wMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.9 });
+      [[-0.45, -0.15, 0.45], [-0.45, -0.15, -0.45], [0.45, -0.15, 0.45], [0.45, -0.15, -0.45]].forEach(pos => {
+        const wheel = new THREE.Mesh(wGeo, wMat);
+        wheel.rotation.z = Math.PI / 2;
+        wheel.position.set(pos[0], pos[1], pos[2]);
+        roverGroup.add(wheel);
+      });
+      fieldGroup.add(roverGroup);
+
+      // 11. Zone C: Soybeans (Young Seedlings with Micro-drip Lines)
+      const soyBedMat = new THREE.MeshStandardMaterial({
+        map: texSoy,
+        roughness: 0.85,
+        metalness: 0.05
+      });
+      const zoneCGeo = new THREE.BoxGeometry(12.5, 0.45, 8.2);
+      zoneCPlot = new THREE.Mesh(zoneCGeo, soyBedMat);
+      zoneCPlot.position.set(6.5, 1.4, 4.65);
+      zoneCPlot.receiveShadow = true;
+      fieldGroup.add(zoneCPlot);
+
+      const soyGroup = new THREE.Group();
+      soyGroup.position.set(6.5, 1.6, 4.65);
+      const sproutMat = new THREE.MeshStandardMaterial({ color: 0x86efac, roughness: 0.4 });
+      for (let r = -3.2; r <= 3.2; r += 1.4) {
+        for (let c = -4.8; c <= 4.8; c += 0.8) {
+          const sp = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.35, 5), sproutMat);
+          sp.position.set(c, 0.18, r);
+          sp.castShadow = true;
+          soyGroup.add(sp);
+        }
+        const dt = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 10.5, 8), new THREE.MeshStandardMaterial({ color: 0x020617, roughness: 0.4 }));
+        dt.rotation.z = Math.PI / 2;
+        dt.position.set(0, 0.04, r);
+        soyGroup.add(dt);
+      }
+      fieldGroup.add(soyGroup);
+
+      // 12. Cybernetic Glass Inspection Walkways
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0x38bdf8,
+        transparent: true,
+        opacity: 0.45,
+        roughness: 0.1,
+        transmission: 0.8,
+        thickness: 0.5
+      });
+      const spineWalk = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.15, 18), glassMat);
+      spineWalk.position.set(0, 1.55, 0);
+      fieldGroup.add(spineWalk);
+
+      const crossWalk = new THREE.Mesh(new THREE.BoxGeometry(13, 0.15, 1.4), glassMat);
+      crossWalk.position.set(6.5, 1.55, 0);
+      fieldGroup.add(crossWalk);
+
+      const conduitMat = new THREE.MeshBasicMaterial({ color: 0x00d2aa });
+      const conduit1 = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 18, 8), conduitMat);
+      conduit1.rotation.x = Math.PI / 2;
+      conduit1.position.set(0, 1.45, 0);
+      fieldGroup.add(conduit1);
+
+      // 13. Central Solar IoT Gateway Mast
+      const gwGroup = new THREE.Group();
+      gwGroup.position.set(0, 1.4, 0);
+
+      const mastGeo = new THREE.BoxGeometry(0.4, 3.8, 0.4);
+      const mastMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.2 });
+      const mast = new THREE.Mesh(mastGeo, mastMat);
+      mast.position.y = 1.9;
+      mast.castShadow = true;
+      gwGroup.add(mast);
+
+      // Dual Solar PV Panels
+      const pvGeo = new THREE.BoxGeometry(1.8, 0.08, 1.2);
+      const pvMat = new THREE.MeshStandardMaterial({ map: texSolar, metalness: 0.8, roughness: 0.2 });
+      const pvLeft = new THREE.Mesh(pvGeo, pvMat);
+      pvLeft.position.set(0, 3.1, 0.45);
+      pvLeft.rotation.x = Math.PI / 5;
+      gwGroup.add(pvLeft);
+
+      // Telemetry Screen
+      const screenGeo = new THREE.PlaneGeometry(0.6, 0.9);
+      const screenMat = new THREE.MeshBasicMaterial({ color: 0x00d2aa });
+      const screen = new THREE.Mesh(screenGeo, screenMat);
+      screen.position.set(0, 1.8, 0.22);
+      gwGroup.add(screen);
+
+      // Antenna Mast & Glowing Pulse Beacon
+      const antGeo = new THREE.CylinderGeometry(0.03, 0.03, 1.6, 8);
+      const antMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.95 });
+      const ant = new THREE.Mesh(antGeo, antMat);
+      ant.position.y = 4.2;
+      gwGroup.add(ant);
+
+      const tipGeo = new THREE.SphereGeometry(0.25, 16, 16);
+      const tipMat = new THREE.MeshBasicMaterial({ color: 0x00d2aa });
+      beaconGateway = new THREE.Mesh(tipGeo, tipMat);
+      beaconGateway.position.set(0, 5.0, 0);
+      gwGroup.add(beaconGateway);
+
+      fieldGroup.add(gwGroup);
+      nodes3D['gateway'].obj = gwGroup;
+
+      // 14. Hardware Sensor Nodes
+      // Probe B (Zone B Warning Node)
+      const probeBGroup = new THREE.Group();
+      probeBGroup.position.set(6.2, 1.4, -4.15);
+      const pBBox = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.9, 0.4), new THREE.MeshPhongMaterial({ color: 0x1e293b }));
+      pBBox.position.y = 0.45;
+      probeBGroup.add(pBBox);
+      beaconProbeB = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 12), new THREE.MeshBasicMaterial({ color: 0xf87171 }));
+      beaconProbeB.position.y = 1.2;
+      probeBGroup.add(beaconProbeB);
+      fieldGroup.add(probeBGroup);
+      nodes3D['zone-b'].obj = probeBGroup;
+
+      // Probe A (Zone A Node)
+      const probeAGroup = new THREE.Group();
+      probeAGroup.position.set(-6.2, 1.4, 2.0);
+      const pABox = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.9, 0.4), new THREE.MeshPhongMaterial({ color: 0x1e293b }));
+      pABox.position.y = 0.45;
+      probeAGroup.add(pABox);
+      beaconProbeA = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 12), new THREE.MeshBasicMaterial({ color: 0x00d2aa }));
+      beaconProbeA.position.y = 1.2;
+      probeAGroup.add(beaconProbeA);
+      fieldGroup.add(probeAGroup);
+      nodes3D['zone-a'].obj = probeAGroup;
+
+      // Probe C (Zone C Node)
+      const probeCGroup = new THREE.Group();
+      probeCGroup.position.set(6.2, 1.4, 4.15);
+      const pCBox = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.9, 0.4), new THREE.MeshPhongMaterial({ color: 0x1e293b }));
+      pCBox.position.y = 0.45;
+      probeCGroup.add(pCBox);
+      beaconProbeC = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 12), new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
+      beaconProbeC.position.y = 1.2;
+      probeCGroup.add(beaconProbeC);
+      fieldGroup.add(probeCGroup);
+      nodes3D['zone-c'].obj = probeCGroup;
+
+      // 15. LoRa Wireless Pulse Waves
+      const ringGeo = new THREE.RingGeometry(0.3, 0.6, 32);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x00d2aa, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
+      pulseRing = new THREE.Mesh(ringGeo, ringMat);
+      pulseRing.rotation.x = -Math.PI / 2;
+      pulseRing.position.set(0, 1.5, 0);
+      fieldGroup.add(pulseRing);
+
+      // RF Beams Group
+      rfLinesGroup = new THREE.Group();
+      createRFLine([new THREE.Vector3(0, 5.0, 0), new THREE.Vector3(6.2, 2.5, -4.15)], 0xf87171);
+      createRFLine([new THREE.Vector3(0, 5.0, 0), new THREE.Vector3(-6.2, 2.5, 2.0)], 0x00d2aa);
+      createRFLine([new THREE.Vector3(0, 5.0, 0), new THREE.Vector3(6.2, 2.5, 4.15)], 0x38bdf8);
+      fieldGroup.add(rfLinesGroup);
+
+      // 16. Controls & Resizing
+      setupOrbitEvents(renderer.domElement);
+      window.addEventListener('resize', onWindowResize);
+
+      // Start Render Loop
+      animate();
+    }
+
+    function createRFLine(points, colorHex) {
+      const mat = new THREE.LineDashedMaterial({ color: colorHex, dashSize: 0.5, gapSize: 0.25, linewidth: 2 });
+      const geo = new THREE.BufferGeometry().setFromPoints(points);
+      const line = new THREE.Line(geo, mat);
+      line.computeLineDistances();
+      rfLinesGroup.add(line);
+    }
+
+    // Camera Math & Smooth Damping
+    function updateCameraPosImmediate() {
+      camera.position.x = spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
+      camera.position.y = spherical.radius * Math.cos(spherical.phi);
+      camera.position.z = spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
+      camera.lookAt(0, 1.5, 0);
+    }
+
+    function updateCameraSmoothing() {
+      spherical.theta += (targetRotation.theta - spherical.theta) * damping;
+      spherical.phi += (targetRotation.phi - spherical.phi) * damping;
+      spherical.radius += (targetRotation.radius - spherical.radius) * damping;
+
+      // Constrain polar angle to avoid flipping under terrain
+      spherical.phi = Math.max(0.12, Math.min(Math.PI / 2 - 0.05, spherical.phi));
+      spherical.radius = Math.max(16, Math.min(75, spherical.radius));
+
+      camera.position.x = spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
+      camera.position.y = spherical.radius * Math.cos(spherical.phi);
+      camera.position.z = spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
+      camera.lookAt(0, 1.5, 0);
+    }
+
+    // =========================================================================
+    // 3D-TO-2D SCREEN PROJECTION: ANCHORS LABELS IN REAL 3D SPACE
+    // =========================================================================
+    function update3DProjectedLabels() {
+      if (!layerTags) {
+        document.getElementById('spatial-labels-layer').style.display = 'none';
+        return;
+      }
+      document.getElementById('spatial-labels-layer').style.display = 'block';
+
+      const container = document.getElementById('orbit-viewport');
+      if (!container) return;
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      for (const [key, node] of Object.entries(nodes3D)) {
+        const el = document.getElementById(node.elId);
+        if (!el) continue;
+
+        // Clone world position
+        const worldPos = node.pos.clone();
+        if (node.obj) {
+          node.obj.getWorldPosition(worldPos);
+          worldPos.y += 0.5; // offset above mesh tip
+        }
+
+        // Project onto normalized device coordinates (-1 to +1)
+        const proj = worldPos.project(camera);
+
+        // Check if node is behind camera plane
+        if (proj.z > 1.0) {
+          el.classList.add('behind-camera');
+          continue;
+        }
+        el.classList.remove('behind-camera');
+
+        // Convert NDC to pixel coordinates
+        const x = (proj.x * 0.5 + 0.5) * w;
+        const y = (-(proj.y * 0.5) + 0.5) * h;
+
+        el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      }
+    }
+
+    // Orbit Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+      const elapsed = clock.getElapsedTime();
+
+      // Subtle ambient auto-rotation when user isn't interacting
+      if (autoRotate && !isDragging) {
+        targetRotation.theta += 0.0015;
+      }
+
+      // Beacon LED pulses
+      const pulse = 0.5 + 0.5 * Math.sin(elapsed * 4.0);
+      if (beaconGateway) beaconGateway.material.color.setHex(pulse > 0.5 ? 0x00d2aa : 0x008f75);
+      if (beaconProbeB) beaconProbeB.material.color.setHex(pulse > 0.5 ? 0xf87171 : 0xdc2626);
+
+      // Wireless wave ring expansion
+      if (pulseRing) {
+        const scale = 1.0 + (elapsed % 2.5) * 4.2;
+        pulseRing.scale.set(scale, scale, 1);
+        pulseRing.material.opacity = Math.max(0, 0.9 - (scale / 11.5));
+      }
+
+      // Update camera
+      updateCameraSmoothing();
+
+      // Project 3D labels to screen pixels
+      update3DProjectedLabels();
+
+      // Render
+      renderer.render(scene, camera);
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('orbit-viewport');
+      if (!container || !renderer || !camera) return;
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+
+    // Pointer Drag & Wheel Events
+    function setupOrbitEvents(dom) {
+      dom.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        prevMousePos = { x: e.clientX, y: e.clientY };
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - prevMousePos.x;
+        const dy = e.clientY - prevMousePos.y;
+        targetRotation.theta -= dx * 0.007;
+        targetRotation.phi -= dy * 0.006;
+        prevMousePos = { x: e.clientX, y: e.clientY };
+      });
+
+      window.addEventListener('mouseup', () => { isDragging = false; });
+
+      dom.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        targetRotation.radius += e.deltaY * 0.04;
+      }, { passive: false });
+
+      // Touch events
+      dom.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          prevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+      });
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - prevMousePos.x;
+        const dy = e.touches[0].clientY - prevMousePos.y;
+        targetRotation.theta -= dx * 0.009;
+        targetRotation.phi -= dy * 0.008;
+        prevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      });
+      window.addEventListener('touchend', () => { isDragging = false; });
+    }
+
+    // =========================================================================
+    // 3D STUDIO CONTROLS & CAMERA PRESETS
+    // =========================================================================
+    function setCameraAngle(type) {
+      // Highlight active button
+      ['iso', 'top', 'canopy'].forEach(id => {
+        const btn = document.getElementById(`cam-btn-${id}`);
+        if (btn) {
+          btn.className = id === type 
+            ? "px-2.5 py-1 rounded-xl bg-primary text-on-primary font-bold shadow-[0_0_10px_rgba(0,210,170,0.4)] transition-all cursor-pointer"
+            : "px-2.5 py-1 rounded-xl text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-all cursor-pointer";
+        }
+      });
+
+      if (type === 'iso') {
+        targetRotation.theta = 0.65;
+        targetRotation.phi = 0.95;
+        targetRotation.radius = 46;
+      } else if (type === 'top') {
+        targetRotation.theta = 0.0;
+        targetRotation.phi = 0.15; // Directly above
+        targetRotation.radius = 48;
+      } else if (type === 'canopy') {
+        targetRotation.theta = 1.2;
+        targetRotation.phi = 1.45; // Low-angle canopy perspective
+        targetRotation.radius = 34;
+      }
+    }
+
+    function focusOnAlertZone() {
+      targetRotation.theta = 0.35;
+      targetRotation.phi = 1.1;
+      targetRotation.radius = 28;
+      select3DNode('zone-b');
+      showToast('Camera Focused: Zone B', 'Snapped to Critical Moisture Deficit Probe #10555');
+    }
+
+    function resetCameraView() {
+      setCameraAngle('iso');
+      showToast('Camera Reset', 'Restored nominal 45° isometric orbit');
+    }
+
+    function zoomCamera(dir) {
+      targetRotation.radius = Math.max(16, Math.min(75, targetRotation.radius - dir * 6));
+    }
+
+    function toggleAutoRotate() {
+      autoRotate = !autoRotate;
+      const lbl = document.getElementById('rotate-label');
+      if (lbl) lbl.textContent = `Orbit: ${autoRotate ? 'ON' : 'OFF'}`;
+    }
+
+    // Layer Switches
+    function toggle3DHeatmap() {
+      layerHeatmap = !layerHeatmap;
+      const btn = document.getElementById('btn-toggle-heatmap');
+      const badge = document.getElementById('badge-heatmap');
+      if (zoneBPlot) {
+        zoneBPlot.material.color.setHex(layerHeatmap ? 0x251c14 : 0x0f1820);
+      }
+      if (badge) badge.textContent = layerHeatmap ? 'ON' : 'OFF';
+      btn.classList.toggle('bg-primary/15', layerHeatmap);
+      btn.classList.toggle('text-primary', layerHeatmap);
+      btn.classList.toggle('border-primary/30', layerHeatmap);
+      showToast('Soil VWC Layer', layerHeatmap ? 'Volumetric moisture contour rendering active' : 'Moisture layer hidden');
+    }
+
+    function toggle3DNDVI() {
+      layerNDVI = !layerNDVI;
+      const badge = document.getElementById('badge-ndvi');
+      if (zoneAPlot) {
+        zoneAPlot.material.color.setHex(layerNDVI ? 0x00f075 : 0x0b241e);
+      }
+      if (badge) badge.textContent = layerNDVI ? 'ON' : 'OFF';
+      showToast('NDVI Vegetation Index', layerNDVI ? 'Multispectral canopy chlorophyll vigor active' : 'NDVI layer hidden');
+    }
+
+    function toggle3DMeshBeams() {
+      layerMeshBeams = !layerMeshBeams;
+      rfLinesGroup.visible = layerMeshBeams;
+      const badge = document.getElementById('badge-mesh');
+      if (badge) badge.textContent = layerMeshBeams ? 'ACTIVE' : 'OFF';
+    }
+
+    function toggle3DTags() {
+      layerTags = !layerTags;
+      const badge = document.getElementById('badge-tags');
+      if (badge) badge.textContent = layerTags ? 'SHOWN' : 'HIDDEN';
+    }
+
+    // =========================================================================
+    // INTERACTIVE NODE INSPECTION
+    // =========================================================================
+    function select3DNode(id) {
+      const card = document.getElementById('spatial-node-inspector');
+      if (!card) return;
+
+      const title = document.getElementById('inspect-title');
+      const sub = document.getElementById('inspect-subtitle');
+      const vwc = document.getElementById('inspect-val-vwc');
+      const temp = document.getElementById('inspect-val-temp');
+      const icon = document.getElementById('inspect-icon');
+      const actBtn = document.getElementById('inspect-actuator-btn');
+      const actTxt = document.getElementById('inspect-actuator-text');
+
+      card.classList.remove('hidden', 'opacity-0');
+
+      if (id === 'zone-b') {
+        title.textContent = 'Zone B [Probe #10555]';
+        sub.textContent = 'Capacitive FDR Moisture Array (Organic Kale)';
+        vwc.textContent = '28.0% VWC';
+        vwc.className = 'text-base font-extrabold text-error';
+        temp.textContent = '19.5°C';
+        icon.textContent = 'warning';
+        icon.className = 'material-symbols-outlined text-[20px] text-error';
+        actBtn.style.display = 'flex';
+        actTxt.textContent = 'Trigger Drip Valve';
+      } else if (id === 'gateway') {
+        title.textContent = 'Mesh Gateway #1 (Solar Mast)';
+        sub.textContent = 'SX1302 8-Channel Concentrator Hub';
+        vwc.textContent = '100% Pkts';
+        vwc.className = 'text-base font-extrabold text-primary';
+        temp.textContent = '24.2°C (Internal)';
+        icon.textContent = 'cell_tower';
+        icon.className = 'material-symbols-outlined text-[20px] text-primary';
+        actBtn.style.display = 'none';
+      } else if (id === 'zone-a') {
+        title.textContent = 'Zone A [Probe #10551]';
+        sub.textContent = 'Primary Soil Probe (Sweet Corn)';
+        vwc.textContent = '42.1% VWC';
+        vwc.className = 'text-base font-extrabold text-primary';
+        temp.textContent = '23.1°C';
+        icon.textContent = 'check_circle';
+        icon.className = 'material-symbols-outlined text-[20px] text-primary';
+        actBtn.style.display = 'none';
+      } else {
+        title.textContent = 'Zone C [Probe #10558]';
+        sub.textContent = 'Soil Probe (Soybeans)';
+        vwc.textContent = '37.8% VWC';
+        vwc.className = 'text-base font-extrabold text-secondary';
+        temp.textContent = '22.4°C';
+        icon.textContent = 'sensors';
+        icon.className = 'material-symbols-outlined text-[20px] text-secondary';
+        actBtn.style.display = 'none';
+      }
+    }
+
+    function closeInspectorCard() {
+      const card = document.getElementById('spatial-node-inspector');
+      if (card) card.classList.add('hidden');
+    }
+
+    function triggerDripDirect() {
+      showToast('⚡ Micro-Drip Valve Actuated', 'Zone B Solenoid Valve #04 opened (+35 L/min)');
+      if (window.AgriGCS_State && window.AgriGCS_State.resolveAlert) {
+        window.AgriGCS_State.resolveAlert(1);
+      }
+      const actTxt = document.getElementById('inspect-actuator-text');
+      if (actTxt) actTxt.textContent = 'Valve Open (Flowing)';
+    }
+
+    // =========================================================================
+    // ⚡ GOD MODE ENGINE & STATE SYNC
+    // =========================================================================
+    let isGodModeActive = false;
+
+    function toggleGodModeUI(forceState, openModal = true) {
+      isGodModeActive = typeof forceState === 'boolean' ? forceState : !isGodModeActive;
+      const btn = document.getElementById('nav-god-mode-btn');
+      const text = document.getElementById('nav-god-mode-text');
+      const dot = document.getElementById('nav-god-mode-dot');
+      const hudBar = document.getElementById('god-mode-hud-bar');
+
+      if (isGodModeActive) {
+        document.body.classList.add('god-mode-active');
+        if (hudBar) hudBar.classList.remove('hidden');
+        if (btn) {
+          btn.classList.remove('text-amber-300', 'bg-gradient-to-r');
+          btn.classList.add('bg-amber-400', 'text-amber-950', 'border-amber-300');
+        }
+        if (text) text.textContent = '⚡ GOD MODE [ACTIVE]';
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-950 animate-ping';
+        if (openModal) {
+          showToast('⚡ GOD MODE ACTIVE', 'Direct 3D Moisture Forcer Unlocked [Shift+G]');
+          openGodModeModal();
+        }
+      } else {
+        document.body.classList.remove('god-mode-active');
+        if (hudBar) hudBar.classList.add('hidden');
+        if (btn) {
+          btn.classList.remove('bg-amber-400', 'text-amber-950', 'border-amber-300');
+          btn.classList.add('text-amber-300', 'bg-gradient-to-r');
+        }
+        if (text) text.textContent = 'GOD MODE';
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-400/40';
+        closeModal('modal-god-mode');
+      }
+
+      if (window.AgriGCS_State && window.AgriGCS_State.toggleGodMode) {
+        window.AgriGCS_State.toggleGodMode(isGodModeActive);
+      }
+    }
+
+    function openGodModeModal() {
+      const modal = document.getElementById('modal-god-mode');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+    }
+
+    function handleGodVwcSlider(val) {
+      val = parseFloat(val);
+      const readout = document.getElementById('god-readout-vwc');
+      if (readout) readout.textContent = val.toFixed(1) + '%';
+      const spatialVwc = document.getElementById('spatial-vwc-val');
+      if (spatialVwc) spatialVwc.textContent = val.toFixed(1) + '%';
+
+      // Dynamically change 3D plot soil material color
+      if (zoneBPlot) {
+        if (val < 30) {
+          zoneBPlot.material.color.setHex(0x251c14); // Drier brown
+          beaconProbeB.material.color.setHex(0xf87171); // Red warning
+        } else {
+          zoneBPlot.material.color.setHex(0x0b241e); // Lush green
+          beaconProbeB.material.color.setHex(0x00d2aa); // Green nominal
+        }
+      }
+
+      if (window.AgriGCS_State && window.AgriGCS_State.forceTelemetry) {
+        window.AgriGCS_State.forceTelemetry({ vwc: val });
+      }
+    }
+
+    function godModeForceAllValves(openState) {
+      const status = document.getElementById('god-actuator-status');
+      if (status) status.textContent = openState ? 'ALL VALVES OPEN' : 'NORMAL';
+      showToast(openState ? '⚡ ALL SOLENOIDS OPEN' : 'Valves Closed', 'Hydraulic bypass applied');
+      if (window.AgriGCS_State && window.AgriGCS_State.setGodModeActuator) {
+        window.AgriGCS_State.setGodModeActuator('allValvesOpen', openState);
+      }
+    }
+
+    function showToast(title, desc) {
+      const toast = document.getElementById('toast-notify');
+      if (!toast) return;
+      document.getElementById('toast-title').textContent = title;
+      document.getElementById('toast-desc').textContent = desc;
+      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'G' && e.shiftKey) || (e.key === 'g' && !e.target.matches('input, select, textarea'))) {
+        toggleGodModeUI();
+      }
+    });
+
+    // Page Initialization & Shared State Subscription
+    window.addEventListener('DOMContentLoaded', () => {
+      init3DStudio();
+
+      // Subscribe to Shared State
+      if (window.AgriGCS_State) {
+        window.AgriGCS_State.subscribe((state) => {
+          if (!state) return;
+          if (state.zoneB && typeof state.zoneB.vwc !== 'undefined') {
+            const el = document.getElementById('spatial-vwc-val');
+            if (el) el.textContent = `${state.zoneB.vwc}%`;
+            const vwcInspect = document.getElementById('inspect-val-vwc');
+            if (vwcInspect) vwcInspect.textContent = `${state.zoneB.vwc}% VWC`;
+          }
+          if (state.godMode && !isGodModeActive) {
+            toggleGodModeUI(true, false);
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

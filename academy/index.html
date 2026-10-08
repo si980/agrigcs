@@ -1,0 +1,727 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "tertiary-container": "#3dd197", "on-primary": "#00382b", "error-container": "#93000a", "on-background": "#dce3ed", "on-primary-fixed-variant": "#005140", "outline-variant": "#3b4a44", "primary-container": "#00d2aa", "secondary-container": "#00a6e0", "on-secondary-container": "#00374d", "surface-container": "#192028", "on-tertiary-fixed": "#002113", "tertiary-fixed-dim": "#4edea3", "on-secondary-fixed": "#001e2c", "tertiary-fixed": "#6ffbbe", "tertiary": "#60eeb1", "secondary": "#7bd0ff", "surface-container-low": "#151c23", "secondary-fixed-dim": "#7bd0ff", "outline": "#85948d", "surface-container-highest": "#2e353d", "inverse-on-surface": "#2a3139", "background": "#0d141b", "on-surface-variant": "#bacac3", "inverse-primary": "#006b56", "surface-dim": "#0d141b", "on-secondary-fixed-variant": "#004c69", "secondary-fixed": "#c4e7ff", "inverse-surface": "#dce3ed", "on-error-container": "#ffdad6", "primary-fixed-dim": "#2bdfb6", "surface-tint": "#2bdfb6", "on-tertiary-container": "#005539", "on-surface": "#dce3ed", "primary-fixed": "#57fcd2", "surface-bright": "#333a42", "on-secondary": "#00354a", "surface": "#0d141b", "on-tertiary-fixed-variant": "#005236", "primary": "#45efc5", "on-primary-container": "#005543", "on-tertiary": "#003824", "on-primary-fixed": "#002018", "surface-container-high": "#242b32", "error": "#ffb4ab", "surface-container-lowest": "#080f16", "on-error": "#690005", "surface-variant": "#2e353d" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "unit-xl": "2rem", "container-max": "1440px", "unit-sm": "0.75rem", "unit-2xs": "0.25rem", "unit-xs": "0.5rem", "gutter-desktop": "1.25rem", "unit-2xl": "2.5rem", "unit-3xl": "3.5rem", "gutter-mobile": "0.75rem", "unit-md": "1rem", "unit-lg": "1.5rem" }, "fontFamily": { "headline-sm": ["Inter"], "body-md": ["Inter"], "label-caps": ["JetBrains Mono"], "display": ["Inter"], "headline-md": ["Inter"], "body-sm": ["Inter"], "body-lg": ["Inter"], "telemetry-sm": ["JetBrains Mono"], "headline-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "telemetry-metric": ["JetBrains Mono"] }, "fontSize": { "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.005em", "fontWeight": "400" }], "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600" }], "display": ["44px", { "lineHeight": "52px", "letterSpacing": "-0.025em", "fontWeight": "700" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "telemetry-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "telemetry-metric": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="agrigcs-unified-header fixed top-0 left-0 right-0 z-50 bg-surface/85 backdrop-blur-xl border-b border-outline-variant/15 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+  <div class="h-16 w-full px-4 lg:px-8 max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+    
+    <!-- Left: Single Clean Brand Identity (Zero Duplication) -->
+    <div class="flex items-center gap-3 shrink-0">
+      <a href="/home/" class="flex items-center gap-2.5 hover:opacity-95 transition-all group no-underline">
+        <!-- High-res Vector Emblem -->
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/20 via-surface-container-high to-surface-container flex items-center justify-center border border-primary/40 shadow-[0_0_15px_rgba(0,210,170,0.25)] group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12a10 10 0 0 1 10-10z"></path>
+            <path d="M12 6c0 4 4 6 4 10"></path>
+            <path d="M8 12c2 0 4-2 4-6"></path>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="font-display font-extrabold text-lg text-white tracking-tight leading-none">Agri<span class="text-primary">GCS</span></span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">v2.4</span>
+          </div>
+          <span class="text-[9px] font-mono tracking-widest uppercase text-on-surface-variant/80 mt-0.5">Ground Control Station</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Center: Clean Grouped Navigation Dropdowns (Zero Text-Wrapping) -->
+    <nav class="hidden xl:flex items-center gap-1">
+      
+      <!-- Primary 1: Mission Control -->
+      <a href="/home/" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-body-sm text-[13px] font-medium transition-all whitespace-nowrap text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high">
+        <span class="material-symbols-outlined text-[16px]">dashboard</span>
+        <span>Mission Control</span>
+      </a>
+
+      <!-- Primary 2: Operations & 3D Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-secondary">radar</span>
+          <span>Operations &amp; 3D</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/monitoring/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">monitoring</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Live Field Monitoring</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Sector 04 sensor array &amp; nodes</span>
+              </div>
+            </a>
+            <a href="/orbit/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">3d_rotation</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">3D Orbit Visualizer</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Interactive 360&deg; canopy inspect</span>
+              </div>
+            </a>
+            <a href="/webgl/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary-fixed/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary-fixed group-hover/item:scale-110 transition-transform">view_in_ar</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary-fixed">WebGL Telemetry</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Volumetric soil heatmaps</span>
+              </div>
+            </a>
+            <a href="/motion/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-tertiary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-tertiary group-hover/item:scale-110 transition-transform">motion_photos_on</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-tertiary">Dynamic Motion</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Real-time pulse wave physics</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary 3: Hardware & Field Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-primary">sensors</span>
+          <span>Hardware &amp; Nodes</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/sensors/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">device_hub</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Sensor Ecosystem</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Capacitive probes, SX1262 LoRa</span>
+              </div>
+            </a>
+            <a href="/wiring/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">cable</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">Interactive Wiring Lab</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">ESP32-S3 pinouts &amp; schematics</span>
+              </div>
+            </a>
+            <a href="/field-setup/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-tertiary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-tertiary group-hover/item:scale-110 transition-transform">layers</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-tertiary">Field Placement SOP</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">3D GPS-RTK node alignment</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary 4: Diagnostics & Triage Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-tertiary">warning</span>
+          <span>Diagnostics</span>
+          <span class="agrigcs-alert-badge px-1.5 py-0.2 rounded-full text-[10px] bg-error text-on-error font-bold font-mono">3</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/alerts/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-error/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-error group-hover/item:scale-110 transition-transform">notification_important</span>
+              <div class="flex flex-col">
+                <div class="flex items-center justify-between w-full">
+                  <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-error">Alert Center</span>
+                  <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-error/20 text-error font-bold">3 ACTIVE</span>
+                </div>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Threshold breaches &amp; triage</span>
+              </div>
+            </a>
+            <a href="/inspector/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">terminal</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Packet Inspector</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">CRC-16, raw hex streams</span>
+              </div>
+            </a>
+            <a href="/sim-lab/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">science</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">Simulation Lab</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Drought &amp; packet drop tests</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary 5: Architecture & Docs Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium bg-primary text-on-primary font-semibold shadow-[0_0_12px_rgba(0,210,170,0.3)] transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-on-primary">menu_book</span>
+          <span>Documentation</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full right-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/how-it-works/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">account_tree</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Architecture Overview</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">LoRa RF to Tokio broker</span>
+              </div>
+            </a>
+            <a href="/deck/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">slideshow</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">10-Stage Executive Deck</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Interactive slide pitch deck</span>
+              </div>
+            </a>
+            <a href="/academy/" class="flex items-center gap-3 p-2 rounded-xl bg-primary/20 border-l-2 border-primary hover:bg-tertiary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-tertiary group-hover/item:scale-110 transition-transform">school</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-tertiary">AgriGCS Academy</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Agronomy &amp; hardware manuals</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Right: Utility Cluster & Operator Actions -->
+    <div class="flex items-center gap-2.5 shrink-0">
+      
+      <!-- Command Palette Quick Launcher (⌘K) -->
+      <button onclick="if(window.AgriGCS_UI && window.AgriGCS_UI.toggleCommandPalette) window.AgriGCS_UI.toggleCommandPalette();" type="button" class="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high/80 hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface text-xs font-mono border border-outline-variant/20 transition-all cursor-pointer" title="Quick Jump (Ctrl+K / ⌘K)">
+        <span class="material-symbols-outlined text-[14px]">terminal</span>
+        <span class="text-[11px]">⌘K</span>
+      </button>
+
+      <!-- Live Stream Pill -->
+      <button class="agrigcs-live-btn flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest/90 hover:bg-surface-container-high text-on-surface text-xs font-medium transition-all active:scale-95 cursor-pointer border border-outline-variant/20" type="button" title="Toggle Live / Simulated Stream">
+        <span class="relative flex h-2 w-2">
+          <span class="agrigcs-live-ping animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+          <span class="agrigcs-live-dot relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+        </span>
+        <span class="agrigcs-live-label font-mono text-[11px] uppercase tracking-wider text-on-surface font-semibold">LIVE</span>
+      </button>
+
+      <!-- Connect Hardware Button (Calls openHardwareModal) -->
+      <button class="agrigcs-connect-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-semibold text-[12px] tracking-wide shadow-[0_0_15px_rgba(0,210,170,0.3)] hover:shadow-[0_0_20px_rgba(0,210,170,0.5)] transition-all active:scale-95 cursor-pointer" type="button">
+        <span class="material-symbols-outlined text-[16px]">memory</span>
+        <span>Connect Gateway</span>
+      </button>
+
+      <!-- Operator Profile Badge -->
+      <button class="agrigcs-profile-btn flex items-center gap-1.5 p-1 pr-2.5 rounded-full bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/20 transition-all active:scale-95 cursor-pointer" type="button" title="Sector 04 Operator Profile">
+        <div class="w-6 h-6 rounded-full bg-primary/20 text-primary border border-primary/40 flex items-center justify-center font-mono text-[10px] font-bold">
+          W4
+        </div>
+        <span class="text-[11px] font-mono text-on-surface hidden sm:inline">OP-04</span>
+      </button>
+
+      <!-- Mobile Hamburger Menu Button -->
+      <button class="xl:hidden flex items-center justify-center w-8 h-8 rounded-full bg-surface-container-highest hover:bg-surface-container-high text-on-surface transition-all cursor-pointer" id="agrigcs-mobile-menu-btn" type="button" aria-label="Toggle navigation">
+        <span class="material-symbols-outlined text-[20px]">menu</span>
+      </button>
+
+    </div>
+
+  </div>
+</header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<!-- Interactive Academy Hub Container -->
+<div class="max-w-[1440px] mx-auto px-gutter-desktop py-unit-xl w-full flex flex-col gap-unit-xl">
+<!-- Top Command Strip & Header Bar -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-unit-lg pb-unit-sm">
+<div class="flex flex-col gap-unit-xs">
+<div class="flex items-center gap-unit-sm">
+<span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary-container text-on-primary-container">
+<span class="material-symbols-outlined text-[16px]">school</span>
+</span>
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-primary">AgriGCS Academic Telemetry Protocol</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary font-telemetry-sm text-[11px] tracking-wide">REV 24.8.1</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">AgriGCS Learning Academy</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+          Master precision agricultural IoT, capacitive soil physics, ESP32 hardware wiring, and autonomous field telemetry with hands-on simulated diagnostic rigs.
+        </p>
+</div>
+<!-- Search & Global Badge Credential Pill -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-unit-md shrink-0">
+<div class="relative min-w-[320px] max-w-md">
+<span class="material-symbols-outlined absolute left-unit-sm top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-unit-md py-unit-xs rounded-full bg-surface-container-high text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-highest shadow-inner transition-all" placeholder="Search Academy lessons, hardware schematics, pinouts..." type="text">
+</div>
+<div class="flex items-center gap-unit-xs px-unit-md py-unit-xs rounded-full bg-surface-container-high shadow-md">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<div class="flex flex-col leading-tight">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-primary">Credential Metric</span>
+<span class="font-telemetry-sm text-telemetry-sm text-on-surface">4 of 6 Badges Earned <span class="text-on-surface-variant">(Agronomist L4)</span></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Dynamic Academy Grid: 28% Left Column / 72% Center & Right Column -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-unit-xl items-start">
+<!-- LEFT COLUMN: User Pathway Progress, Badges & Quiz Metrics (Approx 28% / 3.4 cols -> col-span-1 lg:col-span-4) -->
+<aside class="lg:col-span-4 flex flex-col gap-unit-lg w-full">
+<!-- Student Operator Card -->
+<div class="bg-surface-container-low/90 backdrop-blur-xl p-unit-lg rounded-xl shadow-[0_8px_32px_-4px_rgba(0,0,0,0.5)] flex flex-col gap-unit-md relative overflow-hidden">
+<div class="absolute -right-8 -bottom-8 w-36 h-36 rounded-full bg-primary/5 blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-unit-sm">
+<div class="relative w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[26px]">engineering</span>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-primary-container rounded-full shadow-[0_0_8px_rgba(0,210,170,0.6)]"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-caps text-label-caps uppercase text-outline tracking-wider">Field Operator Spec</span>
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Field Engineer Operator</span>
+<span class="font-telemetry-sm text-telemetry-sm text-secondary font-medium">Level 4 Certified</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-primary-container/20 text-primary font-label-caps text-label-caps uppercase tracking-widest">ACTIVE</span>
+</div>
+<!-- Overall Progress Gauge Section -->
+<div class="bg-surface-container/70 p-unit-md rounded-lg flex flex-col gap-unit-xs">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Agronomic Hardware Track</span>
+<span class="font-telemetry-metric text-headline-sm text-primary font-bold">78%</span>
+</div>
+<!-- Interactive Segmented Progress Bar -->
+<div class="w-full bg-surface-container-lowest h-2.5 rounded-full overflow-hidden p-0.5 flex items-center">
+<div class="h-full bg-gradient-to-r from-primary via-primary-fixed-dim to-tertiary rounded-full shadow-[0_0_12px_rgba(69,239,197,0.5)] transition-all duration-500" style="width: 78%;"></div>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant font-label-caps text-[10px] tracking-wider pt-1">
+<span>MODULE 01: COMPLETED</span>
+<span>18 / 24 OBJECTIVES</span>
+</div>
+</div>
+<!-- Verified Badges List -->
+<div class="flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between pb-1">
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Earned Credentials</span>
+<span class="material-symbols-outlined text-outline text-[18px]">verified</span>
+</div>
+<div class="flex flex-col gap-unit-2xs">
+<!-- Badge Item 1 -->
+<div class="flex items-center justify-between p-unit-xs bg-surface-container-high/60 rounded-lg hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-unit-sm min-w-0">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[18px]">waves</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-on-surface truncate group-hover:text-primary transition-colors">Soil Physics &amp; Capacitive Dielectric Permittivity</span>
+<span class="font-telemetry-sm text-[11px] text-tertiary">Verified Master</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0">check_circle</span>
+</div>
+<!-- Badge Item 2 -->
+<div class="flex items-center justify-between p-unit-xs bg-surface-container-high/60 rounded-lg hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-unit-sm min-w-0">
+<div class="w-8 h-8 rounded-full bg-secondary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-[18px]">developer_board</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-on-surface truncate group-hover:text-primary transition-colors">ESP32 3.3V GPIO &amp; ADC Calibration</span>
+<span class="font-telemetry-sm text-[11px] text-secondary">Verified Specialist</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0">check_circle</span>
+</div>
+<!-- Badge Item 3 -->
+<div class="flex items-center justify-between p-unit-xs bg-surface-container-high/60 rounded-lg hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-unit-sm min-w-0">
+<div class="w-8 h-8 rounded-full bg-tertiary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary text-[18px]">settings_input_antenna</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-on-surface truncate group-hover:text-primary transition-colors">LoRaWAN 915MHz RF Mesh Planning</span>
+<span class="font-telemetry-sm text-[11px] text-tertiary">Verified Architect</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0">check_circle</span>
+</div>
+<!-- Badge Item 4 (In Progress) -->
+<div class="flex items-center justify-between p-unit-xs bg-surface-container-high/30 rounded-lg">
+<div class="flex items-center gap-unit-sm min-w-0">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-outline text-[18px]">water_drop</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Closed-Loop Irrigation &amp; FAO-56 Evapotranspiration</span>
+<span class="font-telemetry-sm text-[11px] text-outline">In Progress [4/6 Steps]</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px] shrink-0">hourglass_top</span>
+</div>
+</div>
+</div>
+<!-- Quiz Performance Metrics Panel -->
+<div class="bg-surface-container-lowest/80 p-unit-md rounded-lg flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Quiz Accuracy</span>
+<span class="font-telemetry-metric text-headline-sm text-primary font-bold">94.2%</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex text-primary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">12 of 12 Field Checkpoints Cleared</span>
+</div>
+</div>
+<!-- Technical Glossary Button -->
+<button class="w-full flex items-center justify-between px-unit-md py-unit-sm rounded-full bg-surface-container-highest hover:bg-surface-bright text-on-surface transition-all shadow-sm group" type="button">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-secondary text-[20px] group-hover:rotate-6 transition-transform">menu_book</span>
+<span class="font-headline-sm text-[13px] tracking-wide">Agronomic IoT Dictionary &amp; Pinout Index</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary group-hover:translate-x-1 transition-all text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Quick Recommended Tech Brief Card -->
+<div class="bg-surface-container-low/60 backdrop-blur-md p-unit-md rounded-xl flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-outline uppercase">Field Hardware Tip</span>
+<span class="font-telemetry-sm text-primary text-[11px]">[ADC-ESP32]</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Never route raw 5V sensor outputs directly into ESP32 GPIO 34-39. Always employ a 1:2 precision resistive voltage divider or 3.3V rail clamp to shield internal ADC attenuators.
+          </p>
+</div>
+</aside>
+<!-- CENTER & RIGHT COLUMN: Masterclass Banner, Tab Filters, Module Grid, Live Quiz (72% / 8.6 cols -> col-span-1 lg:col-span-8) -->
+<section class="lg:col-span-8 flex flex-col gap-unit-xl w-full">
+<!-- Featured Interactive Masterclass Banner -->
+<div class="relative bg-gradient-to-br from-surface-container-high via-surface-container to-surface-container-low rounded-xl p-unit-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col lg:flex-row gap-unit-lg items-center">
+<!-- Background Radial Glow Accents -->
+<div class="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-secondary-container/10 blur-3xl pointer-events-none"></div>
+<!-- Text Information Side -->
+<div class="flex flex-col gap-unit-sm z-10 lg:w-3/5">
+<div class="flex items-center gap-unit-xs">
+<span class="px-unit-xs py-0.5 rounded-full bg-primary/15 text-primary font-label-caps text-label-caps uppercase tracking-wider flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+                Interactive Masterclass
+              </span>
+<span class="font-telemetry-sm text-telemetry-sm text-secondary">MOD-04 / ADVANCED</span>
+</div>
+<h2 class="font-headline-lg text-headline-md sm:text-headline-lg text-on-surface font-bold leading-tight">
+              Module 4: Capacitive vs Resistive Soil Probes &amp; Soil Salinity Compensation
+            </h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              Learn why resistive probes corrode within 14 days due to DC electrolysis and how high-frequency 70MHz FDR capacitive sensing prevents copper trace oxidation while decoupling ionic pore-water interference.
+            </p>
+<div class="flex flex-wrap items-center gap-unit-md pt-unit-xs">
+<button class="flex items-center gap-unit-xs px-unit-lg py-unit-xs rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-headline-sm text-[13px] tracking-wide shadow-[0_0_20px_rgba(0,210,170,0.4)] hover:shadow-[0_0_26px_rgba(0,210,170,0.6)] transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<span>Resume Interactive Lesson</span>
+</button>
+<button class="flex items-center gap-unit-xs px-unit-md py-unit-xs rounded-full bg-surface-container-highest hover:bg-surface-bright text-on-surface font-headline-sm text-[13px] tracking-wide transition-all" type="button">
+<span class="material-symbols-outlined text-secondary text-[18px]">science</span>
+<span>Launch Virtual Lab</span>
+</button>
+</div>
+</div>
+<!-- Graphic Side: Cross-Section 3D Probe & Soil Permittivity Vector Visualization -->
+<div class="relative w-full lg:w-2/5 aspect-square max-h-64 sm:max-h-72 bg-surface-container-lowest/80 rounded-xl overflow-hidden flex items-center justify-center p-unit-md shadow-inner">
+<img class="w-full h-full object-cover rounded-lg" data-alt="An isometric 3D render of a futuristic agricultural telemetry soil probe inserted into stratified loam soil with glowing teal and cyan electromagnetic field lines showing dielectric permittivity measurement, dark obsidian high-tech aesthetic, laboratory lighting with neon emerald highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWdPmisM60q4tCsO2M8vYO0Lz3SA-EJO-5DvFSSZIpZ6zj6CjO_2rufTQNXkkjQeqZqLVz-J9yEE_SzPnM2h1jkAi9dQ-E3Av1G-MFrNl_yhtJtMJfLD_IXBeFYf3UfeWgnFY4UTJYdrqDu6N1VBF3kPGXWXycaDo7c2L4QgyAC5qZyDdQP6fBmferwqHbZTrkpaMH1fRHWIbXl5LM7aOjpGP0xXWY9R_OIEdr57KNUL1yvYCwD7-r">
+<!-- Live Vector Telemetry Pins Overlay -->
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1.5 rounded-lg shadow-md flex flex-col">
+<span class="font-label-caps text-[9px] uppercase tracking-wider text-outline">Dielectric Constant</span>
+<span class="font-telemetry-sm text-primary text-[12px] font-bold">εr = 28.4 (VWC 34.2%)</span>
+</div>
+<div class="absolute bottom-3 right-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1.5 rounded-lg shadow-md flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-[14px]">bolt</span>
+<span class="font-telemetry-sm text-[11px] text-tertiary">70 MHz FDR Wave Active</span>
+</div>
+</div>
+</div>
+<!-- Curriculum Filter Tabs -->
+<div class="flex items-center gap-unit-xs overflow-x-auto pb-1 scrollbar-none">
+<button class="px-unit-md py-unit-xs rounded-full bg-primary-container text-on-primary-container font-headline-sm text-[13px] font-semibold tracking-wide shadow-[0_0_12px_rgba(0,210,170,0.3)] shrink-0" type="button">
+            All Lessons
+          </button>
+<button class="px-unit-md py-unit-xs rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm tracking-wide transition-all shrink-0" type="button">
+            Sensor Fundamentals
+          </button>
+<button class="px-unit-md py-unit-xs rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm tracking-wide transition-all shrink-0" type="button">
+            IoT &amp; Telemetry
+          </button>
+<button class="px-unit-md py-unit-xs rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm tracking-wide transition-all shrink-0" type="button">
+            GPS Navigation
+          </button>
+<button class="px-unit-md py-unit-xs rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm tracking-wide transition-all shrink-0" type="button">
+            Interactive Wiring
+          </button>
+<button class="px-unit-md py-unit-xs rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm tracking-wide transition-all shrink-0" type="button">
+            Decision Support
+          </button>
+</div>
+<!-- 4 Interactive Module Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-unit-md">
+<!-- Card 1: Lesson 1.1 Completed -->
+<div class="bg-surface-container-low/85 backdrop-blur-md p-unit-md rounded-xl flex flex-col justify-between gap-unit-md shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:bg-surface-container-low transition-all group">
+<div class="flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-outline">Module 1.1</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-telemetry-sm text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check</span> 100% Score
+                </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                Dielectric Permittivity &amp; VWC Soil Calibration Curves
+              </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Master the Topp equation, calibrate Topp polynomial curves, and distinguish bound vs free volumetric pore-water metrics.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-unit-xs">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-telemetry-sm text-[12px]">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>15 Mins</span>
+</div>
+<button class="px-unit-sm py-1 rounded-full bg-surface-container-highest hover:bg-surface-bright text-on-surface font-label-caps text-label-caps uppercase tracking-wider transition-all" type="button">
+                Review Lab
+              </button>
+</div>
+</div>
+<!-- Card 2: Lesson 2.3 Completed with Simulator -->
+<div class="bg-surface-container-low/85 backdrop-blur-md p-unit-md rounded-xl flex flex-col justify-between gap-unit-md shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:bg-surface-container-low transition-all group">
+<div class="flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-outline">Module 2.3</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-telemetry-sm text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check</span> 95% Score
+                </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                Wiring ESP32 ADC Pins Safely (Why 5V Kills GPIO 34)
+              </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Voltage division circuits, 0-1.1V vs 0-3.3V attenuation registers, and non-linear ADC lookup tables (LUT).
+              </p>
+</div>
+<div class="flex items-center justify-between pt-unit-xs">
+<div class="flex items-center gap-1.5 text-secondary font-telemetry-sm text-[12px]">
+<span class="material-symbols-outlined text-[16px]">cable</span>
+<span>Wiring Simulator</span>
+</div>
+<button class="px-unit-sm py-1 rounded-full bg-surface-container-highest hover:bg-surface-bright text-on-surface font-label-caps text-label-caps uppercase tracking-wider transition-all" type="button">
+                Inspect Schematics
+              </button>
+</div>
+</div>
+<!-- Card 3: Lesson 3.2 Active / Next Up -->
+<div class="bg-surface-container-high/70 backdrop-blur-md p-unit-md rounded-xl flex flex-col justify-between gap-unit-md shadow-[0_8px_24px_rgba(0,210,170,0.15)] ring-1 ring-primary/20 relative group">
+<div class="flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-primary">Module 3.2 • NEXT UP</span>
+<span class="px-2 py-0.5 rounded-full bg-primary text-on-primary font-telemetry-sm text-[11px] font-semibold">
+                  In Progress
+                </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                RTK-GPS Fixed vs Float States &amp; Centimeter Guidance
+              </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Carrier phase ambiguity resolution, base-station NTRIP caster configuration, and autosteer waypoint tracking.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-unit-xs">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-telemetry-sm text-[12px]">
+<span class="material-symbols-outlined text-[16px]">timelapse</span>
+<span>25 Mins</span>
+</div>
+<button class="px-unit-md py-1 rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-headline-sm text-[12px] font-semibold tracking-wide shadow-md transition-all" type="button">
+                Start Module
+              </button>
+</div>
+</div>
+<!-- Card 4: Lesson 4.1 Locked -->
+<div class="bg-surface-container-low/40 p-unit-md rounded-xl flex flex-col justify-between gap-unit-md opacity-75 group">
+<div class="flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-outline">Module 4.1</span>
+<span class="material-symbols-outlined text-outline text-[18px]">lock</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant">
+                Calibrating Micro-Drip Solenoids for Zone B Deficit Irrigation
+              </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Flyback diode protection for inductive 12V relay coils and pulse-width volumetric dosage algorithms.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-unit-xs">
+<span class="text-outline font-telemetry-sm text-[12px]">Requires Module 3.2</span>
+<span class="px-unit-sm py-1 rounded-full bg-surface-container-lowest text-outline font-label-caps text-label-caps uppercase">
+                30 Mins
+              </span>
+</div>
+</div>
+</div>
+<!-- Interactive Knowledge Checkpoint Component (Live Quiz Widget) -->
+<div class="bg-surface-container-low/95 backdrop-blur-xl p-unit-lg rounded-xl shadow-[0_8px_32px_-4px_rgba(0,0,0,0.5)] flex flex-col gap-unit-md" id="checkpointWidget">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-unit-xs pb-unit-xs">
+<div class="flex items-center gap-unit-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-caps text-label-caps uppercase text-primary tracking-widest">Interactive Field Checkpoint</span>
+<span class="font-telemetry-sm text-telemetry-sm text-outline">[QUESTION #09]</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-[11px] uppercase">
+              Sensor Longevity Diagnostics
+            </span>
+</div>
+<!-- Question Body -->
+<div class="flex flex-col gap-unit-xs">
+<p class="font-headline-sm text-headline-sm text-on-surface leading-snug">
+              What is the primary cause of signal degradation when measuring volumetric water content with low-frequency (&lt;1 MHz) resistive soil probes?
+            </p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Select the accurate physical phenomena affecting galvanic soil telemetry:</span>
+</div>
+<!-- Radio Quiz Options -->
+<div class="flex flex-col gap-unit-xs" id="quizOptions">
+<!-- Option A -->
+<label class="flex items-start gap-unit-sm p-unit-sm rounded-lg bg-surface-container-high/60 hover:bg-surface-container-high cursor-pointer transition-all">
+<input class="mt-1 text-primary focus:ring-0 accent-primary" name="telemetry_quiz" type="radio">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">A) Thermal drift in the ESP32 internal reference voltage</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Affects ADC linearity across temperature swings but does not degrade raw probe impedance physically.</span>
+</div>
+</label>
+<!-- Option B (Correct & Selected) -->
+<label class="flex flex-col gap-unit-xs p-unit-sm rounded-lg bg-surface-container-highest/90 shadow-[0_0_16px_rgba(0,210,170,0.15)] cursor-pointer">
+<div class="flex items-start gap-unit-sm">
+<input checked="" class="mt-1 text-primary focus:ring-0 accent-primary" name="telemetry_quiz" type="radio">
+<div class="flex flex-col">
+<div class="flex items-center gap-unit-xs">
+<span class="font-body-md text-body-md text-primary font-semibold">B) Electrolytic corrosion of copper electrodes and soil salinity ionization</span>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface">DC excitation rapidly accelerates electrochemical anodic stripping while saline ions create false moisture spikes.</span>
+</div>
+</div>
+<!-- Correct Explanation Drawer -->
+<div class="mt-2 ml-7 p-unit-sm rounded-lg bg-surface-container-lowest/80 text-on-surface-variant font-body-sm text-body-sm leading-relaxed flex items-start gap-unit-xs">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">lightbulb</span>
+<p>
+<strong class="text-primary">Explanation:</strong> DC current causes electrochemical dissolution of copper traces and is highly sensitive to dissolved mineral salts. In contrast, 70MHz high-frequency FDR capacitive probes insulate traces behind solder mask/FR-4, reading charge relaxation times without galvanic metal degradation.
+                </p>
+</div>
+</label>
+<!-- Option C -->
+<label class="flex items-start gap-unit-sm p-unit-sm rounded-lg bg-surface-container-high/60 hover:bg-surface-container-high cursor-pointer transition-all">
+<input class="mt-1 text-primary focus:ring-0 accent-primary" name="telemetry_quiz" type="radio">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">C) LoRaWAN packet collisions at 915 MHz</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">RF packet collisions impact network transmission reliability, not analog sensor probe physics.</span>
+</div>
+</label>
+<!-- Option D -->
+<label class="flex items-start gap-unit-sm p-unit-sm rounded-lg bg-surface-container-high/60 hover:bg-surface-container-high cursor-pointer transition-all">
+<input class="mt-1 text-primary focus:ring-0 accent-primary" name="telemetry_quiz" type="radio">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">D) Satellite clock bias in GPS NMEA sentences</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">NMEA clock divergence affects spatial position stamps, completely decoupled from soil moisture impedance.</span>
+</div>
+</label>
+</div>
+<!-- Bottom Action Bar for Quiz -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-unit-md pt-unit-xs">
+<div class="flex items-center gap-unit-xs text-on-surface-variant font-telemetry-sm text-[12px]">
+<span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+<span>Checkpoint verified by Agronomic Systems Engine</span>
+</div>
+<button class="flex items-center gap-unit-xs px-unit-lg py-unit-xs rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-headline-sm text-[13px] font-semibold tracking-wide shadow-[0_0_16px_rgba(0,210,170,0.35)] hover:shadow-[0_0_22px_rgba(0,210,170,0.5)] transition-all" type="button">
+<span>Next Lesson: Calibrating Soil Salinity Offsets</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-lowest border-t border-white/5 pt-unit-xl pb-unit-lg text-on-surface-variant font-body-sm text-body-sm">
+  <div class="max-w-[1440px] mx-auto px-gutter-desktop flex flex-col gap-unit-lg">
+    <!-- 4-Column Directory Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-unit-lg pb-unit-md border-b border-white/5">
+      <!-- Col 1: Core Platform -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Core Platform</span>
+        <a href="/home/" class="hover:text-primary transition-colors text-[13px] no-underline">Home Landing Hub</a>
+        <a href="/monitoring/" class="hover:text-primary transition-colors text-[13px] no-underline">Live Field Monitoring</a>
+        <a href="/how-it-works/" class="hover:text-primary transition-colors text-[13px] no-underline">Architecture & Protocol</a>
+      </div>
+      <!-- Col 2: Hardware & Field -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Hardware & Nodes</span>
+        <a href="/sensors/" class="hover:text-primary transition-colors text-[13px] no-underline">Sensor Ecosystem</a>
+        <a href="/field-setup/" class="hover:text-primary transition-colors text-[13px] no-underline">3D Field Placement SOP</a>
+        <a href="/wiring/" class="hover:text-primary transition-colors text-[13px] no-underline">Wiring Simulator</a>
+      </div>
+      <!-- Col 3: Diagnostics & Triage -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Diagnostics & Triage</span>
+        <a href="/inspector/" class="hover:text-primary transition-colors text-[13px] no-underline">Packet Inspector</a>
+        <a href="/alerts/" class="hover:text-primary transition-colors text-[13px] no-underline">Alert Center & Actuation</a>
+        <a href="/sim-lab/" class="hover:text-primary transition-colors text-[13px] no-underline">Simulation Lab</a>
+      </div>
+      <!-- Col 4: Knowledge & 3D -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Presentations & 3D</span>
+        <a href="/academy/" class="hover:text-primary transition-colors text-[13px] no-underline">AgriGCS Academy</a>
+        <a href="/deck/" class="hover:text-primary transition-colors text-[13px] no-underline">10-Stage Executive Deck</a>
+        <a href="/orbit/" class="hover:text-primary transition-colors text-[13px] no-underline">3D Orbit Visualizer</a>
+        <a href="/webgl/" class="hover:text-primary transition-colors text-[13px] no-underline">WebGL Heatmap Telemetry</a>
+        <a href="/motion/" class="hover:text-primary transition-colors text-[13px] no-underline">Dynamic Motion Wave Effects</a>
+      </div>
+    </div>
+    <!-- Bottom Telemetry Specs Strip -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-unit-sm text-xs font-telemetry-sm">
+      <div class="flex flex-wrap items-center gap-unit-sm">
+        <span class="font-label-caps text-label-caps text-on-surface font-bold uppercase tracking-wider">AgriGCS Ground Control v2.4</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-tertiary">Baud: 115200</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-secondary">RF: 915.2 MHz (SF7)</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-primary">Mesh: 12/12 Synced</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-primary-container">RTK FIXED (±1.2cm)</span>
+      </div>
+      <div class="flex items-center gap-unit-sm text-outline">
+        <span>© 2024 AgriGCS Systems Inc. All rights reserved.</span>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="/agrigcs-state.js"></script>
+<script src="/agrigcs-nav.js"></script>
+<script>
+  (function() {
+    const quizOptions = document.querySelectorAll('#quizOptions label');
+    quizOptions.forEach((opt, idx) => {
+      opt.addEventListener('click', () => {
+        quizOptions.forEach(o => {
+          o.className = 'flex items-start gap-unit-sm p-unit-sm rounded-lg bg-surface-container-high/60 hover:bg-surface-container-high cursor-pointer transition-all';
+        });
+        if (idx === 1) { // Option B is correct
+          opt.className = 'flex flex-col gap-unit-xs p-unit-sm rounded-lg bg-surface-container-highest/90 shadow-[0_0_16px_rgba(0,210,170,0.25)] ring-1 ring-primary cursor-pointer';
+          window.AgriGCS_UI?.showToast('Correct! DC excitation causes electrolytic degradation and false ionic spikes.', 'success');
+        } else {
+          opt.className = 'flex flex-col gap-unit-xs p-unit-sm rounded-lg bg-error-container/30 ring-1 ring-error cursor-pointer';
+          window.AgriGCS_UI?.showToast('Incorrect option selected. Review electrochemical corrosion explanation.', 'warn');
+        }
+      });
+    });
+
+    // Next lesson button
+    const nextLessonBtn = document.querySelector('main button:has(.material-symbols-outlined)');
+    document.querySelectorAll('main button').forEach(b => {
+      if (b.textContent.includes('Next Lesson')) {
+        b.addEventListener('click', () => {
+          window.AgriGCS_UI?.showToast('Loading Lesson #10: Multi-Depth Salinity Compensation Matrices...', 'info');
+        });
+      }
+    });
+  })();
+</script>
+</body></html>

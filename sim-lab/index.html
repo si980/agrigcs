@@ -1,0 +1,977 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "tertiary-container": "#3dd197", "on-primary": "#00382b", "error-container": "#93000a", "on-background": "#dce3ed", "on-primary-fixed-variant": "#005140", "outline-variant": "#3b4a44", "primary-container": "#00d2aa", "secondary-container": "#00a6e0", "on-secondary-container": "#00374d", "surface-container": "#192028", "on-tertiary-fixed": "#002113", "tertiary-fixed-dim": "#4edea3", "on-secondary-fixed": "#001e2c", "tertiary-fixed": "#6ffbbe", "tertiary": "#60eeb1", "secondary": "#7bd0ff", "surface-container-low": "#151c23", "secondary-fixed-dim": "#7bd0ff", "outline": "#85948d", "surface-container-highest": "#2e353d", "inverse-on-surface": "#2a3139", "background": "#0d141b", "on-surface-variant": "#bacac3", "inverse-primary": "#006b56", "surface-dim": "#0d141b", "on-secondary-fixed-variant": "#004c69", "secondary-fixed": "#c4e7ff", "inverse-surface": "#dce3ed", "on-error-container": "#ffdad6", "primary-fixed-dim": "#2bdfb6", "surface-tint": "#2bdfb6", "on-tertiary-container": "#005539", "on-surface": "#dce3ed", "primary-fixed": "#57fcd2", "surface-bright": "#333a42", "on-secondary": "#00354a", "surface": "#0d141b", "on-tertiary-fixed-variant": "#005236", "primary": "#45efc5", "on-primary-container": "#005543", "on-tertiary": "#003824", "on-primary-fixed": "#002018", "surface-container-high": "#242b32", "error": "#ffb4ab", "surface-container-lowest": "#080f16", "on-error": "#690005", "surface-variant": "#2e353d" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "unit-xl": "2rem", "container-max": "1440px", "unit-sm": "0.75rem", "unit-2xs": "0.25rem", "unit-xs": "0.5rem", "gutter-desktop": "1.25rem", "unit-2xl": "2.5rem", "unit-3xl": "3.5rem", "gutter-mobile": "0.75rem", "unit-md": "1rem", "unit-lg": "1.5rem" }, "fontFamily": { "headline-sm": ["Inter"], "body-md": ["Inter"], "label-caps": ["JetBrains Mono"], "display": ["Inter"], "headline-md": ["Inter"], "body-sm": ["Inter"], "body-lg": ["Inter"], "telemetry-sm": ["JetBrains Mono"], "headline-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "telemetry-metric": ["JetBrains Mono"] }, "fontSize": { "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.005em", "fontWeight": "400" }], "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600" }], "display": ["44px", { "lineHeight": "52px", "letterSpacing": "-0.025em", "fontWeight": "700" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "telemetry-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "telemetry-metric": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="agrigcs-unified-header fixed top-0 left-0 right-0 z-50 bg-surface/85 backdrop-blur-xl border-b border-outline-variant/15 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+  <div class="h-16 w-full px-4 lg:px-8 max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+    
+    <!-- Left: Single Clean Brand Identity (Zero Duplication) -->
+    <div class="flex items-center gap-3 shrink-0">
+      <a href="/home/" class="flex items-center gap-2.5 hover:opacity-95 transition-all group no-underline">
+        <!-- High-res Vector Emblem -->
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/20 via-surface-container-high to-surface-container flex items-center justify-center border border-primary/40 shadow-[0_0_15px_rgba(0,210,170,0.25)] group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12a10 10 0 0 1 10-10z"></path>
+            <path d="M12 6c0 4 4 6 4 10"></path>
+            <path d="M8 12c2 0 4-2 4-6"></path>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="font-display font-extrabold text-lg text-white tracking-tight leading-none">Agri<span class="text-primary">GCS</span></span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">v2.4</span>
+          </div>
+          <span class="text-[9px] font-mono tracking-widest uppercase text-on-surface-variant/80 mt-0.5">Ground Control Station</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Center: Clean Grouped Navigation Dropdowns (Zero Text-Wrapping) -->
+    <nav class="hidden xl:flex items-center gap-1">
+      
+      <!-- Primary 1: Mission Control -->
+      <a href="/home/" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-body-sm text-[13px] font-medium transition-all whitespace-nowrap text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high">
+        <span class="material-symbols-outlined text-[16px]">dashboard</span>
+        <span>Mission Control</span>
+      </a>
+
+      <!-- Primary 2: Operations & 3D Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-secondary">radar</span>
+          <span>Operations &amp; 3D</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/monitoring/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">monitoring</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Live Field Monitoring</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Sector 04 sensor array &amp; nodes</span>
+              </div>
+            </a>
+            <a href="/orbit/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">3d_rotation</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">3D Orbit Visualizer</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Interactive 360&deg; canopy inspect</span>
+              </div>
+            </a>
+            <a href="/webgl/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary-fixed/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary-fixed group-hover/item:scale-110 transition-transform">view_in_ar</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary-fixed">WebGL Telemetry</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Volumetric soil heatmaps</span>
+              </div>
+            </a>
+            <a href="/motion/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-tertiary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-tertiary group-hover/item:scale-110 transition-transform">motion_photos_on</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-tertiary">Dynamic Motion</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Real-time pulse wave physics</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary 3: Hardware & Field Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-primary">sensors</span>
+          <span>Hardware &amp; Nodes</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/sensors/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">device_hub</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Sensor Ecosystem</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Capacitive probes, SX1262 LoRa</span>
+              </div>
+            </a>
+            <a href="/wiring/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">cable</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">Interactive Wiring Lab</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">ESP32-S3 pinouts &amp; schematics</span>
+              </div>
+            </a>
+            <a href="/field-setup/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-tertiary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-tertiary group-hover/item:scale-110 transition-transform">layers</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-tertiary">Field Placement SOP</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">3D GPS-RTK node alignment</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary 4: Diagnostics & Triage Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium bg-primary text-on-primary font-semibold shadow-[0_0_12px_rgba(0,210,170,0.3)] transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-on-primary">warning</span>
+          <span>Diagnostics</span>
+          <span class="agrigcs-alert-badge px-1.5 py-0.2 rounded-full text-[10px] bg-error text-on-error font-bold font-mono">3</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/alerts/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-error/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-error group-hover/item:scale-110 transition-transform">notification_important</span>
+              <div class="flex flex-col">
+                <div class="flex items-center justify-between w-full">
+                  <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-error">Alert Center</span>
+                  <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-error/20 text-error font-bold">3 ACTIVE</span>
+                </div>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Threshold breaches &amp; triage</span>
+              </div>
+            </a>
+            <a href="/inspector/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">terminal</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Packet Inspector</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">CRC-16, raw hex streams</span>
+              </div>
+            </a>
+            <a href="/sim-lab/" class="flex items-center gap-3 p-2 rounded-xl bg-primary/20 border-l-2 border-primary hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">science</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">Simulation Lab</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Drought &amp; packet drop tests</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary 5: Architecture & Docs Dropdown -->
+      <div class="relative group/nav">
+        <button type="button" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm text-[13px] font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer whitespace-nowrap">
+          <span class="material-symbols-outlined text-[16px] text-outline">menu_book</span>
+          <span>Documentation</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 group-hover/nav:rotate-180 transition-transform">expand_more</span>
+        </button>
+        <div class="absolute top-full right-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
+          <div class="w-64 p-2 rounded-2xl bg-[#121922]/95 backdrop-blur-2xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.8)] flex flex-col gap-1">
+            <a href="/how-it-works/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-primary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-primary group-hover/item:scale-110 transition-transform">account_tree</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-primary">Architecture Overview</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">LoRa RF to Tokio broker</span>
+              </div>
+            </a>
+            <a href="/deck/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-secondary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-secondary group-hover/item:scale-110 transition-transform">slideshow</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-secondary">10-Stage Executive Deck</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Interactive slide pitch deck</span>
+              </div>
+            </a>
+            <a href="/academy/" class="flex items-center gap-3 p-2 rounded-xl hover:bg-tertiary/10 transition-colors group/item no-underline">
+              <span class="material-symbols-outlined text-[20px] text-tertiary group-hover/item:scale-110 transition-transform">school</span>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-semibold text-on-surface group-hover/item:text-tertiary">AgriGCS Academy</span>
+                <span class="text-[10px] text-on-surface-variant font-telemetry-sm">Agronomy &amp; hardware manuals</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Right: Utility Cluster & Operator Actions -->
+    <div class="flex items-center gap-2.5 shrink-0">
+      
+      <!-- Command Palette Quick Launcher (⌘K) -->
+      <button onclick="if(window.AgriGCS_UI && window.AgriGCS_UI.toggleCommandPalette) window.AgriGCS_UI.toggleCommandPalette();" type="button" class="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high/80 hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface text-xs font-mono border border-outline-variant/20 transition-all cursor-pointer" title="Quick Jump (Ctrl+K / ⌘K)">
+        <span class="material-symbols-outlined text-[14px]">terminal</span>
+        <span class="text-[11px]">⌘K</span>
+      </button>
+
+      <!-- Live Stream Pill -->
+      <button class="agrigcs-live-btn flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest/90 hover:bg-surface-container-high text-on-surface text-xs font-medium transition-all active:scale-95 cursor-pointer border border-outline-variant/20" type="button" title="Toggle Live / Simulated Stream">
+        <span class="relative flex h-2 w-2">
+          <span class="agrigcs-live-ping animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+          <span class="agrigcs-live-dot relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+        </span>
+        <span class="agrigcs-live-label font-mono text-[11px] uppercase tracking-wider text-on-surface font-semibold">LIVE</span>
+      </button>
+
+      <!-- Connect Hardware Button (Calls openHardwareModal) -->
+      <button class="agrigcs-connect-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-semibold text-[12px] tracking-wide shadow-[0_0_15px_rgba(0,210,170,0.3)] hover:shadow-[0_0_20px_rgba(0,210,170,0.5)] transition-all active:scale-95 cursor-pointer" type="button">
+        <span class="material-symbols-outlined text-[16px]">memory</span>
+        <span>Connect Gateway</span>
+      </button>
+
+      <!-- Operator Profile Badge -->
+      <button class="agrigcs-profile-btn flex items-center gap-1.5 p-1 pr-2.5 rounded-full bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/20 transition-all active:scale-95 cursor-pointer" type="button" title="Sector 04 Operator Profile">
+        <div class="w-6 h-6 rounded-full bg-primary/20 text-primary border border-primary/40 flex items-center justify-center font-mono text-[10px] font-bold">
+          W4
+        </div>
+        <span class="text-[11px] font-mono text-on-surface hidden sm:inline">OP-04</span>
+      </button>
+
+      <!-- Mobile Hamburger Menu Button -->
+      <button class="xl:hidden flex items-center justify-center w-8 h-8 rounded-full bg-surface-container-highest hover:bg-surface-container-high text-on-surface transition-all cursor-pointer" id="agrigcs-mobile-menu-btn" type="button" aria-label="Toggle navigation">
+        <span class="material-symbols-outlined text-[20px]">menu</span>
+      </button>
+
+    </div>
+
+  </div>
+</header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<div class="w-full max-w-[1440px] mx-auto px-gutter-desktop py-unit-md flex flex-col gap-unit-md">
+<!-- Header & Breadcrumbs Sub-bar -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-unit-sm bg-surface-container-lowest/80 p-unit-md rounded-xl shadow-md">
+<div class="flex flex-col gap-unit-2xs">
+<div class="flex items-center gap-unit-xs font-label-caps text-label-caps tracking-widest text-outline">
+<span class="text-tertiary font-semibold">SIMULATION</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span>ENVIRONMENTAL DIGITAL TWIN</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-secondary font-semibold">STRESS TEST SUITE</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight flex items-center gap-unit-xs">
+          Field Simulation Lab &amp; Hardware Fault Injection
+          <span class="inline-flex items-center gap-1 px-unit-xs py-0.5 rounded-full bg-surface-container-high text-secondary text-[11px] font-label-caps">
+<span class="material-symbols-outlined text-[14px]">science</span> LAB V3.1
+          </span>
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-4xl">
+          Simulate real-time agronomic environmental cycles, drought conditions, sensor battery degradation, and LoRa packet dropouts without deploying physical field hardware.
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-unit-xs shrink-0">
+<button class="flex items-center gap-unit-2xs px-unit-sm py-unit-xs rounded-full bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-caps text-label-caps uppercase transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px] text-tertiary">data_object</span>
+<span>Export JSON</span>
+</button>
+<button id="sim-reset-btn" class="flex items-center gap-unit-2xs px-unit-sm py-unit-xs rounded-full bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-caps text-label-caps uppercase transition-all shadow-sm cursor-pointer" type="button"><span class="material-symbols-outlined text-[16px] text-outline">restart_alt</span><span>Reset Baseline</span></button>
+<button id="sim-push-btn" class="flex items-center gap-unit-2xs px-unit-md py-unit-xs rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-headline-sm font-semibold text-[13px] tracking-wide shadow-lg shadow-primary-container/20 transition-all cursor-pointer" type="button"><span class="material-symbols-outlined text-[18px]">publish</span><span>Push to Live Dashboard</span></button>
+</div>
+</div>
+<!-- Master Control Strip & Playhead Telemetry Ribbon -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-unit-sm items-center bg-surface-container-low/90 p-unit-sm rounded-xl shadow-md">
+<!-- Simulation Status -->
+<div class="xl:col-span-3 flex items-center gap-unit-sm">
+<div class="flex items-center gap-unit-xs px-unit-sm py-unit-xs rounded-full bg-surface-container-highest/90 shadow-inner">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-80"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-tertiary"></span>
+</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface font-semibold">Running • 2.0x Replay</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] uppercase text-outline">Deterministic Seed</span>
+<span class="font-telemetry-sm text-telemetry-sm text-tertiary font-mono">0x9F42B_SIM</span>
+</div>
+</div>
+<!-- Playback Controls -->
+<div class="xl:col-span-5 flex items-center justify-center gap-unit-xs">
+<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-surface-bright text-on-surface transition-all" id="btn-rewind" title="Rewind to 00:00" type="button">
+<span class="material-symbols-outlined text-[18px]">fast_rewind</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-container hover:bg-primary text-on-primary-container shadow-md shadow-primary-container/25 transition-all" id="btn-toggle-play" title="Play / Pause" type="button">
+<span class="material-symbols-outlined text-[20px]" id="play-icon">pause</span>
+</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high hover:bg-surface-bright text-on-surface transition-all" id="btn-step" title="Step Forward +10m" type="button">
+<span class="material-symbols-outlined text-[18px]">request_quote</span>
+</button>
+<div class="h-6 w-px bg-surface-container-highest mx-unit-xs hidden sm:block"></div>
+<!-- Speed Selectors -->
+<div class="flex items-center gap-unit-2xs bg-surface-container-highest/80 p-1 rounded-full">
+<button class="speed-btn px-2.5 py-1 rounded-full font-label-caps text-[11px] text-on-surface-variant hover:text-on-surface transition-all" data-speed="0.5" type="button">0.5x</button>
+<button class="speed-btn px-2.5 py-1 rounded-full font-label-caps text-[11px] text-on-surface-variant hover:text-on-surface transition-all" data-speed="1.0" type="button">1.0x</button>
+<button class="speed-btn px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-primary text-on-primary font-bold shadow-sm" data-speed="2.0" type="button">2.0x</button>
+<button class="speed-btn px-2.5 py-1 rounded-full font-label-caps text-[11px] text-on-surface-variant hover:text-on-surface transition-all" data-speed="5.0" type="button">5.0x</button>
+<button class="speed-btn px-2.5 py-1 rounded-full font-label-caps text-[11px] text-on-surface-variant hover:text-on-surface transition-all" data-speed="10.0" type="button">10.0x</button>
+</div>
+</div>
+<!-- Playhead Metrics Counter -->
+<div class="xl:col-span-4 flex items-center justify-end gap-unit-md text-right">
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] uppercase text-outline">Simulated Clock</span>
+<span class="font-telemetry-sm text-telemetry-sm text-secondary font-mono" id="sim-clock">19:42:10 UTC</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] uppercase text-outline">Sim Elapsed</span>
+<span class="font-telemetry-sm text-telemetry-sm text-primary font-mono" id="sim-elapsed">+11h 42m 10s</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] uppercase text-outline">Sync Drift</span>
+<span class="font-telemetry-sm text-telemetry-sm text-tertiary font-mono">0.00ms</span>
+</div>
+</div>
+</div>
+<!-- Main Workspace Grid: 32% (4 cols) Left Control Panel / 68% (8 cols) Visualizer & Impacts -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-unit-md items-start">
+<!-- LEFT COLUMN: Parameter Controls & Fault Injection (32% equivalent -> 4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-unit-md">
+<!-- Scenario Selector Card -->
+<div class="flex flex-col gap-unit-sm bg-surface-container-low/80 p-unit-md rounded-xl shadow-md backdrop-blur-md">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Preset Scenarios</span>
+<span class="font-label-caps text-label-caps uppercase text-secondary">5 Stored</span>
+</div>
+<div class="flex flex-col gap-unit-xs" id="scenario-list">
+<!-- Scenario 1 -->
+<button class="scenario-option w-full text-left p-unit-sm rounded-lg bg-surface-container-high/60 hover:bg-surface-container-high transition-all flex flex-col gap-1" data-scenario="normal" type="button">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-tertiary">eco</span>
+                  Normal Agronomic Cycle
+                </span>
+<span class="font-label-caps text-[10px] px-2 py-0.5 rounded-full bg-surface-container-highest text-tertiary">Baseline</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-tight">Diurnal swing 18°C–29°C, stable 38% moisture, 100% solar efficiency.</p>
+</button>
+<!-- Scenario 2 (Active) -->
+<button class="scenario-option w-full text-left p-unit-sm rounded-lg bg-surface-container-high shadow-[0_0_16px_rgba(255,180,171,0.15)] flex flex-col gap-1 ring-1 ring-error/40" data-scenario="drought" type="button">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-error">local_fire_department</span>
+                  Acute Heatwave &amp; Desiccation
+                </span>
+<span class="font-label-caps text-[10px] px-2 py-0.5 rounded-full bg-error-container text-error font-bold">Active Suite</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-tight">Canopy breaches 42°C, VWC plummets under 20% PWP threshold.</p>
+</button>
+<!-- Scenario 3 -->
+<button class="scenario-option w-full text-left p-unit-sm rounded-lg bg-surface-container-high/60 hover:bg-surface-container-high transition-all flex flex-col gap-1" data-scenario="flood" type="button">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">flood</span>
+                  Flash Flood &amp; Soil Saturation
+                </span>
+<span class="font-label-caps text-[10px] px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary">Anaerobic</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-tight">VWC reaches 95% full saturation, root zone hypoxia conditions.</p>
+</button>
+<!-- Scenario 4 -->
+<button class="scenario-option w-full text-left p-unit-sm rounded-lg bg-surface-container-high/60 hover:bg-surface-container-high transition-all flex flex-col gap-1" data-scenario="battery" type="button">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim">battery_alert</span>
+                  Gateway LiFePO4 Low Power
+                </span>
+<span class="font-label-caps text-[10px] px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant">Overcast</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-tight">Overcast decay curve; gateway rail voltage droops below 3.10V cutoff.</p>
+</button>
+<!-- Scenario 5 -->
+<button class="scenario-option w-full text-left p-unit-sm rounded-lg bg-surface-container-high/60 hover:bg-surface-container-high transition-all flex flex-col gap-1" data-scenario="lora" type="button">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-outline">wifi_off</span>
+                  LoRa RF Packet Dropout
+                </span>
+<span class="font-label-caps text-[10px] px-2 py-0.5 rounded-full bg-surface-container-highest text-outline">Noise 40%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-tight">Severe SNR degradation and 40% CRC framing errors across node mesh.</p>
+</button>
+</div>
+</div>
+<!-- Live Dynamic Parameter Sliders -->
+<div class="flex flex-col gap-unit-md bg-surface-container-low/80 p-unit-md rounded-xl shadow-md">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Live Environmental Overrides</span>
+<span class="font-label-caps text-[10px] text-tertiary bg-surface-container-highest px-2 py-0.5 rounded">REALTIME HOOK</span>
+</div>
+<!-- Slider 1: Soil Moisture -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-caps text-label-caps">
+<span class="text-on-surface flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Target Soil Moisture (VWC)
+              </span>
+<span class="font-telemetry-sm text-telemetry-sm text-error font-bold" id="vwc-val">18.5% [CRIT LOW]</span>
+</div>
+<input class="w-full accent-primary bg-surface-container-highest h-2 rounded-lg cursor-pointer" id="slider-vwc" max="80" min="5" step="0.5" type="range" value="18.5">
+<div class="flex justify-between font-label-caps text-[10px] text-outline">
+<span>0% PWP</span>
+<span class="text-error font-bold">Warning Trigger: 20%</span>
+<span>80% Saturated</span>
+</div>
+</div>
+<!-- Slider 2: Ambient Temperature -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-caps text-label-caps">
+<span class="text-on-surface flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Canopy Temperature (°C)
+              </span>
+<span class="font-telemetry-sm text-telemetry-sm text-secondary font-bold" id="temp-val">38.2°C</span>
+</div>
+<input class="w-full accent-secondary bg-surface-container-highest h-2 rounded-lg cursor-pointer" id="slider-temp" max="50" min="10" step="0.2" type="range" value="38.2">
+<div class="flex justify-between font-label-caps text-[10px] text-outline">
+<span>10°C Frost</span>
+<span>32°C Normal</span>
+<span class="text-error">50°C Heat Extreme</span>
+</div>
+</div>
+<!-- Slider 3: Relative Humidity -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-caps text-label-caps">
+<span class="text-on-surface flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Relative Humidity (%)
+              </span>
+<span class="font-telemetry-sm text-telemetry-sm text-tertiary font-bold" id="rh-val">28.0% [ARID]</span>
+</div>
+<input class="w-full accent-tertiary bg-surface-container-highest h-2 rounded-lg cursor-pointer" id="slider-rh" max="100" min="10" step="1" type="range" value="28">
+<div class="flex justify-between font-label-caps text-[10px] text-outline">
+<span>10% Arid</span>
+<span>55% Baseline</span>
+<span>100% Saturation</span>
+</div>
+</div>
+<!-- Slider 4: Battery Rail Voltage -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-caps text-label-caps">
+<span class="text-on-surface flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span> LiFePO4 Rail Voltage
+              </span>
+<span class="font-telemetry-sm text-telemetry-sm text-on-surface-variant font-bold" id="volt-val">3.32 V</span>
+</div>
+<input class="w-full accent-secondary-container bg-surface-container-highest h-2 rounded-lg cursor-pointer" id="slider-volt" max="4.2" min="2.8" step="0.02" type="range" value="3.32">
+<div class="flex justify-between font-label-caps text-[10px] text-outline">
+<span class="text-error">2.8V Low Cutoff</span>
+<span>3.3V Float</span>
+<span>4.2V Max Sun</span>
+</div>
+</div>
+</div>
+<!-- Hardware Fault Injection Toggles -->
+<div class="flex flex-col gap-unit-sm bg-surface-container-low/80 p-unit-md rounded-xl shadow-md">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Fault Injections</span>
+<span class="font-label-caps text-[10px] text-error bg-error-container/40 text-error px-2 py-0.5 rounded uppercase">Hardware Anomaly Engine</span>
+</div>
+<div class="flex flex-col gap-unit-xs">
+<!-- Fault 1 -->
+<label class="flex items-center justify-between p-unit-xs rounded-lg bg-surface-container-high/60 cursor-pointer hover:bg-surface-container-high">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">ADC Drift Noise (+/- 50 counts)</span>
+<span class="font-body-sm text-body-sm text-outline">Simulates probe corrosion analog signal jitter</span>
+</div>
+<input checked="" class="w-4 h-4 accent-primary rounded cursor-pointer" type="checkbox">
+</label>
+<!-- Fault 2 -->
+<label class="flex items-center justify-between p-unit-xs rounded-lg bg-surface-container-high/60 cursor-pointer hover:bg-surface-container-high">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">Disconnect Backup Probe #10554</span>
+<span class="font-body-sm text-body-sm text-outline">Force dual-redundancy rollover failure</span>
+</div>
+<input class="w-4 h-4 accent-primary rounded cursor-pointer" type="checkbox">
+</label>
+<!-- Fault 3 -->
+<label class="flex items-center justify-between p-unit-xs rounded-lg bg-surface-container-high/60 cursor-pointer hover:bg-surface-container-high">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">RTK Rover Precision Degradation</span>
+<span class="font-body-sm text-body-sm text-outline">Drop from Fixed 1.2cm to 3.8m Float status</span>
+</div>
+<input checked="" class="w-4 h-4 accent-primary rounded cursor-pointer" type="checkbox">
+</label>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Telemetry Replay Chart & Downstream Impact Preview (68% equivalent -> 8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-unit-md">
+<!-- 24-Hour Telemetry Replay Chart Canvas Window -->
+<div class="flex flex-col bg-surface-container-low/90 p-unit-md rounded-xl shadow-lg relative overflow-hidden backdrop-blur-md">
+<!-- Chart Header & Legend Strip -->
+<div class="flex flex-col md:flex-row md:items-center justify-between pb-unit-sm gap-unit-xs">
+<div class="flex flex-col">
+<div class="flex items-center gap-unit-xs">
+<span class="font-headline-md text-headline-md text-on-surface">24-Hour Multi-Parameter Telemetry Curve</span>
+<span class="font-label-caps text-[10px] text-primary bg-primary-container/20 text-primary-container px-2 py-0.5 rounded uppercase font-bold">Synchronized Synced Log</span>
+</div>
+<span class="font-label-caps text-[11px] text-outline font-mono">SESSION ID: 1b17d54-422b-66be025880 | RANGE: 08:00 UTC - 08:00 UTC (+24H)</span>
+</div>
+<!-- Legend Pills -->
+<div class="flex flex-wrap items-center gap-unit-xs font-label-caps text-[11px]">
+<span class="flex items-center gap-1 text-primary">
+<span class="w-2.5 h-1 rounded-full bg-primary"></span> Soil Moisture (VWC %)
+              </span>
+<span class="flex items-center gap-1 text-secondary">
+<span class="w-2.5 h-1 rounded-full bg-secondary"></span> Temp (°C)
+              </span>
+<span class="flex items-center gap-1 text-tertiary">
+<span class="w-2.5 h-1 rounded-full bg-tertiary"></span> Humidity (%)
+              </span>
+<span class="flex items-center gap-1 text-secondary-container">
+<span class="w-2.5 h-1 rounded-full bg-secondary-container"></span> Battery (V)
+              </span>
+</div>
+</div>
+<!-- SVG Multi-Series Interactive Chart -->
+<div class="relative w-full h-[360px] bg-surface-container-lowest/90 rounded-lg p-2 overflow-hidden select-none" id="chart-viewport">
+<!-- Shaded Heat Stress Breach Zone -->
+<div class="absolute top-0 bottom-8 left-[62%] w-[24%] bg-error-container/25 rounded-md pointer-events-none flex flex-col justify-start p-2">
+<span class="font-label-caps text-[10px] text-error font-bold tracking-wider uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                Heat Stress Breach Zone
+              </span>
+<span class="font-body-sm text-[10px] text-on-surface-variant font-mono">T &gt; 38°C &amp; VWC &lt; 20%</span>
+</div>
+<!-- Pre-warning Buffer Zone -->
+<div class="absolute top-0 bottom-8 left-[38%] w-[15%] bg-surface-container-highest/30 rounded-md pointer-events-none flex flex-col justify-start p-2">
+<span class="font-label-caps text-[10px] text-outline tracking-wider uppercase">Diurnal Peak Window</span>
+</div>
+<!-- SVG Data Curves -->
+<svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 320">
+<defs>
+<!-- Gradients -->
+<linearGradient id="primaryGlow" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#45efc5" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#45efc5" stop-opacity="0.0"></stop>
+</linearGradient>
+<linearGradient id="errorGlow" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffb4ab" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#ffb4ab" stop-opacity="0.0"></stop>
+</linearGradient>
+</defs>
+<!-- Horizontal Grid Lines -->
+<line stroke="#242b32" stroke-dasharray="3 3" x1="40" x2="780" y1="40" y2="40"></line>
+<line stroke="#242b32" stroke-dasharray="3 3" x1="40" x2="780" y1="100" y2="100"></line>
+<line stroke="#242b32" stroke-dasharray="3 3" x1="40" x2="780" y1="160" y2="160"></line>
+<line stroke="#242b32" stroke-dasharray="3 3" x1="40" x2="780" y1="220" y2="220"></line>
+<line stroke="#3b4a44" x1="40" x2="780" y1="280" y2="280"></line>
+<!-- Axis Y Labels (Telemetry metric scale) -->
+<text fill="#85948d" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="35" y="44">100%</text>
+<text fill="#85948d" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="35" y="104">75%</text>
+<text fill="#85948d" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="35" y="164">50%</text>
+<text fill="#85948d" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="35" y="224">25%</text>
+<text fill="#85948d" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="35" y="284">0%</text>
+<!-- Critical PWP Threshold Line (20% Soil Moisture) -->
+<line stroke="#ffb4ab" stroke-dasharray="4 2" stroke-width="1.5" x1="40" x2="780" y1="232" y2="232"></line>
+<text fill="#ffb4ab" font-family="JetBrains Mono" font-size="9" text-anchor="end" x="775" y="228">20% PWP THRESHOLD</text>
+<!-- Yellow Curve: Battery Rail Voltage (3.3V range normalized) -->
+<path d="M 40,240 Q 180,242 320,245 T 500,248 T 620,252 T 780,255" fill="none" opacity="0.85" stroke="#00a6e0" stroke-linecap="round" stroke-width="2"></path>
+<!-- Green Curve: Relative Humidity (%) -->
+<path d="M 40,160 C 140,165 240,175 340,195 C 440,210 520,230 600,240 C 660,245 720,220 780,185" fill="none" stroke="#60eeb1" stroke-linecap="round" stroke-width="2"></path>
+<!-- Cyan Curve: Ambient Canopy Temperature (°C) -->
+<path d="M 40,210 C 120,215 220,200 320,170 C 420,135 500,110 580,75 C 640,60 700,90 780,140" fill="none" stroke="#7bd0ff" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- Teal Curve: Soil Moisture VWC % (Dipping severely in heat window) -->
+<!-- Area under VWC curve -->
+<path d="M 40,130 C 140,132 260,134 360,140 C 440,146 510,165 580,210 C 640,242 700,244 780,246 L 780,280 L 40,280 Z" fill="url(#primaryGlow)"></path>
+<path d="M 40,130 C 140,132 260,134 360,140 C 440,146 510,165 580,210 C 640,242 700,244 780,246" fill="none" id="vwc-curve" stroke="#45efc5" stroke-linecap="round" stroke-width="3"></path>
+<!-- Breach Marker Indicator Point on VWC Curve -->
+<circle cx="585" cy="214" fill="#ffb4ab" r="5" stroke="#080f16" stroke-width="2"></circle>
+<text fill="#ffb4ab" font-family="JetBrains Mono" font-size="9" font-weight="bold" text-anchor="middle" x="585" y="202">BREACH 18:14 UTC</text>
+</svg>
+<!-- Dynamic Interactive Playhead Vertical Scrubber Line -->
+<div class="absolute top-2 bottom-8 left-[68%] w-0.5 bg-primary shadow-[0_0_12px_rgba(69,239,197,0.9)] cursor-ew-resize flex flex-col items-center" id="playhead-line">
+<div class="w-3.5 h-3.5 rounded-full bg-primary -mt-1 shadow-md shadow-primary/50"></div>
+<!-- Floating Scrubber HUD Pill -->
+<div class="absolute top-8 left-2 whitespace-nowrap bg-surface-container-high/95 p-unit-xs rounded-lg shadow-xl pointer-events-none flex flex-col gap-0.5 ring-1 ring-primary/40">
+<div class="flex items-center gap-1 font-label-caps text-[10px] text-primary font-bold">
+<span class="material-symbols-outlined text-[13px]">location_searching</span>
+<span>Playhead: 19:42 UTC</span>
+</div>
+<div class="font-telemetry-sm text-[11px] text-on-surface font-mono">
+                  Moisture: <span class="text-error font-bold">18.5% VWC</span> | Temp: <span class="text-secondary">38.2°C</span>
+</div>
+<div class="font-label-caps text-[9px] text-outline">
+                  Soil Deficit: -19.5% below target
+                </div>
+</div>
+</div>
+<!-- Time Axis Bottom Strip -->
+<div class="absolute bottom-1 left-10 right-4 flex justify-between font-label-caps text-[10px] text-outline font-mono pt-1">
+<span>08:00 UTC</span>
+<span>12:00 UTC</span>
+<span>16:00 UTC</span>
+<span class="text-secondary font-bold">19:42 UTC (Now)</span>
+<span>00:00 UTC</span>
+<span>04:00 UTC</span>
+<span>08:00 UTC (+24H)</span>
+</div>
+</div>
+<!-- Bottom Playhead Timeline Mini Bar -->
+<div class="mt-unit-sm flex flex-col gap-1">
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden flex">
+<div class="bg-primary/40 h-full w-[38%]"></div>
+<div class="bg-secondary/40 h-full w-[24%]"></div>
+<div class="bg-error h-full w-[26%] shadow-[0_0_8px_rgba(255,180,171,0.5)]"></div>
+<div class="bg-surface-container-high h-full w-[12%]"></div>
+</div>
+<div class="flex justify-between font-label-caps text-[10px] text-outline">
+<span>Nominal Baseline</span>
+<span class="text-secondary">Thermal Acceleration</span>
+<span class="text-error font-bold">Zone B Desiccation Warning</span>
+<span>Diurnal Recovery (Simulated)</span>
+</div>
+</div>
+</div>
+<!-- Downstream System Impact Live Preview Grid -->
+<div class="flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-unit-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">Downstream System Impact Preview</span>
+<span class="font-label-caps text-label-caps uppercase text-tertiary tracking-wider font-semibold">[AUTO-DISPATCH ENGINE]</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">Hardware state projections derived from 19:42 UTC telemetry</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-unit-sm">
+<!-- Card 1: Zone Desiccation -->
+<div class="flex flex-col justify-between p-unit-sm rounded-xl bg-surface-container-low/80 shadow-md ring-1 ring-error/30 hover:bg-surface-container-low transition-all">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] uppercase text-outline">Field Bed Zone</span>
+<span class="material-symbols-outlined text-error text-[18px]">warning</span>
+</div>
+<span class="font-headline-sm text-[16px] text-on-surface font-bold">Sector 04 — Zone B</span>
+<span class="font-telemetry-sm text-[13px] text-error font-bold font-mono">18.5% VWC [CRITICAL]</span>
+</div>
+<div class="mt-unit-xs pt-unit-xs flex flex-col gap-0.5">
+<span class="font-body-sm text-[11px] text-on-surface-variant">Min safe agronomic floor: 28.0%</span>
+<span class="font-label-caps text-[10px] text-error font-semibold">Immediate root stress alert</span>
+</div>
+</div>
+<!-- Card 2: Automated Actuation -->
+<div class="flex flex-col justify-between p-unit-sm rounded-xl bg-surface-container-low/80 shadow-md ring-1 ring-primary/30 hover:bg-surface-container-low transition-all">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] uppercase text-outline">Actuator Logic</span>
+<span class="material-symbols-outlined text-primary text-[18px]">valve</span>
+</div>
+<span class="font-headline-sm text-[16px] text-on-surface font-bold">Valve Solenoid #04</span>
+<span class="font-telemetry-sm text-[13px] text-primary font-bold font-mono">ARMED • 45 MIN PULSE</span>
+</div>
+<div class="mt-unit-xs pt-unit-xs flex flex-col gap-0.5">
+<span class="font-body-sm text-[11px] text-on-surface-variant">Flow rate: 14.2 L/min automated</span>
+<span class="font-label-caps text-[10px] text-tertiary font-semibold">Target restoration: 32% by 21:00</span>
+</div>
+</div>
+<!-- Card 3: Incident Dispatch -->
+<div class="flex flex-col justify-between p-unit-sm rounded-xl bg-surface-container-low/80 shadow-md ring-1 ring-secondary/30 hover:bg-surface-container-low transition-all">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] uppercase text-outline">Escalation Dispatch</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">cell_tower</span>
+</div>
+<span class="font-headline-sm text-[16px] text-on-surface font-bold">Alert #ALT-8842</span>
+<span class="font-telemetry-sm text-[13px] text-secondary font-bold font-mono">SMS QUEUED • PRIO 1</span>
+</div>
+<div class="mt-unit-xs pt-unit-xs flex flex-col gap-0.5">
+<span class="font-body-sm text-[11px] text-on-surface-variant">Recipients: Irrigation Agronomist</span>
+<span class="font-label-caps text-[10px] text-secondary font-semibold">Mesh Gateway LTE Relay OK</span>
+</div>
+</div>
+<!-- Card 4: Agronomic Yield Impact Model -->
+<div class="flex flex-col justify-between p-unit-sm rounded-xl bg-surface-container-low/80 shadow-md ring-1 ring-error/30 hover:bg-surface-container-low transition-all">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] uppercase text-outline">Bio-Yield Forecast</span>
+<span class="material-symbols-outlined text-error text-[18px]">trending_down</span>
+</div>
+<span class="font-headline-sm text-[16px] text-on-surface font-bold">Canopy Loss Risk</span>
+<span class="font-telemetry-sm text-[13px] text-error font-bold font-mono">-4.2% YIELD DECAY</span>
+</div>
+<div class="mt-unit-xs pt-unit-xs flex flex-col gap-0.5">
+<span class="font-body-sm text-[11px] text-on-surface-variant">If unmitigated within 2.5 hrs</span>
+<span class="font-label-caps text-[10px] text-error font-semibold">Stomatal closure initiated</span>
+</div>
+</div>
+</div>
+</div>
+<!-- System Digital Twin Node Metadata Table -->
+<div class="flex flex-col bg-surface-container-low/80 p-unit-md rounded-xl shadow-md">
+<div class="flex items-center justify-between pb-unit-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">Simulated Field Node Fleet Status</span>
+<span class="font-label-caps text-label-caps uppercase text-outline">Sector 04 Wireless Topology</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead>
+<tr class="font-label-caps text-[11px] text-outline uppercase border-b border-surface-container-highest">
+<th class="py-2 px-3">Node UUID</th>
+<th class="py-2 px-3">Sensor Spec</th>
+<th class="py-2 px-3">Simulated Soil VWC</th>
+<th class="py-2 px-3">Temp / RH</th>
+<th class="py-2 px-3">Battery Rail</th>
+<th class="py-2 px-3">Mesh Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-highest/40 font-telemetry-sm text-[12px] text-on-surface">
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-2.5 px-3 text-tertiary font-mono">NODE-04A-P1</td>
+<td class="py-2.5 px-3 text-on-surface-variant">Decagon 5TE FDR Core</td>
+<td class="py-2.5 px-3 text-error font-bold">18.5% [BREACH]</td>
+<td class="py-2.5 px-3">38.2°C / 28%</td>
+<td class="py-2.5 px-3 text-secondary">3.32 V</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center gap-1 text-primary text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> SYNCED (0.4 dBm)
+                    </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-2.5 px-3 text-tertiary font-mono">NODE-04B-P2</td>
+<td class="py-2.5 px-3 text-on-surface-variant">Decagon 5TE Backup (Sim)</td>
+<td class="py-2.5 px-3 text-outline font-bold">-- (DISCONNECTED)</td>
+<td class="py-2.5 px-3">-- / --</td>
+<td class="py-2.5 px-3 text-outline">0.00 V</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center gap-1 text-error text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> FAULT INJECTED
+                    </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-2.5 px-3 text-tertiary font-mono">NODE-04C-S3</td>
+<td class="py-2.5 px-3 text-on-surface-variant">Teros-12 SDI-12 Matrix</td>
+<td class="py-2.5 px-3 text-tertiary">31.2% [NOMINAL]</td>
+<td class="py-2.5 px-3">34.1°C / 32%</td>
+<td class="py-2.5 px-3 text-secondary">3.41 V</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center gap-1 text-primary text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> SYNCED (1.1 dBm)
+                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Diagnostic Telemetry Terminal Banner -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-unit-xs bg-surface-container-lowest p-unit-sm rounded-lg text-on-surface-variant font-label-caps text-[11px] shadow-sm">
+<div class="flex items-center gap-unit-sm flex-wrap">
+<span class="text-tertiary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">terminal</span>
+          AgriGCS Simulation Engine v3.1
+        </span>
+<span class="text-outline">|</span>
+<span>Seed: <strong class="text-on-surface font-mono">0x9F42B</strong></span>
+<span class="text-outline">|</span>
+<span>Deterministic Physics: <strong class="text-primary">ACTIVE</strong></span>
+<span class="text-outline">|</span>
+<span>LoRaWAN Frame Model: <strong class="text-secondary">SX1262 Multi-Spreading</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs font-mono text-tertiary">
+<span class="inline-block w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span>STATUS: SIMULATION ACTIVE [2.0X]</span>
+</div>
+</div>
+</div>
+<!-- Interactive JavaScript for micro-interactions -->
+<script>
+    (function() {
+      // Playhead dragging & scrubbing
+      const chartViewport = document.getElementById('chart-viewport');
+      const playheadLine = document.getElementById('playhead-line');
+      const simClock = document.getElementById('sim-clock');
+      const simElapsed = document.getElementById('sim-elapsed');
+      let isDragging = false;
+
+      function updatePlayheadPos(clientX) {
+        const rect = chartViewport.getBoundingClientRect();
+        let offsetX = clientX - rect.left;
+        if (offsetX < 40) offsetX = 40;
+        if (offsetX > rect.width - 20) offsetX = rect.width - 20;
+
+        const pct = (offsetX / rect.width) * 100;
+        playheadLine.style.left = pct + '%';
+
+        // Calculate hours based on percentage
+        const totalMinutes = Math.floor((pct / 100) * 24 * 60);
+        const hours = Math.floor(totalMinutes / 60);
+        const mins = totalMinutes % 60;
+        const formattedH = (hours < 10 ? '0' : '') + hours;
+        const formattedM = (mins < 10 ? '0' : '') + mins;
+
+        if (simClock) simClock.textContent = formattedH + ':' + formattedM + ':00 UTC';
+        if (simElapsed) simElapsed.textContent = '+' + formattedH + 'h ' + formattedM + 'm 00s';
+      }
+
+      if (playheadLine && chartViewport) {
+        playheadLine.addEventListener('mousedown', (e) => {
+          isDragging = true;
+          e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (isDragging) {
+            updatePlayheadPos(e.clientX);
+          }
+        });
+
+        window.addEventListener('mouseup', () => {
+          isDragging = false;
+        });
+
+        chartViewport.addEventListener('click', (e) => {
+          updatePlayheadPos(e.clientX);
+        });
+      }
+
+      // Sliders real-time feedback
+      const sliderVwc = document.getElementById('slider-vwc');
+      const vwcVal = document.getElementById('vwc-val');
+      if (sliderVwc && vwcVal) {
+        sliderVwc.addEventListener('input', (e) => {
+          const val = parseFloat(e.target.value).toFixed(1);
+          if (val < 20.0) {
+            vwcVal.textContent = val + '% [CRIT LOW]';
+            vwcVal.className = 'font-telemetry-sm text-telemetry-sm text-error font-bold';
+          } else {
+            vwcVal.textContent = val + '% [NOMINAL]';
+            vwcVal.className = 'font-telemetry-sm text-telemetry-sm text-primary font-bold';
+          }
+        });
+      }
+
+      const sliderTemp = document.getElementById('slider-temp');
+      const tempVal = document.getElementById('temp-val');
+      if (sliderTemp && tempVal) {
+        sliderTemp.addEventListener('input', (e) => {
+          const val = parseFloat(e.target.value).toFixed(1);
+          tempVal.textContent = val + '°C';
+          tempVal.className = val > 35.0 ? 'font-telemetry-sm text-telemetry-sm text-error font-bold' : 'font-telemetry-sm text-telemetry-sm text-secondary font-bold';
+        });
+      }
+
+      const sliderRh = document.getElementById('slider-rh');
+      const rhVal = document.getElementById('rh-val');
+      if (sliderRh && rhVal) {
+        sliderRh.addEventListener('input', (e) => {
+          const val = parseInt(e.target.value, 10);
+          rhVal.textContent = val + '% ' + (val < 30 ? '[ARID]' : '[OPTIMAL]');
+        });
+      }
+
+      const sliderVolt = document.getElementById('slider-volt');
+      const voltVal = document.getElementById('volt-val');
+      if (sliderVolt && voltVal) {
+        sliderVolt.addEventListener('input', (e) => {
+          const val = parseFloat(e.target.value).toFixed(2);
+          voltVal.textContent = val + ' V';
+          voltVal.className = val < 3.10 ? 'font-telemetry-sm text-telemetry-sm text-error font-bold' : 'font-telemetry-sm text-telemetry-sm text-secondary-container font-bold';
+        });
+      }
+
+      // Speed Toggles
+      const speedBtns = document.querySelectorAll('.speed-btn');
+      speedBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          speedBtns.forEach(b => {
+            b.className = 'speed-btn px-2.5 py-1 rounded-full font-label-caps text-[11px] text-on-surface-variant hover:text-on-surface transition-all';
+          });
+          btn.className = 'speed-btn px-2.5 py-1 rounded-full font-label-caps text-[11px] bg-primary text-on-primary font-bold shadow-sm';
+        });
+      });
+
+      // Play/Pause button toggle
+      const btnToggle = document.getElementById('btn-toggle-play');
+      const playIcon = document.getElementById('play-icon');
+      let isPlaying = true;
+      if (btnToggle && playIcon) {
+        btnToggle.addEventListener('click', () => {
+          isPlaying = !isPlaying;
+          playIcon.textContent = isPlaying ? 'pause' : 'play_arrow';
+        });
+      }
+
+      // Scenario selection active states
+      const scenarioBtns = document.querySelectorAll('.scenario-option');
+      scenarioBtns.forEach(sBtn => {
+        sBtn.addEventListener('click', () => {
+          scenarioBtns.forEach(b => {
+            b.classList.remove('ring-1', 'ring-error/40', 'bg-surface-container-high', 'shadow-[0_0_16px_rgba(255,180,171,0.15)]');
+            b.classList.add('bg-surface-container-high/60');
+          });
+          sBtn.classList.add('ring-1', 'ring-error/40', 'bg-surface-container-high', 'shadow-[0_0_16px_rgba(255,180,171,0.15)]');
+          sBtn.classList.remove('bg-surface-container-high/60');
+        });
+      });
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-lowest border-t border-white/5 pt-unit-xl pb-unit-lg text-on-surface-variant font-body-sm text-body-sm">
+  <div class="max-w-[1440px] mx-auto px-gutter-desktop flex flex-col gap-unit-lg">
+    <!-- 4-Column Directory Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-unit-lg pb-unit-md border-b border-white/5">
+      <!-- Col 1: Core Platform -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Core Platform</span>
+        <a href="/home/" class="hover:text-primary transition-colors text-[13px] no-underline">Home Landing Hub</a>
+        <a href="/monitoring/" class="hover:text-primary transition-colors text-[13px] no-underline">Live Field Monitoring</a>
+        <a href="/how-it-works/" class="hover:text-primary transition-colors text-[13px] no-underline">Architecture & Protocol</a>
+      </div>
+      <!-- Col 2: Hardware & Field -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Hardware & Nodes</span>
+        <a href="/sensors/" class="hover:text-primary transition-colors text-[13px] no-underline">Sensor Ecosystem</a>
+        <a href="/field-setup/" class="hover:text-primary transition-colors text-[13px] no-underline">3D Field Placement SOP</a>
+        <a href="/wiring/" class="hover:text-primary transition-colors text-[13px] no-underline">Wiring Simulator</a>
+      </div>
+      <!-- Col 3: Diagnostics & Triage -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Diagnostics & Triage</span>
+        <a href="/inspector/" class="hover:text-primary transition-colors text-[13px] no-underline">Packet Inspector</a>
+        <a href="/alerts/" class="hover:text-primary transition-colors text-[13px] no-underline">Alert Center & Actuation</a>
+        <a href="/sim-lab/" class="hover:text-primary transition-colors text-[13px] no-underline">Simulation Lab</a>
+      </div>
+      <!-- Col 4: Knowledge & 3D -->
+      <div class="flex flex-col gap-unit-xs">
+        <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary font-bold">Presentations & 3D</span>
+        <a href="/academy/" class="hover:text-primary transition-colors text-[13px] no-underline">AgriGCS Academy</a>
+        <a href="/deck/" class="hover:text-primary transition-colors text-[13px] no-underline">10-Stage Executive Deck</a>
+        <a href="/orbit/" class="hover:text-primary transition-colors text-[13px] no-underline">3D Orbit Visualizer</a>
+        <a href="/webgl/" class="hover:text-primary transition-colors text-[13px] no-underline">WebGL Heatmap Telemetry</a>
+        <a href="/motion/" class="hover:text-primary transition-colors text-[13px] no-underline">Dynamic Motion Wave Effects</a>
+      </div>
+    </div>
+    <!-- Bottom Telemetry Specs Strip -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-unit-sm text-xs font-telemetry-sm">
+      <div class="flex flex-wrap items-center gap-unit-sm">
+        <span class="font-label-caps text-label-caps text-on-surface font-bold uppercase tracking-wider">AgriGCS Ground Control v2.4</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-tertiary">Baud: 115200</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-secondary">RF: 915.2 MHz (SF7)</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-primary">Mesh: 12/12 Synced</span>
+        <span class="text-outline-variant">•</span>
+        <span class="text-primary-container">RTK FIXED (±1.2cm)</span>
+      </div>
+      <div class="flex items-center gap-unit-sm text-outline">
+        <span>© 2024 AgriGCS Systems Inc. All rights reserved.</span>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="/agrigcs-state.js"></script>
+<script src="/agrigcs-nav.js"></script>
+<script>
+  (function() {
+    document.getElementById('sim-reset-btn')?.addEventListener('click', () => {
+      if (window.AgriGCS_State) {
+        window.AgriGCS_State.resetToBaseline();
+        window.AgriGCS_UI?.showToast('Telemetry reset to Sector 04 baseline (28.0% VWC)', 'success');
+      }
+    });
+
+    document.getElementById('sim-push-btn')?.addEventListener('click', () => {
+      window.AgriGCS_UI?.showToast('Pushing simulation state to Sector 04 Live Dashboard...', 'info');
+      setTimeout(() => {
+        window.location.href = '/monitoring/';
+      }, 500);
+    });
+
+    // Visual selection feedback for scenario buttons
+    const scenBtns = document.querySelectorAll('[data-scenario]');
+    scenBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        scenBtns.forEach(b => {
+          b.classList.remove('ring-1', 'ring-primary', 'ring-error/40', 'bg-surface-container-high');
+          b.classList.add('bg-surface-container-high/60');
+        });
+        btn.classList.add('ring-1', 'ring-primary', 'bg-surface-container-high');
+        btn.classList.remove('bg-surface-container-high/60');
+      });
+    });
+  })();
+</script>
+</body></html>
